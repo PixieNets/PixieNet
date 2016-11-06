@@ -52,6 +52,17 @@ Performing image detection on a mobile device (<a href="http://xkcd.com/1425/">s
 
 <ul>
 <li><strong>Why is this a mobile device application project?</strong></li>
+</ul>
+
+<p>Convolutional neural networks work really well in tasks like object recognition and scene classification, and for building image embeddings (vectorial or feature representations) that can in turn be used in more complex tasks such as scene navigation, obstacle avoidance etc.</p>
+
+<p>Presently, there are many popular libraries and frameworks for deep learning such as Google's TensorFlow, Facebook's Torch, Caffe, Theano etc. There are iOS versions of some of these frameworks, such as TensorFlow and Torch. We examined an application published in the TensorFlow repository (<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">Object detection via the camera app</a>) wherein a pre-trained GoogleLeNet model (size approx. 50 MB) was able to perform object recognition on a video on our iPad Air 2 at 6.8 FPS. This is a decent speed because the application is able to perform real time object recognition on the iOS device. However, when we tried to change the application code to use a pre-trained VGG-16 Network (trained on 1001 classes of ImageNet dataset) instead, the application crashed due to the huge size of the weights file (approx. 553.5 MB). </p>
+
+<p><em>Simply put, there is a problem of a huge memory footprint of many existing deep networks.</em></p>
+
+<p>The ability of running such networks on mobile devices can help in research projects and applications. For instance, a high performance and accurate object/scene classifier can be used to guide the visually impaired, as it can give a coarse description of their surroundings. Further, a full working CNN on a mobile device will help in reducing the workload on server side computation (as how currently networks run in the cloud) as now the forward pass of a neural net can compute image features on the user's device.</p>
+
+<ul>
 <li><strong>Computational speedups</strong></li>
 </ul>
 
