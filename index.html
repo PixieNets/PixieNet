@@ -66,6 +66,10 @@ Performing image detection on a mobile device (<a href="http://xkcd.com/1425/">s
 <li><strong>Computational speedups</strong></li>
 </ul>
 
+<p>We aim to implement binary networks as described in <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a>. The key insight is that binary values occupy less memory than double/single-precision floating point values and hence if we use binary valued parameters and weights for the many layers and binary valued inputs, the memory footprint of the network will decrease. Further, operations like convolution can be implemented using binary operations that are faster than an <em>O(N^3)</em> matrix multiplication. </p>
+
+<p>The implementation will therefore tap every possible source of speedup such as using fast matrix operation libraries like Armadillo, Accelerate framework, Eigen and very likely also tap the GPU using Metal in Objective-C. We will present some evidence as to what we actually choose in our final implementation when we present benchmarks for our project (please see the [Goals &amp; Deliverables)(.#Goals-&amp;-Deliverables) section).</p>
+
 <h3>
 <a id="the-challenge" class="anchor" href="#the-challenge" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Challenge</h3>
 
