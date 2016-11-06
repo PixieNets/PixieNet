@@ -1,0 +1,6 @@
+{
+  "name": "PixieNet",
+  "tagline": "16-623 CMU Course project",
+  "body": "####Team Members\r\nEsha Uboweja, Salvador Medina\r\n\r\n## Project Proposal\r\n\r\n### Summary\r\n\r\nWe aim to implement a binary convolutional neural network capable of being executed on an iOS device to run image classification on image frames captured by the device's camera.\r\n\r\n![Is that a bird?!](images/tasks_xkcd_1425.png)\r\nPerforming image detection on a mobile device ([source](http://xkcd.com/1425/))\r\n\r\n### Background\r\n\r\n* **Why is this a mobile device application project?**\r\n* **Computational speedups**\r\n\r\n### The Challenge\r\n\r\n\r\n### Goals & Deliverables\r\n\r\n\r\n### Schedule",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
