@@ -57,7 +57,7 @@
 
 <p>Convolutional neural networks (CNNs) work really well in tasks like object recognition and scene classification, and for building image embeddings (vectorial or feature representations) that can in turn be used in more complex tasks such as scene navigation, obstacle avoidance etc.</p>
 
-<p>Presently, there are many popular libraries and frameworks for deep learning such as Google's TensorFlow, Facebook's Torch, Caffe, Theano etc. There are iOS versions of some of these frameworks, such as TensorFlow and Torch. We examined an application published in the TensorFlow repository (<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">Object detection via the camera app</a>) wherein a pre-trained GoogleLeNet model (size approx. 50 MB) was able to perform object recognition on a video on our iPad Air 2 at 6.8 FPS. This is a decent speed because the application is able to perform real time object recognition on the iOS device. However, when we tried to change the application code to use a pre-trained VGG-16 Network (trained on 1001 classes of ImageNet dataset) instead, the application crashed due to the huge size of the weights file (approx. 553.5 MB). </p>
+<p>Presently, there are many popular libraries and frameworks for deep learning such as Google's TensorFlow, Facebook's Torch, Caffe, Theano etc. There are iOS versions of some of these frameworks, such as TensorFlow and Torch. We examined an application published in the TensorFlow repository (<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">Object detection via the camera app</a>) wherein a pre-trained <a href="http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf">GoogleLeNet</a> model (size approx. 50 MB) was able to perform object recognition on a video on our iPad Air 2 at 6.8 FPS. This is a decent speed because the application is able to perform real time object recognition on the iOS device. However, when we tried to change the application code to use a pre-trained VGG-16 Network (trained on 1001 classes of ImageNet dataset) instead, the application crashed due to the huge size of the weights file (approx. 553.5 MB). </p>
 
 <p><em>Simply put, there is a problem of a huge memory footprint of many existing deep networks.</em></p>
 
@@ -83,11 +83,27 @@ We will present some evidence as to what we actually choose in our final impleme
 <li>The key challenge here is to get the network running, not the accuracy of the network itself. This means that in our project, our main goal is to compress and run the network (even with just arbitrary values), and work on accuracy later.</li>
 <li>Our project focuses on <em>running</em> the network and <em>not training</em> on the mobile device. This means that for accurate object recognition, we will take pre-trained network weights and use them at test time in the device application, similar to what is demonstrated in the <a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">TensorFlow iOS camera application</a>.</li>
 <li>
-<em>Where do we get pre-trained weights for binary networks from?!</em> : This is an interesting question because the authors of <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a> highlight that they borrowed network architectures from <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">AlexNet</a> and <a href="http://www.robots.ox.ac.uk/%7Evgg/research/very_deep/">VGGNet</a> and train the binary networks from scratch. This is our plan, but keep tuned in to see if come up with something more exciting!</li>
+<em>Where do we get pre-trained weights for binary networks from?!</em> : This is an interesting question because the authors of <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a> highlight that they borrowed network architectures from <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">AlexNet</a> and <a href="http://www.robots.ox.ac.uk/%7Evgg/research/very_deep/">VGGNet</a> and train the binary networks from scratch. This is our plan too, when we work on improving the accuracy of the network for object/scene recognition.</li>
 </ol>
 
 <h3>
 <a id="goals--deliverables" class="anchor" href="#goals--deliverables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Goals &amp; Deliverables</h3>
+
+<ul>
+<li>We <em>plan to achieve</em> an implementation of a fully end-to-end binarized network framework for iOS that can run a network like <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">AlexNet</a> on the device.</li>
+<li>We <em>hope to achive</em> the full deployment of an application for iOS with a compact model of pre-trained weights, capable of classifying objects and/or scenes that are captured by the camera.</li>
+</ul>
+
+<p><strong>Evaluating our delivarables</strong></p>
+
+<ul>
+<li><p>We plan to present benchmarks for our framework as we implement and optimize it. The benchmarks will show the size of the pre-trained model that we compress using a binary network and the speed of the computation for a forward neural network pass for object recognition on a live video.</p></li>
+<li><p>A baseline is already provided to us by the <a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">TensorFlow iOS camera application</a> which uses a pre-trained <a href="http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf">GoogleLeNet</a> model (size approx. 50 MB) was able to perform object recognition on a video on our iPad Air 2 at 6.8 FPS. So one measure of success would be to beat this benchmark on the GoogleLeNet architecture.</p></li>
+</ul>
+
+<p><img src="einstein_cartoon1-full-100x125.jpg" alt="Realism in life"></p>
+
+<p>** "Let's be real folks, you have only 4 weeks!" **</p>
 
 <h3>
 <a id="schedule" class="anchor" href="#schedule" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Schedule</h3>
