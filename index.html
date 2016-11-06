@@ -44,8 +44,9 @@
 
 <p>We aim to implement a binary convolutional neural network capable of being executed on an iOS device to run image classification on image frames captured by the device's camera.</p>
 
-<p><img src="images/tasks_xkcd_1425.png" alt="Is that a bird?!">
-Performing image detection on a mobile device (<a href="http://xkcd.com/1425/">source</a>)</p>
+<p><img src="images/tasks_xkcd_1425.png" alt="Is that a bird?!"></p>
+
+<p>Performing image detection on a mobile device (<a href="http://xkcd.com/1425/">source</a>)</p>
 
 <h3>
 <a id="background" class="anchor" href="#background" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Background</h3>
@@ -54,7 +55,7 @@ Performing image detection on a mobile device (<a href="http://xkcd.com/1425/">s
 <li><strong>Why is this a mobile device application project?</strong></li>
 </ul>
 
-<p>Convolutional neural networks work really well in tasks like object recognition and scene classification, and for building image embeddings (vectorial or feature representations) that can in turn be used in more complex tasks such as scene navigation, obstacle avoidance etc.</p>
+<p>Convolutional neural networks (CNNs) work really well in tasks like object recognition and scene classification, and for building image embeddings (vectorial or feature representations) that can in turn be used in more complex tasks such as scene navigation, obstacle avoidance etc.</p>
 
 <p>Presently, there are many popular libraries and frameworks for deep learning such as Google's TensorFlow, Facebook's Torch, Caffe, Theano etc. There are iOS versions of some of these frameworks, such as TensorFlow and Torch. We examined an application published in the TensorFlow repository (<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">Object detection via the camera app</a>) wherein a pre-trained GoogleLeNet model (size approx. 50 MB) was able to perform object recognition on a video on our iPad Air 2 at 6.8 FPS. This is a decent speed because the application is able to perform real time object recognition on the iOS device. However, when we tried to change the application code to use a pre-trained VGG-16 Network (trained on 1001 classes of ImageNet dataset) instead, the application crashed due to the huge size of the weights file (approx. 553.5 MB). </p>
 
@@ -66,12 +67,24 @@ Performing image detection on a mobile device (<a href="http://xkcd.com/1425/">s
 <li><strong>Computational speedups</strong></li>
 </ul>
 
-<p>We aim to implement binary networks as described in <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a>. The key insight is that binary values occupy less memory than double/single-precision floating point values and hence if we use binary valued parameters and weights for the many layers and binary valued inputs, the memory footprint of the network will decrease. Further, operations like convolution can be implemented using binary operations that are faster than an <em>O(N^3)</em> matrix multiplication. </p>
+<p>We aim to implement binary networks as described in <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a>. The key insight is that binary values occupy less memory than double/single-precision floating point values and hence if we use binary valued parameters and weights for the many layers and binary valued inputs, the memory footprint of the network will decrease. Further, operations like convolution can be implemented using binary operations that are faster than an <em>O(N^3)</em> matrix multiplication. The authors of <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a> claim that it is possible to compress networks like <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">AlexNet</a> to 7.4MB size with a small loss in prediction accuracy. </p>
 
-<p>The implementation will therefore tap every possible source of speedup such as using fast matrix operation libraries like Armadillo, Accelerate framework, Eigen and very likely also tap the GPU using Metal in Objective-C. We will present some evidence as to what we actually choose in our final implementation when we present benchmarks for our project (please see the <a href=".#Goals-&amp;-Deliverables">Goals &amp; Deliverables</a> section).</p>
+<p>The implementation will therefore tap every possible source of speedup such as using fast matrix operation libraries like Armadillo, Accelerate framework, Eigen and very likely also tap the GPU using Metal in Objective-C. 
+We will present some evidence as to what we actually choose in our final implementation when we present benchmarks for our project (please see the <a href=".###Goals-&amp;-Deliverables">Goals &amp; Deliverables</a> section).</p>
 
 <h3>
 <a id="the-challenge" class="anchor" href="#the-challenge" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Challenge</h3>
+
+<p>The challenges involved in running a deep network on mobile device are two-fold, <strong>memory</strong> and <strong>run-time</strong>. As discussed in the <a href=".###Background">Background</a> section, smaller memory footprint networks can actually run on the mobile device and faster operations involved in the forward pass at runtime can speedup the rate of processing input frames and running them at real time. </p>
+
+<p>We would like to note the following:</p>
+
+<ol>
+<li>The key challenge here is to get the network running, not the accuracy of the network itself. This means that in our project, our main goal is to compress and run the network (even with just arbitrary values), and work on accuracy later.</li>
+<li>Our project focuses on <em>running</em> the network and <em>not training</em> on the mobile device. This means that for accurate object recognition, we will take pre-trained network weights and use them at test time in the device application, similar to what is demonstrated in the <a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples">TensorFlow iOS camera application</a>.</li>
+<li>
+<em>Where do we get pre-trained weights for binary networks from?!</em> : This is an interesting question because the authors of <a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a> highlight that they borrowed network architectures from <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">AlexNet</a> and <a href="http://www.robots.ox.ac.uk/%7Evgg/research/very_deep/">VGGNet</a> and train the binary networks from scratch. This is our plan, but keep tuned in to see if come up with something more exciting!</li>
+</ol>
 
 <h3>
 <a id="goals--deliverables" class="anchor" href="#goals--deliverables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Goals &amp; Deliverables</h3>
