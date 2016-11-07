@@ -1,8 +1,15 @@
 ---
 layout: default
 ---
-###Team Members
-**[Esha Uboweja](http://https://github.com/eknight7)** (euboweja), **[Salvador Medina](https://github.com/salmedina)** (salvadom)
+
+![PixieNet Logo](images/PixieBlueLogoSmallTransparent.png#left)
+
+# PixieNet
+{: style="text-align: center;"}
+
+### Team Members
+
+**[Esha Uboweja](http://https://github.com/eknight7)** (euboweja) and **[Salvador Medina](https://github.com/salmedina)** (salvadom)
 
 ## Project Proposal
 
@@ -13,6 +20,7 @@ We aim to implement a binary convolutional neural network capable of being execu
 ![Is that a bird?!](images/tasks_xkcd_1425.png)
 
 Performing image detection on a mobile device ([source](http://xkcd.com/1425/))
+{: style="text-align: center;"}
 
 ### Background
 
@@ -46,7 +54,7 @@ We would like to note the following:
 ### Goals & Deliverables
 
 * We _plan to achieve_ an implementation of a fully end-to-end binarized network framework for iOS that can run a network like [AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf) on the device.
-* We _hope to achive_ the full deployment of an application for iOS with a compact model of pre-trained weights, capable of classifying objects and/or scenes that are captured by the camera.
+* We _hope to achieve_ the full deployment of an application for iOS with a compact model of pre-trained weights, capable of classifying objects and/or scenes that are captured by the camera.
 
 **Evaluating our deliverables**
 
@@ -55,7 +63,9 @@ We would like to note the following:
 * A baseline is already provided to us by the [TensorFlow iOS camera application](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples) which uses a pre-trained [GoogleLeNet](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf) model (size approx. 50 MB) was able to perform object recognition on a video on our iPad Air 2 at 6.8 FPS. So one measure of success would be to beat this benchmark on the GoogleLeNet architecture.
 
 ![Realism in life](images/einstein_cartoon1-full-200x250.jpg)
+
 ([source](http://blogs.agu.org/wildwildscience/files/2009/09/einstein_cartoon1-full-336x420.jpg))
+{: style="text-align: center;"}
 
 **"Let's be real folks, you have only 4 weeks!"**
 
