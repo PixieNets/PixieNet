@@ -1,0 +1,13 @@
+# Site settings
+title: PixieNet
+description: A binary convolutional neural network framework for iOS devices
+url: "https://pixienets.github.io/PixieNet/"
+baseurl: "/PixieNet"
+
+font-awesome-include: true
+
+# Build settings
+markdown: kramdown
+exclude: ["README.md"]
+#sass:
+#  style: compressed
