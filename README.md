@@ -63,7 +63,9 @@ We would like to note the following:
 
 **"Let's be real folks, you have only 4 weeks!"**
 
-_We believe_ we can achieve a working implementation of a forward pass on a compressed network model. We will keep our update this page with our progress and seek help when stuck. Since the main goal is to actually understand and implement the network framework in [XNOR-Net](https://arxiv.org/abs/1603.05279), most of our efforts will be in squeezing out every bit of optimization to run the network in real time on the device.
+_We believe_ we can achieve a working implementation of a forward pass on a compressed network model. We will regularly update this page with our progress and seek help when stuck. Since the main goal is to actually understand and implement the network framework in [XNOR-Net](https://arxiv.org/abs/1603.05279), most of our efforts will be in squeezing out every bit of optimization to run the network in real time on the device.
+
+
 
 ### Schedule
 
