@@ -1,10 +1,12 @@
 ![PixieNetLogo](images/PixieBlueLogoSmallTransparent.png)
 # PixieNet
 
-16-623 CMU Course project
+A binary convolutional neural network framework for iOS devices
 
-###Team Members
-Esha Uboweja, Salvador Medina
+### Team Members
+
+**[Esha Uboweja](http://https://github.com/eknight7)** (euboweja) and **[Salvador Medina](https://github.com/salmedina)** (salvadom)
+
 
 ## Project Proposal
 
@@ -48,7 +50,7 @@ We would like to note the following:
 ### Goals & Deliverables
 
 * We _plan to achieve_ an implementation of a fully end-to-end binarized network framework for iOS that can run a network like [AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf) on the device.
-* We _hope to achive_ the full deployment of an application for iOS with a compact model of pre-trained weights, capable of classifying objects and/or scenes that are captured by the camera.
+* We _hope to achieve_ the full deployment of an application for iOS with a compact model of pre-trained weights, capable of classifying objects and/or scenes that are captured by the camera.
 
 **Evaluating our deliverables**
 
