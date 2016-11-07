@@ -75,7 +75,7 @@ _We believe_ we can achieve a working implementation of a forward pass on a comp
 
 #### Task Breakdown
 
-1. Profile of the [TensorFlow iOS camera application](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples) (Both)
+1. Profile the [TensorFlow iOS camera application](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples) (Both)
 2. Build application carcass for development (Salvador)
 3. Implement the atomic components required for a forward pass by an XNOR-Net. (Both)
 4. Implement the fully running XNOR-Net based on VGGNet or AlexNet. (Both)
