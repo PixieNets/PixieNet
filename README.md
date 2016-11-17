@@ -13,9 +13,9 @@ A binary convolutional neural network framework for iOS devices
 
 #### Task Breakdown
 
-~~1. Profile the [TensorFlow iOS camera application](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples) (Both)~~
-  ~~1.1 Investigate other iOS CNN implementations (DeepLearningKit, BNNs)~~
-  ~~1.2 Review literature on XNOR nets and Binary networks (and their math)~~
+1. ~~Profile the [TensorFlow iOS camera application](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples) (Both)~~
+  1.1 ~~Investigate other iOS CNN implementations (DeepLearningKit, BNNs)~~
+  1.2 ~~Review literature on XNOR nets and Binary networks (and their math)~~
 2. Build application carcass for development (Salvador)
 3. (Prototype) Implement a forward pass by an XNOR-Net.(Both)
   3.1 Modularize the forward pass
