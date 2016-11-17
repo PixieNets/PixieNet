@@ -35,7 +35,7 @@ layout: default
 
 #### Hard Deadlines
 
-~~1. Mid-project Checkpoint: 16 November, 2016~~
+1. ~~Mid-project Checkpoint: 16 November, 2016~~
 2. Project Demo: 8 December, 2016
 3. Final Project Report: 11 December 2016
 
@@ -44,7 +44,7 @@ layout: default
 | Date             | Description                    |
 |------------------|:------------------------------:|
 | 21 November 2016 | Finish Task 2,3                |
-| ~~24 November 2016 | Profiling completed~~        |
+| ~~24 November 2016~~ | ~~Profiling completed~~        |
 | 24 November 2016 | Finish Task 4                  |
 | 28 November 2016 | Finish Tasks 5, 6, 7           |
 |  1 December 2016 | Finish Task 8                  |
