@@ -11,6 +11,46 @@ layout: default
 
 **[Esha Uboweja](http://https://github.com/eknight7)** (euboweja) and **[Salvador Medina](https://github.com/salmedina)** (salvadom)
 
+## Checkpoint
+
+### Revised Schedule
+
+#### Task Breakdown
+
+1. ~~Profile the [TensorFlow iOS camera application](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/ios_examples) (Both)~~
+  1. ~~Investigate other iOS CNN implementations (DeepLearningKit, BNNs)~~
+  1. ~~Review literature on XNOR nets and Binary networks (and their math)~~
+2. Build application carcass for development (Salvador)
+3. (Prototype) Implement a forward pass by an XNOR-Net.(Both)
+  1. Modularize the forward pass
+  1. Implement the atomic components
+  1. Test the components
+4. (on iOS Device) Implement the fully running XNOR-Net with VGGNet or AlexNet architecture. (Both)
+5. Build the profiling tasks for optimization. (Esha)
+6. Optimize the slowest/most expensive components through CPU/GPU frameworks and libraries and algorithm tricks learnt in class. (Both)
+7. Compare and analyze the implementation. (Salvador)
+8. Improve application UI (controls, interface). (Esha)
+9. Design and implement a real-use case scenario for the implemented net. (Both)
+10. Make the demo video. (Both)
+
+#### Hard Deadlines
+
+~~1. Mid-project Checkpoint: 16 November, 2016~~
+2. Project Demo: 8 December, 2016
+3. Final Project Report: 11 December 2016
+
+#### Calendar
+
+| Date             | Description                    |
+|------------------|:------------------------------:|
+| 21 November 2016 | Finish Task 2,3                |
+| ~~24 November 2016 | Profiling completed~~        |
+| 24 November 2016 | Finish Task 4                  |
+| 28 November 2016 | Finish Tasks 5, 6, 7           |
+|  1 December 2016 | Finish Task 8                  |
+|  5 December 2016 | Finish Task 9, 10              |
+|  7 December 2016 | Fully developed application    |
+
 ## Project Proposal
 
 ### Summary
