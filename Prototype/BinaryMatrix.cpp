@@ -14,9 +14,13 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     this->baseSize = sizeof(char) * 8;
     this->transposed = false;
 
+    //Initialize data
     int n = w*h;
     this->dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
     this->data = new char[dataLength];
+    for(int i=0; i<this->dataLength; ++i) {
+        this->data[i]=0;
+    }
 }
 
 void BinaryMatrix::~BinaryMatrix() {
@@ -103,6 +107,17 @@ double* BinaryMatrix::doubleMultiply(const double* other) {
     }
 
     return res;
+}
+
+int BinaryMatrix::bitCount() {
+    int count = 0;
+    for(int i=0; i<this->dataLength; ++i) {
+        for(int b=0; b<this->baseSize; ++b) {
+            if(this->data[i]>>b&1)
+                count++;
+        }
+    }
+    return count;
 }
 
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
