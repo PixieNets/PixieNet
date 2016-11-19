@@ -22,6 +22,7 @@ public:
     BinaryMatrix tBinMultiply(const BinaryMatrix& other);
     double       doubleMultiply(const double& other);
 
+    char         getBitPos(int row, int col);
 
     BinaryMatrix operator*(const BinaryMatrix& lhs, const BinaryMatrix& rhs );
 
