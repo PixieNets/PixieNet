@@ -6,7 +6,6 @@
 .idea
 *.iml
 *.xml
-Prototype/CMakeLists.txt
 README.md~
 index.html~
 .gitignore~
