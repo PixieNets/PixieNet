@@ -14,7 +14,7 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     this->baseSize = sizeof(char) * 8;
     this->transposed = false;
 
-    //Initialize data
+    //Initialize data, data is stored in a linear form
     int n = w*h;
     this->dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
     this->data = new char[dataLength];
@@ -31,8 +31,9 @@ void BinaryMatrix::T() {
     this->transposed = !this->transposed;
 }
 
-// Binary matrix multiplciation is the Haddamard product of the matrices
-// It is different from the regular matrix mutltiplication
+/*
+ * Binary matrix multiplication is the Haddamard product of the matrices
+ */
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     BinaryMatrix res(this->width, this->height);
     for(int i = 0; i < this->dataLength; ++i) {
@@ -87,8 +88,11 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     return res;
 }
 
-//The operations are done row-wise
-// Watch out and remember to clean the memory
+/*
+ * The operations are done row-wise
+ * !!! Watch out and remember to clean the memory
+ */
+
 double* BinaryMatrix::doubleMultiply(const double* other) {
 
     double* res = new double[this->dataLength];
@@ -109,6 +113,9 @@ double* BinaryMatrix::doubleMultiply(const double* other) {
     return res;
 }
 
+/*
+ * Returns the amount of bits in 1 in the matrix
+ */
 int BinaryMatrix::bitCount() {
     int count = 0;
     for(int i=0; i<this->dataLength; ++i) {
