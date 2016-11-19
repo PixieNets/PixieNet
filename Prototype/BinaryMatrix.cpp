@@ -3,6 +3,7 @@
 //
 
 #include <assert.h>
+#include <utility>
 #include "BinaryMatrix.h"
 
 void BinaryMatrix::BinaryMatrix(int w, int h) {
@@ -31,8 +32,31 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     return res;
 }
 
-BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
+std::pair<int, int> elem_accessor(int i, int cols, int N, bool transposed) {
+    if (transposed) {
+        return std::make_pair(i % N, i / N);
+    } else {
+        return std::make_pair(i / cols, i % cols);
+    }
+}
 
+BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
+    int w = this->width;
+    int h = this->height;
+    if (this->transposed) {
+        w = other.width;
+        h = other.height;
+    }
+    int this_n = this->width * this->height;
+    int other_n = other.width * other.height;
+    BinaryMatrix res(w, h);
+    int this_bit_id = 0, other_bit_id = 0;
+    for (int bit_id = 0; bit_id < this_n; ++bit_id) {
+        this_bit_id = elem_accessor(bit_id, 8, this_n, this->transposed);
+        other_bit_id = elem_accessor(bit_id, 8, other_n, other.transposed);
+        res.data[bit_id] = this->data[this_bit_id] * other.data[other_bit_id];
+    }
+    return res;
 }
 
 //The operations are done row-wise
