@@ -20,9 +20,13 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     this->baseSize = sizeof(char) * 8;
     this->transposed = false;
 
+    //Initialize data, data is stored in a linear form
     int n = w*h;
     this->dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
     this->data = new char[dataLength];
+    for(int i=0; i<this->dataLength; ++i) {
+        this->data[i]=0;
+    }
 }
 
 /**
@@ -126,8 +130,11 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     return res;
 }
 
-//The operations are done row-wise
-// Watch out and remember to clean the memory
+/*
+ * The operations are done row-wise
+ * !!! Watch out and remember to clean the memory
+ */
+
 double* BinaryMatrix::doubleMultiply(const double* other) {
 
     double* res = new double[this->dataLength];
@@ -146,6 +153,17 @@ double* BinaryMatrix::doubleMultiply(const double* other) {
     }
 
     return res;
+}
+
+int BinaryMatrix::bitCount() {
+    int count = 0;
+    for(int i=0; i<this->dataLength; ++i) {
+        for(int b=0; b<this->baseSize; ++b) {
+            if(this->data[i]>>b&1)
+                count++;
+        }
+    }
+    return count;
 }
 
 /**
