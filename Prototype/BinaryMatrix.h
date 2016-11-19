@@ -25,7 +25,7 @@ public:
     char get_bit(char elem, int bit_id);
     char set_bit(char elem, int bit_id, char bit);
 
-    BinaryMatrix operator*(const BinaryMatrix& lhs, const BinaryMatrix& rhs );
+    BinaryMatrix operator*(const BinaryMatrix& other);
 
 };
 
