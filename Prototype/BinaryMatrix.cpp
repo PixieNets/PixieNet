@@ -10,7 +10,8 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     baseSize = sizeof(char);
 
     int n = w*h;
-    int total
+    int totalBases = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
+    this->data = new char[totalBases];
 }
 
 void BinaryMatrix::~BinaryMatrix() {
@@ -18,22 +19,22 @@ void BinaryMatrix::~BinaryMatrix() {
 }
 
 void BinaryMatrix::T() {
-    this->T = !this->T;
+    this->transposed = !this->transposed;
 }
 
-BinaryMatrix BinaryMatrix::multiply(const BinaryMatrix& other) {
+BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
 
 }
 
-BinaryMatrix BinaryMatrix::tMultiply(const BinaryMatrix& other) {
+BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
 
 }
 
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
-    if(this->T != other.T) {
-        return tMultiply(other);
+    if(this->transposed != other.transposed) {
+        return this->tBinMultiply(other);
     }
     else {
-        return multiply(other);
+        return this->binMultiply(other);
     }
 }

@@ -17,8 +17,8 @@ public:
     void BinaryMatrix(int w, int h);
     void ~BinaryMatrix();
     void T();
-    BinaryMatrix multiply(const BinaryMatrix& other);
-    BinaryMatrix tMultiply(const BinaryMatrix& other);
+    BinaryMatrix binMultiply(const BinaryMatrix& other);
+    BinaryMatrix tBinMultiply(const BinaryMatrix& other);
 
 
     BinaryMatrix operator*(const BinaryMatrix& lhs, const BinaryMatrix& rhs );
