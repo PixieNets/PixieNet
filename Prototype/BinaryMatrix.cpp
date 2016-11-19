@@ -35,8 +35,15 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
 
 }
 
-double BinaryMatrix::doubleMultiply(const double& other) {
+//The operations are done row-wise
+double* BinaryMatrix::doubleMultiply(const double* other) {
 
+    double* = new double[this->height][this->width];
+    for(int row=0; row < this->height; ++row) {
+        for(int col=0; col < this->width; ++col) {
+
+        }
+    }
 }
 
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
