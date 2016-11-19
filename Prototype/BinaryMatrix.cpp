@@ -64,10 +64,10 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
         w = other.width;
         h = other.height;
     }
+    BinaryMatrix res(w, h);
     int this_n = this->dataLength;
     int other_n = other.dataLength;
     int res_n = res.dataLength;
-    BinaryMatrix res(w, h);
     for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
         std::pair<int, int> this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
         std::pair<int, int> other_rc = elem_accessor(bit_id, other_n, other->baseSize, other.transposed);
