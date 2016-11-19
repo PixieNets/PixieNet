@@ -10,7 +10,7 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     baseSize = sizeof(char);
 
     int n = w*h;
-
+    int total
 }
 
 void BinaryMatrix::~BinaryMatrix() {
@@ -29,11 +29,11 @@ BinaryMatrix BinaryMatrix::tMultiply(const BinaryMatrix& other) {
 
 }
 
-BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& lhs, const BinaryMatrix& rhs ) {
-    if(!this->T) {
-        return tMultiply(rhs);
+BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
+    if(this->T != other.T) {
+        return tMultiply(other);
     }
     else {
-        return multiply(rhs);
+        return multiply(other);
     }
 }
