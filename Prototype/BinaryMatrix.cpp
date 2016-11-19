@@ -49,11 +49,11 @@ char BinaryMatrix::get_bit(char elem, int bit_id) {
 }
 
 char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
+    char mask = 1 << (this->baseSize - bit_id);
     if (bit == 0) {
-        char mask = 1 << (this->baseSize - bit_id);
         return (elem & !mask);
     } else {
-        return (elem | (bit << (this->baseSize - bit_id)));
+        return (elem | mask);
     }
 }
 
