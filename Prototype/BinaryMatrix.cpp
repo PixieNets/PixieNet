@@ -40,12 +40,14 @@ double BinaryMatrix::doubleMultiply(const double& other) {
 }
 
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
-    assert(this->width == other.width);
-    assert(this->height == other.height)
     if(this->transposed != other.transposed) {
+        assert(this->width == other.height);
+        assert(this->height == other.width);
         return this->tBinMultiply(other);
     }
     else {
+        assert(this->width == other.width);
+        assert(this->height == other.height);
         return this->binMultiply(other);
     }
 }
