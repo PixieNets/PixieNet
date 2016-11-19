@@ -21,13 +21,19 @@ void BinaryMatrix::T() {
     this->T = !this->T;
 }
 
+BinaryMatrix BinaryMatrix::multiply(const BinaryMatrix& other) {
 
+}
 
-BinaryMatrix operator*(const BinaryMatrix& lhs, const BinaryMatrix& rhs ) {
+BinaryMatrix BinaryMatrix::tMultiply(const BinaryMatrix& other) {
+
+}
+
+BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& lhs, const BinaryMatrix& rhs ) {
     if(!this->T) {
-
+        return tMultiply(rhs);
     }
     else {
-
+        return multiply(rhs);
     }
 }

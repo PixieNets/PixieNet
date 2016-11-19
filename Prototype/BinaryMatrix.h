@@ -2,8 +2,8 @@
 // Created by Zal on 11/19/16.
 //
 
-#ifndef PROTOTYPE_BINARYTENSOR_H
-#define PROTOTYPE_BINARYTENSOR_H
+#ifndef PROTOTYPE_BINARYMATRIX_H
+#define PROTOTYPE_BINARYMATRIX_H
 
 
 class BinaryMatrix {
@@ -26,4 +26,4 @@ public:
 };
 
 
-#endif //PROTOTYPE_BINARYTENSOR_H
+#endif //PROTOTYPE_BINARYMATRIX_H
