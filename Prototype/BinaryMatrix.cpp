@@ -8,6 +8,12 @@
 
 #define intPair std::pair<int, int>
 
+/**
+ * Initializes a 2D binary matrix
+ * @param w - width of matrix
+ * @param h - height of matrix
+ * @return (none)
+ */
 void BinaryMatrix::BinaryMatrix(int w, int h) {
     this->width = w;
     this->height = h;
@@ -19,16 +25,26 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     this->data = new char[dataLength];
 }
 
+/**
+ * Destructor for binary matrix, delete the data
+ */
 void BinaryMatrix::~BinaryMatrix() {
     delete[] data;
 }
 
+/**
+ * Toggles the "transposed" switch for binary matrix
+ */
 void BinaryMatrix::T() {
     this->transposed = !this->transposed;
 }
 
-// Binary matrix multiplciation is the Haddamard product of the matrices
-// It is different from the regular matrix mutltiplication
+/**
+ * Multiplies two binary matrices. Binary matrix multiplciation is the
+ * Haddamard product of the matrices, different from regular matrix multiplication.
+ * @param other - The binary matrix we multiply current matrix with
+ * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
+ */
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     BinaryMatrix res(this->width, this->height);
     for(int i = 0; i < this->dataLength; ++i) {
@@ -37,6 +53,15 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     return res;
 }
 
+/**
+ * Generates the (row, col) position for the i^{th} bit stored in the binary matrix
+ * and ensures that access takes into account if the matrix is transposed
+ * @param i - bit index in matrix
+ * @param rows - #rows in binary matrix
+ * @param cols - #cols in binary matrix
+ * @param transposed - boolean to test if the matrix is tranposed and hence read differently
+ * @return - (row, col) position of the bit in the matrix
+ */
 std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool transposed) {
     if (transposed) {
         return std::make_pair(i % rows, i / rows);
@@ -45,10 +70,23 @@ std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool 
     }
 }
 
+/**
+ * Returns the bit at a location in the binary matrix
+ * @param elem - the row containing the bit
+ * @param bit_id - the index of the bit in the row
+ * @return - the bit stored at 'bit_id'
+ */
 char BinaryMatrix::get_bit(char elem, int bit_id) {
     return (elem >> (this->baseSize - bit_id)) & 1;
 }
 
+/**
+ * Sets the bit at a location in a binary matrix
+ * @param elem - the row containing bit to be modified
+ * @param bit_id - index of the bit to be modified
+ * @param bit - the new bit value
+ * @return - the row with the new modified bit
+ */
 char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
     char mask = 1 << (this->baseSize - bit_id);
     if (bit == 0) {
@@ -58,6 +96,12 @@ char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
     }
 }
 
+/**
+ * Multiplies two matrices, one of which is transposed, bit-wise, again to
+ * return their Hadamhard product.
+ * @param other - the matrix to multiply the current matrix with
+ * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
+ */
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     int w = this->width;
     int h = this->height;
@@ -68,7 +112,6 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     BinaryMatrix res(w, h);
     int this_n = this->dataLength;
     int other_n = other.dataLength;
-    int res_n = res.dataLength;
     for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
         std::pair<int, int> this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
         std::pair<int, int> other_rc = elem_accessor(bit_id, other_n, other.baseSize, other.transposed);
@@ -105,6 +148,12 @@ double* BinaryMatrix::doubleMultiply(const double* other) {
     return res;
 }
 
+/**
+ * Defines the multiplication operator for 2 binary matrices as their
+ * Hadamhard product
+ * @param other - the matrix to multiply the current matrix with
+ * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
+ */
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
     if(this->transposed != other.transposed) {
         assert(this->width == other.height);
