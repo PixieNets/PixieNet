@@ -68,15 +68,9 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     int res_n = res.dataLength;
     BinaryMatrix res(w, h);
     for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
-<<<<<<< HEAD
-        std::pair<int, int> this_rc = elem_accessor(bit_id, this_n, 8, this->transposed);
-        std::pair<int, int> other_rc = elem_accessor(bit_id, other_n, 8, other.transposed);
-        std::pair<int, int> res_rc = elem_accessor(bit_Id, res.dataLength, 8, res.transposed);
-=======
         std::pair<int, int> this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
         std::pair<int, int> other_rc = elem_accessor(bit_id, other_n, this->baseSize, other.transposed);
         std::pair<int, int> res_rc = elem_accessor(bit_Id, res_n, this->baseSize, res.transposed);
->>>>>>> 06de3fd37cd1b59a3ce43694cd1792aad11cf0b1
         char this_c = this->data[this_rc.first];
         char other_c = other.data[other_rc.first];
         char res_c = res.data[res_rc.first];
@@ -98,13 +92,6 @@ double* BinaryMatrix::doubleMultiply(const double* other) {
     }
 
     return res;
-}
-
-// Remember it's 0-based
-char BinaryMatrix::getBitPos(int row, int col) {
-    int i = (row+1) * (col+1);
-    intPair pos = elem_accessor(i, this->dataLength, this->baseSize, this->transposed);
-    return (this->data[pos.first]>>pos.second & 1);
 }
 
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
