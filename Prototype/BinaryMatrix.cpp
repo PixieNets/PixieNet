@@ -24,6 +24,8 @@ void BinaryMatrix::T() {
     this->transposed = !this->transposed;
 }
 
+// Binary matrix multiplciation is the Haddamard product of the matrices
+// It is different from the regular matrix mutltiplication
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     BinaryMatrix res(this->width, this->height);
     for(int i = 0; i < this->dataLength; ++i) {
