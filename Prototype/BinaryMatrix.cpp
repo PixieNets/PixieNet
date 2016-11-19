@@ -2,6 +2,7 @@
 // Created by Zal on 11/19/16.
 //
 
+#include <assert.h>
 #include "BinaryMatrix.h"
 
 void BinaryMatrix::BinaryMatrix(int w, int h) {
@@ -10,8 +11,8 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
     baseSize = sizeof(char);
 
     int n = w*h;
-    int totalBases = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
-    this->data = new char[totalBases];
+    dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
+    this->data = new char[dataLength];
 }
 
 void BinaryMatrix::~BinaryMatrix() {
@@ -23,20 +24,24 @@ void BinaryMatrix::T() {
 }
 
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
-    int n = (this->width * this->height);
-    assert(n == (other->width * other->height));
-    BinaryMatrix bm = BinaryMatrix(this->width, this->height);
-    for (int i = 0; i < n; ++i) {
-        bm[i] = !(this->data[i] ^ other->data[i]);
+    BinaryMatrix res(this->width, this->height);
+    for(int i = 0; i < this->dataLength; ++i) {
+        res.data[i] = !(this->data[i] ^ other.data[i]);
     }
-    return bm;
+    return res;
 }
 
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
 
 }
 
+double BinaryMatrix::doubleMultiply(const double& other) {
+
+}
+
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix& other ) {
+    assert(this->width == other.width);
+    assert(this->height == other.height)
     if(this->transposed != other.transposed) {
         return this->tBinMultiply(other);
     }
