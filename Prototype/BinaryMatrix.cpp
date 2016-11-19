@@ -51,7 +51,6 @@ char set_bit(char elem, int bit_id, char bit) {
     return new_elem;
 }
 
-
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     int w = this->width;
     int h = this->height;
@@ -66,7 +65,7 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
         std::pair<int, int> this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
         std::pair<int, int> other_rc = elem_accessor(bit_id, other_n, this->baseSize, other.transposed);
-        std::pair<int, int> res_rc = elem_accessor(bit_Id, res_n, this->baseSize, res.transposed);
+        std::pair<int, int> res_rc = elem_accessor(bit_id, res_n, this->baseSize, res.transposed);
         char this_c = this->data[this_rc.first];
         char other_c = other.data[other_rc.first];
         char res_c = res.data[res_rc.first];
