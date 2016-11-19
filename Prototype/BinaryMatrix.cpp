@@ -32,7 +32,7 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     return res;
 }
 
-std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed) {
+std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool transposed) {
     if (transposed) {
         return std::make_pair(i % rows, i / rows);
     } else {
@@ -40,11 +40,11 @@ std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed) {
     }
 }
 
-char get_bit(char elem, int bit_id) {
+char BinaryMatrix::get_bit(char elem, int bit_id) {
     return (elem >> (this->baseSize - bit_id)) & 1;
 }
 
-char set_bit(char elem, int bit_id, char bit) {
+char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
     // assumes originally the bit is set to 0
     char mask = 1 << ( - bit_id);
     char new_elem = (elem | (bit << mask));
