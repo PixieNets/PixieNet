@@ -23,7 +23,13 @@ void BinaryMatrix::T() {
 }
 
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
-
+    int n = (this->width * this->height);
+    assert(n == (other->width * other->height));
+    BinaryMatrix bm = BinaryMatrix(this->width, this->height);
+    for (int i = 0; i < n; ++i) {
+        bm[i] = !(this->data[i] ^ other->data[i]);
+    }
+    return bm;
 }
 
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
