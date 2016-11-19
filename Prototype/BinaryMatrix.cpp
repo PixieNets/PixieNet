@@ -52,8 +52,8 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     BinaryMatrix res(w, h);
     int this_bit_id = 0, other_bit_id = 0;
     for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
-        this_bit_id = elem_accessor(bit_id, 8, this_n, this->transposed);
-        other_bit_id = elem_accessor(bit_id, 8, other_n, other.transposed);
+        this_bit_id = elem_accessor(bit_id, this_n, 8 this->transposed);
+        other_bit_id = elem_accessor(bit_id, other_n, 8, other.transposed);
         res.data[bit_id] = this->data[this_bit_id] * other.data[other_bit_id];
     }
     return res;
