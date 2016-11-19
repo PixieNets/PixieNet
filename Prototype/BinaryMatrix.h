@@ -25,6 +25,7 @@ public:
     std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed);
     char get_bit(char elem, int bit_id);
     char set_bit(char elem, int bit_id, char bit);
+    char getValueAt(int i);
 
     BinaryMatrix operator*(const BinaryMatrix& other);
 
