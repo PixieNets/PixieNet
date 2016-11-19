@@ -32,7 +32,7 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     return res;
 }
 
-std::pair<int, int> elem_accessor(int i, int cols, int rows, bool transposed) {
+std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed) {
     if (transposed) {
         return std::make_pair(i % rows, i / rows);
     } else {
