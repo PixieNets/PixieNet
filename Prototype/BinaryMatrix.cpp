@@ -51,7 +51,11 @@ char BinaryMatrix::get_bit(char elem, int bit_id) {
 char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
     // assumes originally the bit is set to 0
     char mask = 1 << (this->baseSize - bit_id);
-    return (elem | (bit << mask));
+    if (get_bit(elem, bit_id) == 1 && bit == 0) {
+        return (elem & !(1 << mask));
+    } else {
+        return (elem | (bit << mask));
+    }
 }
 
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
