@@ -33,7 +33,7 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
  * Destructor for binary matrix, delete the data
  */
 void BinaryMatrix::~BinaryMatrix() {
-    delete[] data;
+    if(data != NULL)    delete[] data;
 }
 
 /**
@@ -100,6 +100,12 @@ char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
     }
 }
 
+char BinaryMatrix::getValueAt(int i) {
+    assert(i < this->width*this->height);
+    intPair pos = elem_accessor(i, this->dataLength, this->baseSize, this->transposed);
+    return this->get_bit(this->data[pos.first], pos.second);
+}
+
 /**
  * Multiplies two matrices, one of which is transposed, bit-wise, again to
  * return their Hadamhard product.
@@ -136,7 +142,6 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
  */
 
 double* BinaryMatrix::doubleMultiply(const double* other) {
-
     double* res = new double[this->dataLength];
 
     intPair linearPos;
