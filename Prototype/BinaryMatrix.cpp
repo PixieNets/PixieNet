@@ -84,12 +84,21 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
 }
 
 //The operations are done row-wise
+// Watch out and remember to clean the memory
 double* BinaryMatrix::doubleMultiply(const double* other) {
 
-    double* res = new double[this->height][this->width];
+    double* res = new double[this->dataLength];
+
+    intPair linearPos;
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
-
+            linearPos = elem_accessor(row*col, this->dataLength, this->baseSize, this->transposed);
+            if( get_bit(this->data[linearPos.first], linearPos.second) == 0) {
+                res[row*col] = other[row*col]*-1;
+            }
+            else {
+                res[row*col] = other[row*col];
+            }
         }
     }
 

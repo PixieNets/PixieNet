@@ -20,7 +20,7 @@ public:
     void T();
     BinaryMatrix binMultiply(const BinaryMatrix& other);
     BinaryMatrix tBinMultiply(const BinaryMatrix& other);
-    double       doubleMultiply(const double& other);
+    double*      doubleMultiply(const double* other);
     std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed);
     char get_bit(char elem, int bit_id);
     char set_bit(char elem, int bit_id, char bit);
