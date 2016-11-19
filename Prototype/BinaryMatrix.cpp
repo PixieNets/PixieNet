@@ -11,7 +11,7 @@
 void BinaryMatrix::BinaryMatrix(int w, int h) {
     this->width = w;
     this->height = h;
-    this->baseSize = sizeof(char);
+    this->baseSize = sizeof(char) * 8;
 
     int n = w*h;
     this->dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
