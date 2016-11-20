@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <utility>
+#include <cstdio>
 #include "BinaryMatrix.h"
 
 #define intPair std::pair<int, int>
@@ -169,6 +170,15 @@ int BinaryMatrix::bitCount() {
         }
     }
     return count;
+}
+
+void BinaryMatrix::print() {
+    for(int row; row < this->height; ++row) {
+        for(int col; col < this->width; ++col) {
+            printf("%u ",getValueAt(row*col));
+        }
+        printf("\n");
+    }
 }
 
 /**

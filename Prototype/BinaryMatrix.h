@@ -27,6 +27,8 @@ public:
     char set_bit(char elem, int bit_id, char bit);
     char getValueAt(int i);
 
+    void print();
+
     BinaryMatrix operator*(const BinaryMatrix& other);
 
 };
