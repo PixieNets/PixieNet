@@ -101,35 +101,89 @@ void TestBinaryMatrix::testTranspose(){
 }
 
 void TestBinaryMatrix::testBinMultiply(){
-    cout << "----- TEST Multiply" << endl;
-    int testSize = 5;
+    cout << "----- TEST MULTIPLY" << endl;
+    int testSize = 6;
     BinaryMatrix mtx0(testSize, testSize, 0);
     BinaryMatrix mtx1(testSize, testSize, 1);
 
+    cout << "0 = "<<endl;
     cout << mtx0.dataToString() << endl;
+    cout << "1 = "<<endl;
     cout << mtx1.dataToString() << endl;
     cout << endl;
 
     BinaryMatrix resZero = mtx0 * mtx1;
     cout << "0 x 0 = " << endl;
-    cout << resZero.toString() << endl;
     cout << resZero.dataToString() << endl;
 
     BinaryMatrix resOne = mtx1 * mtx1;
     cout << "1 x 1 = " << endl;
-    cout << resOne.toString() << endl;
     cout << resOne.dataToString() << endl;
-
-    
-
 }
 
 void TestBinaryMatrix::testTBinMultiply(){
+    cout << "----- TEST TRANSPOSE MULTIPLY" << endl;
+    int testSize = 6;
+    BinaryMatrix uDiag(testSize,testSize);
+    BinaryMatrix lDiag(testSize,testSize);
+    //Fill upper triangle
+    for(int i=0; i<testSize; ++i) {
+        for(int j=i; j < testSize; ++j) {
+            uDiag.setValueAt(i,j,1);
+            lDiag.setValueAt(j,i,1);
+        }
+    }
+    cout << "uDiag = " << endl;
+    cout << uDiag.dataToString() << endl;
+    cout << "lDiag = " << endl;
+    cout << lDiag.dataToString() << endl;
 
+    BinaryMatrix diag = uDiag * lDiag;
+    cout << "uDiag * lDiag = " << endl;
+    cout << diag.dataToString() << endl;
+
+    uDiag.T();
+    BinaryMatrix lDiagT = uDiag * lDiag;
+    cout << uDiag.toString() << endl;
+    cout << lDiag.toString() << endl;
+    cout << "uDiag.T * lDiag = " << endl;
+    cout << lDiagT.dataToString() << endl;
 }
 
 void TestBinaryMatrix::testDoubleMultiply(){
+    cout << "----- TEST DOUBLE MULTIPLY" << endl;
+    int testSize = 3;
+    BinaryMatrix uDiag(testSize,testSize);
+    BinaryMatrix lDiag(testSize,testSize);
+    //Fill upper triangle
+    for(int i=0; i<testSize; ++i) {
+        for(int j=i; j < testSize; ++j) {
+            uDiag.setValueAt(i,j,1);
+            lDiag.setValueAt(j,i,1);
+        }
+    }
 
+    double *dMtx = new double[testSize*testSize];
+    for(int i=0; i<testSize*testSize; ++i) {
+        dMtx[i] = 109.0;
+    }
+    double *dResMtx = uDiag.doubleMultiply(dMtx);
+
+    for(int row=0; row<testSize; ++row) {
+        for(int col=0; col<testSize; ++col) {
+            printf("%.1f ", dMtx[row*testSize+col]);
+        }
+        printf("\n");
+    }
+    for(int row=0; row<testSize; ++row) {
+        for(int col=0; col<testSize; ++col) {
+            printf("%.1f ", dResMtx[row*testSize+col]);
+        }
+        printf("\n");
+    }
+
+    if(dMtx!= nullptr) delete[] dMtx;
+    if(dResMtx!= nullptr) delete[] dResMtx;
 }
 
 void TestBinaryMatrix::runAllTests(){

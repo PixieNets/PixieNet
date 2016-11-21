@@ -153,17 +153,17 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     IntPair this_rc;
     IntPair other_rc;
     IntPair res_rc;
-    uchar   res_c,answer_c;
+    uchar   answer_c;
+    int     thisIdx, otherIdx;
     for (int row=0; row<this->height; ++row) {
         for(int col=0; col<this->width; ++col) {
-            int thisIdx = getLinearIndex(row, col, this->height, this->width, this->transposed);
-            int otherIdx = getLinearIndex(row, col, other.height, other.width, other.transposed);
+            thisIdx = getLinearIndex(row, col, this->height, this->width, this->transposed);
+            otherIdx = getLinearIndex(row, col, other.height, other.width, other.transposed);
             this_rc = this->elem_accessor(thisIdx, this->dataLength, this->baseSize, false);
             other_rc = this->elem_accessor(otherIdx, other.dataLength, other.baseSize, false);
             res_rc = this->transposed? other_rc : this_rc;
 
-            answer_c = ~(get_bit(this->data[this_rc.first], this_rc.second) ^ \
-                        get_bit(other.data[other_rc.first], other_rc.second)) & 1;
+            answer_c = ~(get_bit(this->data[this_rc.first], this_rc.second) ^ get_bit(other.data[other_rc.first], other_rc.second)) & 1;
             res.data[res_rc.first] = set_bit(res.data[res_rc.first], res_rc.second, answer_c);
         }
     }
@@ -181,13 +181,10 @@ double* BinaryMatrix::doubleMultiply(const double* other) {
     IntPair linearPos;
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
-            linearPos = elem_accessor(row*col, this->dataLength, this->baseSize, this->transposed);
-            if( get_bit(this->data[linearPos.first], linearPos.second) == 0) {
+            if( this->getValueAt(row, col) == 0)
                 res[row*col] = other[row*col]*-1;
-            }
-            else {
+            else
                 res[row*col] = other[row*col];
-            }
         }
     }
 
