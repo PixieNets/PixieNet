@@ -91,7 +91,7 @@ std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool 
  * @return - the bit stored at 'bit_id'
  */
 uchar BinaryMatrix::get_bit(uchar elem, int bit_id) {
-    return (elem >> (this->baseSize - bit_id)) & 1;
+    return (elem >> (this->baseSize-1 - bit_id)) & 1;
 }
 
 /**
@@ -102,7 +102,7 @@ uchar BinaryMatrix::get_bit(uchar elem, int bit_id) {
  * @return - the row with the new modified bit
  */
 uchar BinaryMatrix::set_bit(uchar elem, int bit_id, uchar bitValue) {
-    uchar mask = 1 << (this->baseSize - bit_id);
+    uchar mask = 1 << (this->baseSize-1 - bit_id);
     if (bitValue == 0) {
         return (elem & !mask);
     } else {
@@ -110,9 +110,11 @@ uchar BinaryMatrix::set_bit(uchar elem, int bit_id, uchar bitValue) {
     }
 }
 
-uchar BinaryMatrix::getValueAt(int i) {
-    assert(i < this->width*this->height);
-    IntPair pos = elem_accessor(i, this->dataLength, this->baseSize, this->transposed);
+uchar BinaryMatrix::getValueAt(int row, int col) {
+    assert( row < this->height);
+    assert( col < this->width);
+
+    IntPair pos = elem_accessor(row*this->width+col, this->dataLength, this->baseSize, this->transposed);
     return this->get_bit(this->data[pos.first], pos.second);
 }
 
@@ -120,8 +122,8 @@ void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
     assert( row < this->height);
     assert( col < this->width);
 
-    IntPair pos = this->elem_accessor(row*col, this->dataLength, this->dataLength, this->transposed);
-    this->set_bit(pos.first, pos.second, bitValue);
+    IntPair pos = this->elem_accessor( (row*this->width)+col, this->dataLength, this->dataLength, this->transposed);
+    this->data[pos.first] = this->set_bit(this->data[pos.first], pos.second, bitValue);
 }
 
 /**
@@ -192,7 +194,7 @@ int BinaryMatrix::bitCount() {
 void BinaryMatrix::print() {
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
-            printf("%u ",getValueAt(row*col));
+            printf("%u ",getValueAt(row, col));
         }
         printf("\n");
     }
@@ -211,7 +213,7 @@ std::string BinaryMatrix::dataToString() {
 
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
-            res += std::to_string(getValueAt(row*col)) + " ";
+            res += std::to_string(getValueAt(row, col)) + " ";
         }
         res += "\n";
     }

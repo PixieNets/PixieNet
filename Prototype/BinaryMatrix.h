@@ -33,7 +33,7 @@ public:
     std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed);
     uchar get_bit(uchar elem, int bit_id);
     uchar set_bit(uchar elem, int bit_id, uchar bitValue);
-    uchar getValueAt(int i);
+    uchar getValueAt(int row, int col);
     void setValueAt(int row, int col, uchar bitValue);
 
     BinaryMatrix operator*(const BinaryMatrix& other);
