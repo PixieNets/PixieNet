@@ -5,9 +5,19 @@
 #ifndef PROTOTYPE_TESTBINARYMATRIX_H
 #define PROTOTYPE_TESTBINARYMATRIX_H
 
+#include <iostream>
 
 class TestBinaryMatrix {
+    void testCreateAndPrint();
+    void testGetBit();
+    void testSetBit();
+    void testGetValueAt();
+    void testBinMultiply();
+    void testTBinMultiply();
+    void testDoubleMultiply();
 
+public:
+    void runAllTests();
 };
 
 

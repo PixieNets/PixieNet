@@ -1,6 +1,9 @@
 #include <iostream>
 
+#include "TestBinaryMatrix.h"
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    TestBinaryMatrix test;
+    test.runAllTests();
     return 0;
 }
