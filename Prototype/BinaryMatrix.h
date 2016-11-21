@@ -38,7 +38,9 @@ public:
 
     int         getLinearIndex(int row, int col, int height, int width, bool transposed);
     IntPair     getDataAccessor(int row, int col);
+    uchar       getValueAt(int idx);
     uchar       getValueAt(int row, int col);
+    void        setValueAt(int idx, uchar bitValue);
     void        setValueAt(int row, int col, uchar bitValue);
 
     BinaryMatrix operator*(const BinaryMatrix& other);

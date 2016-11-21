@@ -103,6 +103,11 @@ uchar BinaryMatrix::set_bit(uchar elem, int bit_id, uchar bitValue) {
     }
 }
 
+uchar BinaryMatrix::getValueAt(int idx) {
+    IntPair pos = std::make_pair(idx / this->baseSize, idx % this->baseSize);
+    return this->get_bit(this->data[pos.first], pos.second);
+}
+
 uchar BinaryMatrix::getValueAt(int row, int col) {
     assert( row < this->height);
     assert( col < this->width);
@@ -110,6 +115,13 @@ uchar BinaryMatrix::getValueAt(int row, int col) {
     //IntPair pos = elem_accessor(row*this->width+col, this->dataLength, this->baseSize, this->transposed);
     IntPair pos = this->getDataAccessor(row, col);
     return this->get_bit(this->data[pos.first], pos.second);
+}
+
+void BinaryMatrix::setValueAt(int idx, uchar bitValue) {
+    assert(idx < this->height*this->width);
+
+    IntPair pos = std::make_pair(idx / this->baseSize, idx % this->baseSize);
+    this->set_bit(this->data[pos.first], pos.second, bitValue);
 }
 
 void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
