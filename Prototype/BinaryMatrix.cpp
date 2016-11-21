@@ -15,7 +15,7 @@
  * @param h - height of matrix
  * @return (none)
  */
-void BinaryMatrix::BinaryMatrix(int w, int h) {
+BinaryMatrix::BinaryMatrix(int w, int h) {
     this->width = w;
     this->height = h;
     this->baseSize = sizeof(char) * 8;
@@ -33,7 +33,7 @@ void BinaryMatrix::BinaryMatrix(int w, int h) {
 /**
  * Destructor for binary matrix, delete the data
  */
-void BinaryMatrix::~BinaryMatrix() {
+BinaryMatrix::~BinaryMatrix() {
     if(data != NULL)    delete[] data;
 }
 
@@ -179,6 +179,26 @@ void BinaryMatrix::print() {
         }
         printf("\n");
     }
+}
+
+std::string BinaryMatrix::toString() {
+    std::string transStr = (this->transposed)?"Yes":"No";
+    std::string res = "< Binary Matrix rows:" + std::to_string(this->height)
+                        + " cols:" + std::to_string(this->width)
+                        + " transposed:" + transStr + " >";
+    return res;
+}
+
+std::string BinaryMatrix::dataToString() {
+    std::string res;
+    for(int row; row < this->height; ++row) {
+        for(int col; col < this->width; ++col) {
+            res += std::to_string(getValueAt(row*col)) + " ";
+            printf("[%d,%d]: %d\n", row, col, getValueAt(row*col));
+        }
+        res += "\n";
+    }
+    return res;
 }
 
 /**

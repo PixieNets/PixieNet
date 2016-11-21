@@ -5,8 +5,11 @@
 #ifndef PROTOTYPE_BINARYMATRIX_H
 #define PROTOTYPE_BINARYMATRIX_H
 
+#include <iostream>
+#include <string>
 
 class BinaryMatrix {
+public:
     bool    transposed;
     int     width;
     int     height;
@@ -15,8 +18,9 @@ class BinaryMatrix {
     int     baseSize;
 
 public:
-    void BinaryMatrix(int w, int h);
-    void ~BinaryMatrix();
+    BinaryMatrix(int w, int h);
+    ~BinaryMatrix();
+
     void T();
     BinaryMatrix binMultiply(const BinaryMatrix& other);
     BinaryMatrix tBinMultiply(const BinaryMatrix& other);
@@ -27,10 +31,11 @@ public:
     char set_bit(char elem, int bit_id, char bit);
     char getValueAt(int i);
 
-    void print();
-
     BinaryMatrix operator*(const BinaryMatrix& other);
 
+    void print();
+    std::string toString();
+    std::string dataToString();
 };
 
 #endif //PROTOTYPE_BINARYMATRIX_H
