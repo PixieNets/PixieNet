@@ -4,11 +4,11 @@
 
 #include "BinaryLayer.h"
 
-void BinaryLayer::BinaryLayer() {
+BinaryLayer::BinaryLayer() {
 
 }
 
-void BinaryLayer::~BinaryLayer() {
+BinaryLayer::~BinaryLayer() {
     if(binMtx != NULL)  delete binMtx;
 }
 
@@ -17,5 +17,5 @@ void BinaryLayer::binarizeWeights(double* weights) {
 }
 
 double* BinaryLayer::getDoubleWeights() {
-
+    return nullptr;
 }

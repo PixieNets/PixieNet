@@ -12,8 +12,8 @@ class BinaryLayer {
     double          scale;
 
 public:
-    void BinaryLayer();
-    void ~BinaryLayer();
+    BinaryLayer();
+    ~BinaryLayer();
 
     void binarizeWeights(double* weights);
     double* getDoubleWeights();
