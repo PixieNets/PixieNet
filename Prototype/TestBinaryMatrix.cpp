@@ -73,6 +73,15 @@ void TestBinaryMatrix::testSetBit(){
     }
     cout << bMtx1.toString() << endl;
     cout << bMtx1.dataToString() << endl;
+
+    cout << "Toggle Linear Index:" << endl;
+    BinaryMatrix bMtx2(testSize, testSize,0);
+    bool toggle = true;
+    for(int i=0; i<testSize*testSize; ++i) {
+        bMtx2.setValueAt(i,toggle? 1:0);
+        toggle = !toggle;
+    }
+    cout << bMtx2.dataToString() << endl;
 }
 
 void TestBinaryMatrix::testTransposeIdx() {
@@ -127,13 +136,17 @@ void TestBinaryMatrix::testBinMultiply(){
     cout << mtx1.dataToString() << endl;
     cout << endl;
 
-    BinaryMatrix resZero = mtx0 * mtx1;
+    BinaryMatrix resZeroZero = mtx0 * mtx0;
     cout << "0 x 0 = " << endl;
-    cout << resZero.dataToString() << endl;
+    cout << resZeroZero.dataToString() << endl;
 
-    BinaryMatrix resOne = mtx1 * mtx1;
+    BinaryMatrix resZeroOne = mtx0 * mtx1;
+    cout << "0 x 1 = " << endl;
+    cout << resZeroOne.dataToString() << endl;
+
+    BinaryMatrix resOneOne = mtx1 * mtx1;
     cout << "1 x 1 = " << endl;
-    cout << resOne.dataToString() << endl;
+    cout << resOneOne.dataToString() << endl;
 }
 
 void TestBinaryMatrix::testTBinMultiply(){
