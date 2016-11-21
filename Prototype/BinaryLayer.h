@@ -12,11 +12,11 @@ class BinaryLayer {
     double          scale;
 
 public:
-    BinaryLayer();
+    BinaryLayer(int w, int h);
     ~BinaryLayer();
 
-    void binarizeWeights(double* weights);
-    double* getDoubleWeights();
+    void binarizeWeights(double* weights, int size);
+    void getDoubleWeights(double** weights, int* size);
 
 };
 

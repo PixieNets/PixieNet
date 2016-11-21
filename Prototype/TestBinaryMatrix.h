@@ -12,6 +12,7 @@ class TestBinaryMatrix {
     void testGetBit();
     void testSetBit();
     void testSetValueAt();
+    void testTransposeIdx();
     void testTranspose();
     void testBinMultiply();
     void testTBinMultiply();
