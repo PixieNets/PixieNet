@@ -55,8 +55,8 @@ void TestBinaryMatrix::testGetBit(){
 
 void TestBinaryMatrix::testSetBit(){
     cout << "TEST SET BITS" << endl;
-    int testSize = 5;
-    BinaryMatrix bMtx(testSize, testSize);
+    int testSize = 10;
+    BinaryMatrix bMtx(testSize, testSize, 0);
     for(int i=0; i<testSize; ++i) {
         bMtx.setValueAt(i,i,1);
     }
@@ -72,7 +72,6 @@ void TestBinaryMatrix::testSetBit(){
     }
     cout << bMtx1.toString() << endl;
     cout << bMtx1.dataToString() << endl;
-
 }
 
 void TestBinaryMatrix::testGetValueAt(){

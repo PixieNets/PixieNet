@@ -74,13 +74,13 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
  * @param rows - #rows in binary matrix
  * @param cols - #cols in binary matrix
  * @param transposed - boolean to test if the matrix is tranposed and hence read differently
- * @return - (row, col) position of the bit in the matrix
+ * @return - (dataPos, bitIndex) position of the bit in the array
  */
 std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool transposed) {
     if (transposed) {
-        return std::make_pair(i % rows, i / rows);
+        return std::make_pair(i % cols, i / cols);
     } else {
-        return std::make_pair(i / cols, i % cols);
+        return std::make_pair(i / rows, i % rows);
     }
 }
 
