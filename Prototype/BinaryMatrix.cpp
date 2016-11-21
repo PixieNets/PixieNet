@@ -7,7 +7,11 @@
 #include <cstdio>
 #include "BinaryMatrix.h"
 
-#define intPair std::pair<int, int>
+#define IntPair std::pair<int, int>
+
+BinaryMatrix::BinaryMatrix(int w, int h) {
+    this->init(w, h, 0);
+}
 
 /**
  * Initializes a 2D binary matrix
@@ -15,26 +19,31 @@
  * @param h - height of matrix
  * @return (none)
  */
-BinaryMatrix::BinaryMatrix(int w, int h) {
-    this->width = w;
-    this->height = h;
-    this->baseSize = sizeof(char) * 8;
-    this->transposed = false;
-
-    //Initialize data, data is stored in a linear form
-    int n = w*h;
-    this->dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
-    this->data = new char[dataLength];
-    for(int i=0; i<this->dataLength; ++i) {
-        this->data[i]=0;
-    }
+BinaryMatrix::BinaryMatrix(int w, int h, int initVal) {
+    this->init(w, h, initVal);
 }
 
 /**
  * Destructor for binary matrix, delete the data
  */
 BinaryMatrix::~BinaryMatrix() {
-    if(data != NULL)    delete[] data;
+    if(data != nullptr)    delete[] data;
+}
+
+void BinaryMatrix::init(int w, int h, int initVal) {
+    this->width = w;
+    this->height = h;
+    this->baseSize = sizeof(uchar) * 8;
+    this->transposed = false;
+
+    //Initialize data, data is stored in a linear form
+    int n = w*h;
+    this->dataLength = (n % baseSize == 0)? n/baseSize : n/baseSize +1;
+    this->data = new uchar[dataLength];
+    uchar val = (initVal==0)? 0 :~0;
+    for(int i=0; i<this->dataLength; ++i) {
+        this->data[i]=val;
+    }
 }
 
 /**
@@ -81,7 +90,7 @@ std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool 
  * @param bit_id - the index of the bit in the row
  * @return - the bit stored at 'bit_id'
  */
-char BinaryMatrix::get_bit(char elem, int bit_id) {
+uchar BinaryMatrix::get_bit(uchar elem, int bit_id) {
     return (elem >> (this->baseSize - bit_id)) & 1;
 }
 
@@ -89,22 +98,30 @@ char BinaryMatrix::get_bit(char elem, int bit_id) {
  * Sets the bit at a location in a binary matrix
  * @param elem - the row containing bit to be modified
  * @param bit_id - index of the bit to be modified
- * @param bit - the new bit value
+ * @param bitValue - the new bit value
  * @return - the row with the new modified bit
  */
-char BinaryMatrix::set_bit(char elem, int bit_id, char bit) {
-    char mask = 1 << (this->baseSize - bit_id);
-    if (bit == 0) {
+uchar BinaryMatrix::set_bit(uchar elem, int bit_id, uchar bitValue) {
+    uchar mask = 1 << (this->baseSize - bit_id);
+    if (bitValue == 0) {
         return (elem & !mask);
     } else {
         return (elem | mask);
     }
 }
 
-char BinaryMatrix::getValueAt(int i) {
+uchar BinaryMatrix::getValueAt(int i) {
     assert(i < this->width*this->height);
-    intPair pos = elem_accessor(i, this->dataLength, this->baseSize, this->transposed);
+    IntPair pos = elem_accessor(i, this->dataLength, this->baseSize, this->transposed);
     return this->get_bit(this->data[pos.first], pos.second);
+}
+
+void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
+    assert( row < this->height);
+    assert( col < this->width);
+
+    IntPair pos = this->elem_accessor(row*col, this->dataLength, this->dataLength, this->transposed);
+    this->set_bit(pos.first, pos.second, bitValue);
 }
 
 /**
@@ -124,14 +141,14 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     int this_n = this->dataLength;
     int other_n = other.dataLength;
     for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
-        std::pair<int, int> this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
-        std::pair<int, int> other_rc = elem_accessor(bit_id, other_n, other.baseSize, other.transposed);
-        std::pair<int, int> res_rc = this->transposed? other_rc : this_rc;
-        char this_c = this->data[this_rc.first];
-        char other_c = other.data[other_rc.first];
-        char res_c = res.data[res_rc.first];
+        IntPair this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
+        IntPair other_rc = elem_accessor(bit_id, other_n, other.baseSize, other.transposed);
+        IntPair res_rc = this->transposed? other_rc : this_rc;
+        uchar this_c = this->data[this_rc.first];
+        uchar other_c = other.data[other_rc.first];
+        uchar res_c = res.data[res_rc.first];
 
-        char answer = !(get_bit(this_c, this_rc.second) ^ get_bit(other_c, other_rc.second)) & 1;
+        uchar answer = !(get_bit(this_c, this_rc.second) ^ get_bit(other_c, other_rc.second)) & 1;
         res.data[res_rc.first] = set_bit(res_c, res_rc.second, answer);
     }
     return res;
@@ -145,7 +162,7 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
 double* BinaryMatrix::doubleMultiply(const double* other) {
     double* res = new double[this->dataLength];
 
-    intPair linearPos;
+    IntPair linearPos;
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
             linearPos = elem_accessor(row*col, this->dataLength, this->baseSize, this->transposed);
@@ -165,7 +182,7 @@ int BinaryMatrix::bitCount() {
     int count = 0;
     for(int i=0; i<this->dataLength; ++i) {
         for(int b=0; b<this->baseSize; ++b) {
-            if(this->data[i]>>b&1)
+            if(this->data[i]>>b & 1)
                 count++;
         }
     }
@@ -173,8 +190,8 @@ int BinaryMatrix::bitCount() {
 }
 
 void BinaryMatrix::print() {
-    for(int row; row < this->height; ++row) {
-        for(int col; col < this->width; ++col) {
+    for(int row=0; row < this->height; ++row) {
+        for(int col=0; col < this->width; ++col) {
             printf("%u ",getValueAt(row*col));
         }
         printf("\n");
@@ -191,10 +208,10 @@ std::string BinaryMatrix::toString() {
 
 std::string BinaryMatrix::dataToString() {
     std::string res;
-    for(int row; row < this->height; ++row) {
-        for(int col; col < this->width; ++col) {
+
+    for(int row=0; row < this->height; ++row) {
+        for(int col=0; col < this->width; ++col) {
             res += std::to_string(getValueAt(row*col)) + " ";
-            printf("[%d,%d]: %d\n", row, col, getValueAt(row*col));
         }
         res += "\n";
     }
