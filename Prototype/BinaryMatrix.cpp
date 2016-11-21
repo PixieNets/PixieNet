@@ -51,6 +51,10 @@ void BinaryMatrix::T() {
     this->transposed = !this->transposed;
 }
 
+int BinaryMatrix::transposeIndex(int idx) {
+    return (idx/this->width + idx%this->width * this->width);
+}
+
 IntPair BinaryMatrix::getDataAccessor(int row, int col) {
     int idx = (this->transposed)? col*this->width+row : row*this->width+col;
     return std::make_pair(idx / this->baseSize, idx % this->baseSize);
@@ -104,6 +108,9 @@ uchar BinaryMatrix::set_bit(uchar elem, int bit_id, uchar bitValue) {
 }
 
 uchar BinaryMatrix::getValueAt(int idx) {
+    assert(idx < this->height*this->width);
+
+    if(this->transposed)    idx = transposeIndex(idx);
     IntPair pos = std::make_pair(idx / this->baseSize, idx % this->baseSize);
     return this->get_bit(this->data[pos.first], pos.second);
 }
@@ -120,6 +127,7 @@ uchar BinaryMatrix::getValueAt(int row, int col) {
 void BinaryMatrix::setValueAt(int idx, uchar bitValue) {
     assert(idx < this->height*this->width);
 
+    if(this->transposed)    idx = transposeIndex(idx);
     IntPair pos = std::make_pair(idx / this->baseSize, idx % this->baseSize);
     this->set_bit(this->data[pos.first], pos.second, bitValue);
 }

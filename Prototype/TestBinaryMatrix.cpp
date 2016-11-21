@@ -75,6 +75,21 @@ void TestBinaryMatrix::testSetBit(){
     cout << bMtx1.dataToString() << endl;
 }
 
+void TestBinaryMatrix::testTransposeIdx() {
+    cout << "----- TEST TRANSPOSE INDEX" << endl;
+    int testSize = 4;
+    BinaryMatrix bMtx(testSize,testSize);
+
+    for(int i=0; i<testSize*testSize; ++i) {
+        printf("%d ", i);
+    }
+    cout << endl;
+    for(int i=0; i<testSize*testSize; ++i) {
+        printf("%d ", bMtx.transposeIndex(i));
+    }
+    cout << endl << endl;
+}
+
 void TestBinaryMatrix::testTranspose(){
     cout << "----- TEST TRANSPOSE" << endl;
     int testSize = 3;
@@ -190,6 +205,7 @@ void TestBinaryMatrix::runAllTests(){
     testCreateAndPrint();
     testGetBit();
     testSetBit();
+    testTransposeIdx();
     testTranspose();
     testBinMultiply();
     testTBinMultiply();
