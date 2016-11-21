@@ -7,8 +7,6 @@
 #include <cstdio>
 #include "BinaryMatrix.h"
 
-#define IntPair std::pair<int, int>
-
 BinaryMatrix::BinaryMatrix(int w, int h) {
     this->init(w, h, 0);
 }
@@ -53,18 +51,9 @@ void BinaryMatrix::T() {
     this->transposed = !this->transposed;
 }
 
-/**
- * Multiplies two binary matrices. Binary matrix multiplciation is the
- * Haddamard product of the matrices, different from regular matrix multiplication.
- * @param other - The binary matrix we multiply current matrix with
- * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
- */
-BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
-    BinaryMatrix res(this->width, this->height);
-    for(int i = 0; i < this->dataLength; ++i) {
-        res.data[i] = !(this->data[i] ^ other.data[i]);
-    }
-    return res;
+IntPair BinaryMatrix::getDataAccessor(int row, int col) {
+    int idx = (this->transposed)? col*this->width+row : row*this->width+col;
+    return std::make_pair(idx / this->baseSize, idx % this->baseSize);
 }
 
 /**
@@ -76,7 +65,7 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
  * @param transposed - boolean to test if the matrix is tranposed and hence read differently
  * @return - (dataPos, bitIndex) position of the bit in the array
  */
-std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool transposed) {
+IntPair BinaryMatrix::elem_accessor(int i, int rows, int cols, bool transposed) {
     if (transposed) {
         return std::make_pair(i % rows, i / rows);
     } else {
@@ -114,7 +103,8 @@ uchar BinaryMatrix::getValueAt(int row, int col) {
     assert( row < this->height);
     assert( col < this->width);
 
-    IntPair pos = elem_accessor(row*this->width+col, this->dataLength, this->baseSize, this->transposed);
+    //IntPair pos = elem_accessor(row*this->width+col, this->dataLength, this->baseSize, this->transposed);
+    IntPair pos = this->getDataAccessor(row, col);
     return this->get_bit(this->data[pos.first], pos.second);
 }
 
@@ -122,8 +112,23 @@ void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
     assert( row < this->height);
     assert( col < this->width);
 
-    IntPair pos = this->elem_accessor( (row*this->width)+col, this->dataLength, this->baseSize, this->transposed);
+    //IntPair pos = this->elem_accessor( (row*this->width)+col, this->dataLength, this->baseSize, this->transposed);
+    IntPair pos = this->getDataAccessor(row, col);
     this->data[pos.first] = this->set_bit(this->data[pos.first], pos.second, bitValue);
+}
+
+/**
+ * Multiplies two binary matrices. Binary matrix multiplciation is the
+ * Haddamard product of the matrices, different from regular matrix multiplication.
+ * @param other - The binary matrix we multiply current matrix with
+ * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
+ */
+BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
+    BinaryMatrix res(this->width, this->height);
+    for(int i = 0; i < this->dataLength; ++i) {
+        res.data[i] = !(this->data[i] ^ other.data[i]);
+    }
+    return res;
 }
 
 /**

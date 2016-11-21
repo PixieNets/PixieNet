@@ -9,6 +9,7 @@
 #include <string>
 
 #define uchar unsigned char
+#define IntPair std::pair<int, int>
 
 class BinaryMatrix {
 public:
@@ -30,11 +31,14 @@ public:
     BinaryMatrix tBinMultiply(const BinaryMatrix& other);
     double*      doubleMultiply(const double* other);
     int          bitCount();
-    std::pair<int, int> elem_accessor(int i, int rows, int cols, bool transposed);
-    uchar get_bit(uchar elem, int bit_id);
-    uchar set_bit(uchar elem, int bit_id, uchar bitValue);
-    uchar getValueAt(int row, int col);
-    void setValueAt(int row, int col, uchar bitValue);
+
+    IntPair     elem_accessor(int i, int rows, int cols, bool transposed);
+    uchar       get_bit(uchar elem, int bit_id);
+    uchar       set_bit(uchar elem, int bit_id, uchar bitValue);
+
+    IntPair     getDataAccessor(int row, int col);
+    uchar       getValueAt(int row, int col);
+    void        setValueAt(int row, int col, uchar bitValue);
 
     BinaryMatrix operator*(const BinaryMatrix& other);
 

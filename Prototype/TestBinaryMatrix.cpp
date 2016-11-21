@@ -75,8 +75,29 @@ void TestBinaryMatrix::testSetBit(){
     cout << bMtx1.dataToString() << endl;
 }
 
-void TestBinaryMatrix::testGetValueAt(){
+void TestBinaryMatrix::testTranspose(){
+    cout << "----- TEST TRANSPOSE" << endl;
+    int testSize = 3;
+    BinaryMatrix bMtx(testSize,testSize);
 
+    //Fill upper triangle
+    for(int i=0; i<testSize; ++i) {
+        for(int j=i; j < testSize; ++j) {
+            bMtx.setValueAt(i,j,1);
+        }
+    }
+    cout << bMtx.dataToString() << endl;
+    bMtx.T();
+    cout << bMtx.dataToString() << endl;
+
+    cout << "elem_accessor transposed" << endl;
+    for(int i=0; i<bMtx.height; ++i) {
+        for(int j=0; j<bMtx.width; ++j) {
+            std::pair<int, int> pos = bMtx.elem_accessor(i*bMtx.width+j,bMtx.dataLength, bMtx.baseSize, bMtx.transposed);
+            printf("[%d,%d]: ", pos.first, pos.second);
+            printf("%u\n", bMtx.get_bit(bMtx.data[pos.first], pos.second));
+        }
+    }
 }
 
 void TestBinaryMatrix::testBinMultiply(){
@@ -95,7 +116,7 @@ void TestBinaryMatrix::runAllTests(){
     testCreateAndPrint();
     testGetBit();
     testSetBit();
-    testGetValueAt();
+    testTranspose();
     testBinMultiply();
     testTBinMultiply();
     testDoubleMultiply();
