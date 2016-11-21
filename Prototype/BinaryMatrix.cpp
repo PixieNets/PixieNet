@@ -78,9 +78,9 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
  */
 std::pair<int, int> BinaryMatrix::elem_accessor(int i, int rows, int cols, bool transposed) {
     if (transposed) {
-        return std::make_pair(i % cols, i / cols);
+        return std::make_pair(i % rows, i / rows);
     } else {
-        return std::make_pair(i / rows, i % rows);
+        return std::make_pair(i / cols, i % cols);
     }
 }
 
@@ -122,7 +122,7 @@ void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
     assert( row < this->height);
     assert( col < this->width);
 
-    IntPair pos = this->elem_accessor( (row*this->width)+col, this->dataLength, this->dataLength, this->transposed);
+    IntPair pos = this->elem_accessor( (row*this->width)+col, this->dataLength, this->baseSize, this->transposed);
     this->data[pos.first] = this->set_bit(this->data[pos.first], pos.second, bitValue);
 }
 

@@ -7,7 +7,7 @@
 
 using namespace std;
 void TestBinaryMatrix::testCreateAndPrint(){
-    cout << "TEST CONSTRUCTOR" << endl;
+    cout << "----- TEST CONSTRUCTOR" << endl;
     int testSize = 5;
     cout << "Default ctor:" << endl;
     BinaryMatrix bMtx(testSize, testSize);
@@ -29,8 +29,8 @@ void TestBinaryMatrix::testCreateAndPrint(){
 }
 
 void TestBinaryMatrix::testGetBit(){
-    cout << "TEST GET BITS" << endl;
-    int testSize = 5;
+    cout << "----- TEST GET BITS" << endl;
+    int testSize = 4;
     cout << "get_bit" << endl;
     BinaryMatrix bMtx(testSize, testSize, 1);
     cout << bMtx.toString() << endl;
@@ -44,6 +44,7 @@ void TestBinaryMatrix::testGetBit(){
     cout << endl;
 
     cout << "elem_accessor" << endl;
+    cout << bMtx.toString() << endl;
     for(int i=0; i<bMtx.height; ++i) {
         for(int j=0; j<bMtx.width; ++j) {
             std::pair<int, int> pos = bMtx.elem_accessor(i*bMtx.width+j,bMtx.dataLength, bMtx.baseSize, bMtx.transposed);
@@ -54,8 +55,8 @@ void TestBinaryMatrix::testGetBit(){
 }
 
 void TestBinaryMatrix::testSetBit(){
-    cout << "TEST SET BITS" << endl;
-    int testSize = 10;
+    cout << "----- TEST SET BITS" << endl;
+    int testSize = 6;
     BinaryMatrix bMtx(testSize, testSize, 0);
     for(int i=0; i<testSize; ++i) {
         bMtx.setValueAt(i,i,1);
