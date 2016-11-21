@@ -90,10 +90,10 @@ void TestBinaryMatrix::testTranspose(){
     bMtx.T();
     cout << bMtx.dataToString() << endl;
 
-    cout << "elem_accessor transposed" << endl;
+    cout << "getDataAccessor transposed" << endl;
     for(int i=0; i<bMtx.height; ++i) {
         for(int j=0; j<bMtx.width; ++j) {
-            std::pair<int, int> pos = bMtx.elem_accessor(i*bMtx.width+j,bMtx.dataLength, bMtx.baseSize, bMtx.transposed);
+            std::pair<int, int> pos = bMtx.getDataAccessor(i, j);
             printf("[%d,%d]: ", pos.first, pos.second);
             printf("%u\n", bMtx.get_bit(bMtx.data[pos.first], pos.second));
         }
@@ -101,6 +101,26 @@ void TestBinaryMatrix::testTranspose(){
 }
 
 void TestBinaryMatrix::testBinMultiply(){
+    cout << "----- TEST Multiply" << endl;
+    int testSize = 5;
+    BinaryMatrix mtx0(testSize, testSize, 0);
+    BinaryMatrix mtx1(testSize, testSize, 1);
+
+    cout << mtx0.dataToString() << endl;
+    cout << mtx1.dataToString() << endl;
+    cout << endl;
+
+    BinaryMatrix resZero = mtx0 * mtx1;
+    cout << "0 x 0 = " << endl;
+    cout << resZero.toString() << endl;
+    cout << resZero.dataToString() << endl;
+
+    BinaryMatrix resOne = mtx1 * mtx1;
+    cout << "1 x 1 = " << endl;
+    cout << resOne.toString() << endl;
+    cout << resOne.dataToString() << endl;
+
+    
 
 }
 

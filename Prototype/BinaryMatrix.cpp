@@ -56,6 +56,10 @@ IntPair BinaryMatrix::getDataAccessor(int row, int col) {
     return std::make_pair(idx / this->baseSize, idx % this->baseSize);
 }
 
+int BinaryMatrix::getLinearIndex(int row, int col, int height, int width, bool transposed) {
+    return (transposed)? col*width+row : row*width+col;
+}
+
 /**
  * Generates the (row, col) position for the i^{th} bit stored in the binary matrix
  * and ensures that access takes into account if the matrix is transposed
@@ -126,7 +130,7 @@ void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
     BinaryMatrix res(this->width, this->height);
     for(int i = 0; i < this->dataLength; ++i) {
-        res.data[i] = !(this->data[i] ^ other.data[i]);
+        res.data[i] = ~(this->data[i] ^ other.data[i]);
     }
     return res;
 }
@@ -140,23 +144,28 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix& other) {
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix& other) {
     int w = this->width;
     int h = this->height;
-    if (this->transposed) {
-        w = other.width;
-        h = other.height;
+    if (this->transposed){
+        w = other.width;    h = other.height;
     }
     BinaryMatrix res(w, h);
     int this_n = this->dataLength;
     int other_n = other.dataLength;
-    for (int bit_id = 0; bit_id < (w * h); ++bit_id) {
-        IntPair this_rc = elem_accessor(bit_id, this_n, this->baseSize, this->transposed);
-        IntPair other_rc = elem_accessor(bit_id, other_n, other.baseSize, other.transposed);
-        IntPair res_rc = this->transposed? other_rc : this_rc;
-        uchar this_c = this->data[this_rc.first];
-        uchar other_c = other.data[other_rc.first];
-        uchar res_c = res.data[res_rc.first];
+    IntPair this_rc;
+    IntPair other_rc;
+    IntPair res_rc;
+    uchar   res_c,answer_c;
+    for (int row=0; row<this->height; ++row) {
+        for(int col=0; col<this->width; ++col) {
+            int thisIdx = getLinearIndex(row, col, this->height, this->width, this->transposed);
+            int otherIdx = getLinearIndex(row, col, other.height, other.width, other.transposed);
+            this_rc = this->elem_accessor(thisIdx, this->dataLength, this->baseSize, false);
+            other_rc = this->elem_accessor(otherIdx, other.dataLength, other.baseSize, false);
+            res_rc = this->transposed? other_rc : this_rc;
 
-        uchar answer = !(get_bit(this_c, this_rc.second) ^ get_bit(other_c, other_rc.second)) & 1;
-        res.data[res_rc.first] = set_bit(res_c, res_rc.second, answer);
+            answer_c = ~(get_bit(this->data[this_rc.first], this_rc.second) ^ \
+                        get_bit(other.data[other_rc.first], other_rc.second)) & 1;
+            res.data[res_rc.first] = set_bit(res.data[res_rc.first], res_rc.second, answer_c);
+        }
     }
     return res;
 }

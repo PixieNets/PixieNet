@@ -36,6 +36,7 @@ public:
     uchar       get_bit(uchar elem, int bit_id);
     uchar       set_bit(uchar elem, int bit_id, uchar bitValue);
 
+    int         getLinearIndex(int row, int col, int height, int width, bool transposed);
     IntPair     getDataAccessor(int row, int col);
     uchar       getValueAt(int row, int col);
     void        setValueAt(int row, int col, uchar bitValue);
