@@ -17,7 +17,7 @@ BinaryMatrix::BinaryMatrix(int w, int h) {
  * @param h - height of matrix
  * @return (none)
  */
-BinaryMatrix::BinaryMatrix(int w, int h, int initVal) {
+BinaryMatrix::BinaryMatrix(int w, int h, uchar initVal) {
     this->init(w, h, initVal);
 }
 
@@ -29,7 +29,7 @@ BinaryMatrix::~BinaryMatrix() {
         delete[] this->data;
 }
 
-void BinaryMatrix::init(int w, int h, int initVal) {
+void BinaryMatrix::init(int w, int h, uchar initVal) {
     this->width = w;
     this->height = h;
     this->baseSize = sizeof(uchar) * 8;
@@ -195,21 +195,19 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     return res;
 }
 
-/*
- * The operations are done row-wise
- * !!! Watch out and remember to clean the memory
- */
+/**
+ *
+ **/
 
-double* BinaryMatrix::doubleMultiply(const double *other) {
-    double* res = new double[this->dataLength];
-
+mat BinaryMatrix::doubleMultiply(const mat &other) {
+    mat res(this->height, this->width);
     IntPair linearPos;
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
             if( this->getValueAt(row, col) == 0)
-                res[row*col] = other[row*col]*-1;
+                res(row,col) = other(row,col)*-1;
             else
-                res[row*col] = other[row*col];
+                res(row,col) = other(row,col);
         }
     }
 
@@ -238,7 +236,7 @@ void BinaryMatrix::print() {
 
 std::string BinaryMatrix::toString() {
     std::string transStr = (this->transposed) ? "Yes":"No";
-    std::string res = "< Binary Matrix rows:" + std::to_string(this->height)
+    std::string res = "< BinaryMatrix rows:" + std::to_string(this->height)
                         + " cols:" + std::to_string(this->width)
                         + " transposed:" + transStr + " >";
     return res;

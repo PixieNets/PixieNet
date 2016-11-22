@@ -6,6 +6,9 @@
 
 #include <iostream>
 #include <string>
+#include <armadillo>
+
+using namespace arma;
 
 #define uchar unsigned char
 #define IntPair std::pair<int, int>
@@ -24,14 +27,14 @@ public:
 
 public:
     BinaryMatrix(int w, int h);
-    BinaryMatrix(int w, int h, int initVal);
+    BinaryMatrix(int w, int h, uchar initVal);
     ~BinaryMatrix();
 
-    void init(int w, int h, int initVal);
+    void init(int w, int h, uchar initVal);
     void T();
     BinaryMatrix binMultiply(const BinaryMatrix &other);
     BinaryMatrix tBinMultiply(const BinaryMatrix &other);
-    double*      doubleMultiply(const double *other);
+    mat          doubleMultiply(const mat &other);
     int          bitCount();
 
     IntPair     elemAccessor(int i, int rows, int cols, bool transposed);
@@ -48,7 +51,7 @@ public:
 
     BinaryMatrix operator*(const BinaryMatrix &other);
 
-    void print();
+    void        print();
     std::string toString();
     std::string dataToString();
 };
