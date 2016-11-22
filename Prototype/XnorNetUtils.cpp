@@ -7,9 +7,9 @@
 #include <assert.h>
 
 /**
- * Binarizes an input double-precision 2D image slice to a 2D binary matrix
+ * Binarizes an input double-precision 2D data slice to a 2D binary matrix
  * @param data - a 2D matrix of size H x W
- * @return 2D binary matrix representation of input image slice
+ * @return 2D binary matrix representation of input data slice
  */
 BinaryMatrix* XnorNetUtils::centerDataMat(arma::mat data) {
     BinaryMatrix *ch = new BinaryMatrix(data.n_rows, data.n_cols);
@@ -22,16 +22,15 @@ BinaryMatrix* XnorNetUtils::centerDataMat(arma::mat data) {
 }
 
 /**
- * Binarizes an input double-precision image to a 3D binary matrix
- * @param image - a 3D matrix of size H X W X 3
- * @return 3D binary matrix representation of input image
+ * Binarizes an input double-precision data matrix to a 3D binary matrix
+ * @param data - a 3D matrix of size H X W X N
+ * @return 3D binary matrix representation of input data
  */
-BMatArr XnorNetUtils::binarizeImage(arma::cube image) {
-    assert(image.n_slices == 3); // Load only RGB images
+BMatArr XnorNetUtils::normalizeData(arma::cube data) {
 
-    BMatArr binIm = new BinaryMatrix*[3];
-    for (int i = 0; i < 3; ++i) {
-        binIm[i] = centerDataMat(image.slice(i));
+    BMatArr binIm = new BinaryMatrix*[data.n_slices];
+    for (int i = 0; i < data.n_slices; ++i) {
+        binIm[i] = centerDataMat(data.slice(i));
     }
 
     return binIm;
