@@ -6,7 +6,7 @@
 #include <cmath>
 #include "BinaryLayer.h"
 
-BinaryLayer::BinaryLayer(int w, int h) {
+BinaryLayer::BinaryLayer(uint w, uint h) {
     this->bl_width = w;
     this->bl_height = h;
     this->bl_binMtx = new BinaryMatrix(w, h);
@@ -26,8 +26,8 @@ BinaryLayer::~BinaryLayer() {
 void BinaryLayer::binarizeMat(arma::mat data) {
     assert((this->bl_width * this->bl_height) == (data.n_rows * data.n_cols));
 
-    int n_elems = this->bl_width * this->bl_height;
-    for (int i = 0; i < n_elems; ++i) {
+    uint n_elems = this->bl_width * this->bl_height;
+    for (uint i = 0; i < n_elems; ++i) {
         this->bl_binMtx->setValueAt(i, (data[i] >= 0)? BIT_ONE:BIT_ZERO);
     }
     this->bl_alpha = arma::sum(arma::sum(arma::abs(data)))/ n_elems;
@@ -43,7 +43,7 @@ void BinaryLayer::binarizeWeights(double *weights, int size) {
     assert(size == (this->bl_binMtx->width * this->bl_binMtx->height));
 
     double bl_alpha = 0.0;
-    for (int i = 0;  i < size; ++i) {
+    for (uint i = 0;  i < size; ++i) {
         bl_alpha += std::fabs(weights[i]);
         this->bl_binMtx->setValueAt(i, (weights[i] >= 0)? BIT_ONE:BIT_ZERO);
     }
@@ -63,7 +63,7 @@ void BinaryLayer::getDoubleWeights(double **weights, int *size) {
     else {
         assert(bl_binMtx->width*bl_binMtx->height == *size);
     }
-    for(int i=0; i<*size; ++i) {
+    for(int i = 0; i < *size; ++i) {
         *weights[i] = this->bl_binMtx->getValueAt(i);
     }
 }
