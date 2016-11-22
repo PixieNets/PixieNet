@@ -6,8 +6,15 @@
 #define PROTOTYPE_TESTBINARYMATRIX_H
 
 #include <iostream>
+#include "BinaryMatrix.h"
 
 class TestBinaryMatrix {
+    // Generate
+    BinaryMatrix generateDiag(int n);
+    BinaryMatrix generateUpperDiag(int n);
+    BinaryMatrix generateLowerDiag(int n);
+
+    // Tests
     void testCreateAndPrint();
     void testGetBit();
     void testSetBit();
