@@ -151,20 +151,26 @@ void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
  * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
  */
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix &other) {
+    assert(this->transposed == other.transposed);
+
     BinaryMatrix res(this->width, this->height);
     for(int i = 0; i < this->dataLength; ++i) {
         res.data[i] = ~(this->data[i] ^ other.data[i]);
     }
+    res.transposed = this->transposed;
     return res;
 }
 
 /**
  * Multiplies two matrices, one of which is transposed, bit-wise, again to
- * return their Hadamhard product.
+ * return their Hadamhard product. The resulting matrix will have the size of the non-transposed.
  * @param other - the matrix to multiply the current matrix with
  * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
  */
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
+    assert(this->width == other.height);
+    assert(this->height == other.width);
+
     int w = this->width;
     int h = this->height;
     if (this->transposed) {
@@ -177,7 +183,7 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     IntPair this_rc;
     IntPair other_rc;
     IntPair res_rc;
-    uchar   answer_c;
+    uchar   this_c, other_c, answer_c;
     int     thisIdx, otherIdx;
     for (int row = 0; row < this->height; ++row) {
         for(int col = 0; col < this->width; ++col) {
@@ -192,6 +198,7 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
             res.data[res_rc.first] = setBit(res.data[res_rc.first], res_rc.second, answer_c);
         }
     }
+
     return res;
 }
 
