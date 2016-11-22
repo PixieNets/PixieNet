@@ -41,7 +41,7 @@ void BinaryMatrix::init(int w, int h, uchar initVal) {
     if (n % baseSize != 0)
         ++this->dataLength;
     this->data = new uchar[dataLength];
-    uchar val = (initVal == 0)? BIT_ZERO:BIT_ONE;
+    uchar val = (initVal == BIT_ZERO)? 0 : ~0;  //all zeroes or all ones
     for(int i = 0; i < this->dataLength; ++i) {
         this->data[i] = val;
     }
@@ -202,12 +202,13 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
 mat BinaryMatrix::doubleMultiply(const mat &other) {
     mat res(this->height, this->width);
     IntPair linearPos;
+
     for(int row=0; row < this->height; ++row) {
         for(int col=0; col < this->width; ++col) {
-            if( this->getValueAt(row, col) == 0)
-                res(row,col) = other(row,col)*-1;
+            if( this->getValueAt(row,col) == BIT_ZERO)
+                res(row, col) = other(row,col)*-1;
             else
-                res(row,col) = other(row,col);
+                res(row, col) = other(row,col);
         }
     }
 

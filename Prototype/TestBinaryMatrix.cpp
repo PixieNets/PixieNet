@@ -206,33 +206,41 @@ void TestBinaryMatrix::testTBinMultiply(){
 void TestBinaryMatrix::testDoubleMultiply(){
     cout << "----- TEST DOUBLE MULTIPLY" << endl;
     int testSize = 3;
-    BinaryMatrix uDiag(testSize,testSize);
-    BinaryMatrix lDiag(testSize,testSize);
-    //Fill upper triangle
-    for(int i=0; i<testSize; ++i) {
-        for(int j=i; j < testSize; ++j) {
-            uDiag.setValueAt(i,j,1);
-            lDiag.setValueAt(j,i,1);
-        }
-    }
+    BinaryMatrix zerosMtx(testSize, testSize);
+    BinaryMatrix onesMtx(testSize, testSize, 1);
+    BinaryMatrix uDiag = this->generateUpperDiag(testSize);
+    BinaryMatrix diag = this->generateDiag(testSize);
 
     mat dMtx(testSize, testSize);
     dMtx.fill(109.0);
 
-    mat dResMtx = uDiag.doubleMultiply(dMtx);
+    cout << "0 = " << endl;
+    cout << zerosMtx.dataToString() << endl;
+    cout << "0 * 109= " << endl;
+    mat dResMtx = zerosMtx.doubleMultiply(dMtx);
+    dResMtx.print();
+    cout << endl;
 
-    for(int row=0; row<testSize; ++row) {
-        for(int col=0; col<testSize; ++col) {
-            printf("%.1f ", dMtx[row*testSize+col]);
-        }
-        printf("\n");
-    }
-    for(int row=0; row<testSize; ++row) {
-        for(int col=0; col<testSize; ++col) {
-            printf("%.1f ", dResMtx[row*testSize+col]);
-        }
-        printf("\n");
-    }
+    cout << "1 = " << endl;
+    cout << onesMtx.dataToString() << endl;
+    cout << "1 * 109= " << endl;
+    dResMtx = onesMtx.doubleMultiply(dMtx);
+    dResMtx.print();
+    cout << endl;
+
+    cout << "U = " << endl;
+    cout << uDiag.dataToString() << endl;
+    cout << "U * 109= " << endl;
+    dResMtx = uDiag.doubleMultiply(dMtx);
+    dResMtx.print();
+    cout << endl;
+
+    cout << "D = " << endl;
+    cout << diag.dataToString() << endl;
+    cout << "D * 109= " << endl;
+    dResMtx = diag.doubleMultiply(dMtx);
+    dResMtx.print();
+    cout << endl;
 }
 
 void TestBinaryMatrix::runAllTests(){
