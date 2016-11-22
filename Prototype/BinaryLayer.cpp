@@ -3,29 +3,31 @@
 //
 
 #include <assert.h>
+#include <cmath>
 #include "BinaryLayer.h"
 
 BinaryLayer::BinaryLayer(int w, int h) {
     this->binMtx = new BinaryMatrix(w, h);
-    this->scale = 1.0;
+    this->alpha = 1.0;
 }
 
 BinaryLayer::~BinaryLayer() {
-    if(binMtx != nullptr)  delete binMtx;
+    if(this->binMtx != nullptr)
+        delete this->binMtx;
 }
 
-void BinaryLayer::binarizeWeights(double* weights, int size) {
-    assert(size == this->binMtx->width*this->binMtx->height);
+void BinaryLayer::binarizeWeights(double *weights, int size) {
+    assert(size == (this->binMtx->width * this->binMtx->height));
 
-    double acc = 0.0;
-    for(int i=0; i<size; ++i) {
-        acc += weights[i];
-        this->binMtx->setValueAt(i, (weights[i]>=0.0)? 1:0);
+    double alpha = 0.0;
+    for (int i = 0;  i < size; ++i) {
+        alpha += std::fabs(weights[i]);
+        this->binMtx->setValueAt(i, (weights[i] >= 0)? BIT_ONE:BIT_ZERO);
     }
-    this->scale /=size;
+    this->alpha = alpha / size;
 }
 
-void BinaryLayer::getDoubleWeights(double** weights, int* size) {
+void BinaryLayer::getDoubleWeights(double **weights, int *size) {
     if(*weights == nullptr) {
         *weights = new double[binMtx->width*binMtx->height];
         *size = binMtx->width*binMtx->height;

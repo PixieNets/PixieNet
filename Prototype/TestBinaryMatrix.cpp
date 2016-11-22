@@ -66,7 +66,7 @@ void TestBinaryMatrix::testGetBit(){
     for(int i=0; i<bMtx.dataLength; ++i) {
         printf("%u ",bMtx.data[i]);
         for(int j=0; j<bMtx.baseSize; ++j) {
-            printf("%u ", bMtx.get_bit(bMtx.data[i],j));
+            printf("%u ", bMtx.getBit(bMtx.data[i],j));
         }
         cout << endl;
     }
@@ -76,9 +76,9 @@ void TestBinaryMatrix::testGetBit(){
     cout << bMtx.toString() << endl;
     for(int i=0; i<bMtx.height; ++i) {
         for(int j=0; j<bMtx.width; ++j) {
-            std::pair<int, int> pos = bMtx.elem_accessor(i*bMtx.width+j,bMtx.dataLength, bMtx.baseSize, bMtx.transposed);
+            std::pair<int, int> pos = bMtx.elemAccessor(i*bMtx.width+j,bMtx.dataLength, bMtx.baseSize, bMtx.transposed);
             printf("[%d,%d]: ", pos.first, pos.second);
-            printf("%u\n", bMtx.get_bit(bMtx.data[pos.first], pos.second));
+            printf("%u\n", bMtx.getBit(bMtx.data[pos.first], pos.second));
         }
     }
 }
@@ -142,7 +142,7 @@ void TestBinaryMatrix::testTranspose(){
         for(int j=0; j<bMtx.width; ++j) {
             std::pair<int, int> pos = bMtx.getDataAccessor(i, j);
             printf("[%d,%d]: ", pos.first, pos.second);
-            printf("%u\n", bMtx.get_bit(bMtx.data[pos.first], pos.second));
+            printf("%u\n", bMtx.getBit(bMtx.data[pos.first], pos.second));
         }
     }
 }
