@@ -6,6 +6,8 @@
 #include <cmath>
 #include "BinaryLayer.h"
 
+using namespace bd;
+
 BinaryLayer::BinaryLayer(uint w, uint h) {
     this->bl_width = w;
     this->bl_height = h;

@@ -4,13 +4,19 @@
 
 #pragma once
 
-#include <armadillo>
-
 #include "BinaryMatrix.h"
+
+#include <armadillo>
 
 typedef unsigned int uint;
 
-class BinaryLayer {
+namespace bd {
+    class BinaryLayer;
+    // Concatenate multiple binary layer channels to form a 3D binary tensor
+    typedef BinaryLayer** BinaryTensor;
+}
+
+class bd::BinaryLayer {
 private:
     uint            bl_width;
     uint            bl_height;

@@ -6,11 +6,10 @@
 
 #include "BinaryLayer.h"
 
+using namespace bd;
+
 // Multiple types of pooling
 enum class Pooling {max, min, average};
-
-// Concatenate multiple binary layer channels to form a 3D binary tensor
-typedef BinaryLayer** BinaryTensor;
 
 class BinaryConvolution {
 private:
