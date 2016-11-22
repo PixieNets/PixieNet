@@ -18,3 +18,12 @@ BinaryConvolution::BinaryConvolution(int w, int h, int ch, bool pool) {
         this->bc_conv_weights[i] = new BinaryLayer(w, h);
     }
 }
+
+BinaryConvolution::~BinaryConvolution() {
+    for (int i = 0; i < this->bc_channels; ++i) {
+        // delete each member of the array
+        delete this->bc_conv_weights[i];
+    }
+    // delete the array
+    delete[] bc_conv_weights;
+}
