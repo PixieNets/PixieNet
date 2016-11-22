@@ -3,9 +3,11 @@
 //
 
 #include "TestBinaryMatrix.h"
+#include <armadillo>
 
 
 using namespace std;
+using namespace arma;
 
 BinaryMatrix TestBinaryMatrix::generateDiag(int n) {
     BinaryMatrix res(n,n);
@@ -45,13 +47,13 @@ void TestBinaryMatrix::testCreateAndPrint(){
     cout << bMtx.dataToString() << endl;
 
     cout << "Init 0 ctor:" << endl;
-    BinaryMatrix bMtx0(testSize, testSize,0);
+    BinaryMatrix bMtx0(testSize, testSize,BIT_ZERO);
     cout << "Data Length: " << bMtx0.dataLength << endl;
     cout << bMtx0.toString() << endl;
     cout << bMtx0.dataToString() << endl;
 
     cout << "Init 1 ctor:" << endl;
-    BinaryMatrix bMtx1(testSize, testSize, 1);
+    BinaryMatrix bMtx1(testSize, testSize, BIT_ONE);
     cout << "Data Length: " << bMtx1.dataLength << endl;
     cout << bMtx1.toString() << endl;
     cout << bMtx1.dataToString() << endl;
@@ -214,11 +216,10 @@ void TestBinaryMatrix::testDoubleMultiply(){
         }
     }
 
-    double *dMtx = new double[testSize*testSize];
-    for(int i=0; i<testSize*testSize; ++i) {
-        dMtx[i] = 109.0;
-    }
-    double *dResMtx = uDiag.doubleMultiply(dMtx);
+    mat dMtx(testSize, testSize);
+    dMtx.fill(109.0);
+
+    mat dResMtx = uDiag.doubleMultiply(dMtx);
 
     for(int row=0; row<testSize; ++row) {
         for(int col=0; col<testSize; ++col) {
@@ -232,9 +233,6 @@ void TestBinaryMatrix::testDoubleMultiply(){
         }
         printf("\n");
     }
-
-    if(dMtx!= nullptr) delete[] dMtx;
-    if(dResMtx!= nullptr) delete[] dResMtx;
 }
 
 void TestBinaryMatrix::runAllTests(){
