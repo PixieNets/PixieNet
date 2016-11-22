@@ -14,4 +14,5 @@ class XnorNetUtils {
 public:
     BinaryMatrix* centerDataMat(arma::mat data);
     BMatArr normalizeData(arma::cube data);
+
 };

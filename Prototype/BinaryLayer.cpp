@@ -7,13 +7,30 @@
 #include "BinaryLayer.h"
 
 BinaryLayer::BinaryLayer(int w, int h) {
-    this->binMtx = new BinaryMatrix(w, h);
-    this->alpha = 1.0;
+    this->bl_width = w;
+    this->bl_height = h;
+    this->bl_binMtx = new BinaryMatrix(w, h);
+    this->bl_alpha = 1.0;
 }
 
 BinaryLayer::~BinaryLayer() {
-    if(this->binMtx != nullptr)
-        delete this->binMtx;
+    if(this->bl_binMtx != nullptr)
+        delete this->bl_binMtx;
+}
+
+/**
+ * Converts double precision 2D weights matrix in Armadillo to single
+ * bit representation binary weights matrix
+ * @param data - double precision 2D weights matrix
+ */
+void BinaryLayer::binarizeMat(arma::mat data) {
+    assert((this->bl_width * this->bl_height) == (data.n_rows * data.n_cols));
+
+    int n_elems = this->bl_width * this->bl_height;
+    for (int i = 0; i < n_elems; ++i) {
+        this->bl_binMtx->setValueAt(i, (data[i] >= 0)? BIT_ONE:BIT_ZERO);
+    }
+    this->bl_alpha = arma::sum(arma::sum(arma::abs(data)))/ n_elems;
 }
 
 /**
@@ -23,14 +40,14 @@ BinaryLayer::~BinaryLayer() {
  * @param size - #elements in the weights matrix
  */
 void BinaryLayer::binarizeWeights(double *weights, int size) {
-    assert(size == (this->binMtx->width * this->binMtx->height));
+    assert(size == (this->bl_binMtx->width * this->bl_binMtx->height));
 
-    double alpha = 0.0;
+    double bl_alpha = 0.0;
     for (int i = 0;  i < size; ++i) {
-        alpha += std::fabs(weights[i]);
-        this->binMtx->setValueAt(i, (weights[i] >= 0)? BIT_ONE:BIT_ZERO);
+        bl_alpha += std::fabs(weights[i]);
+        this->bl_binMtx->setValueAt(i, (weights[i] >= 0)? BIT_ONE:BIT_ZERO);
     }
-    this->alpha = alpha / size;
+    this->bl_alpha = bl_alpha / size;
 }
 
 /**
@@ -40,13 +57,13 @@ void BinaryLayer::binarizeWeights(double *weights, int size) {
  */
 void BinaryLayer::getDoubleWeights(double **weights, int *size) {
     if(*weights == nullptr) {
-        *weights = new double[binMtx->width*binMtx->height];
-        *size = binMtx->width*binMtx->height;
+        *weights = new double[bl_binMtx->width*bl_binMtx->height];
+        *size = bl_binMtx->width*bl_binMtx->height;
     }
     else {
-        assert(binMtx->width*binMtx->height == *size);
+        assert(bl_binMtx->width*bl_binMtx->height == *size);
     }
     for(int i=0; i<*size; ++i) {
-        *weights[i] = this->binMtx->getValueAt(i);
+        *weights[i] = this->bl_binMtx->getValueAt(i);
     }
 }
