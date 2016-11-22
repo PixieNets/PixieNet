@@ -3,9 +3,38 @@
 //
 
 #include "TestBinaryMatrix.h"
-#include "BinaryMatrix.h"
+
 
 using namespace std;
+
+BinaryMatrix TestBinaryMatrix::generateDiag(int n) {
+    BinaryMatrix res(n,n);
+    for(int i=0; i<n; ++i) {
+        res.setValueAt(i,i,1);
+    }
+    return res;
+}
+
+BinaryMatrix TestBinaryMatrix::generateUpperDiag(int n) {
+    BinaryMatrix res(n,n);
+    for(int i=0; i<n; ++i) {
+        for(int j=i; j < n; ++j) {
+            res.setValueAt(i,j,1);
+        }
+    }
+    return res;
+}
+
+BinaryMatrix TestBinaryMatrix::generateLowerDiag(int n) {
+    BinaryMatrix res(n,n);
+    for(int i=0; i<n; ++i) {
+        for(int j=i; j < n; ++j) {
+            res.setValueAt(j,i,1);
+        }
+    }
+    return res;
+}
+
 void TestBinaryMatrix::testCreateAndPrint(){
     cout << "----- TEST CONSTRUCTOR" << endl;
     int testSize = 5;
@@ -57,10 +86,8 @@ void TestBinaryMatrix::testGetBit(){
 void TestBinaryMatrix::testSetBit(){
     cout << "----- TEST SET BITS" << endl;
     int testSize = 6;
-    BinaryMatrix bMtx(testSize, testSize, 0);
-    for(int i=0; i<testSize; ++i) {
-        bMtx.setValueAt(i,i,1);
-    }
+    BinaryMatrix bMtx = this->generateDiag(testSize);
+
     cout << bMtx.toString() << endl;
     cout << bMtx.dataToString() << endl;
 
@@ -102,16 +129,12 @@ void TestBinaryMatrix::testTransposeIdx() {
 void TestBinaryMatrix::testTranspose(){
     cout << "----- TEST TRANSPOSE" << endl;
     int testSize = 3;
-    BinaryMatrix bMtx(testSize,testSize);
+    BinaryMatrix bMtx = this->generateUpperDiag(testSize);
 
-    //Fill upper triangle
-    for(int i=0; i<testSize; ++i) {
-        for(int j=i; j < testSize; ++j) {
-            bMtx.setValueAt(i,j,1);
-        }
-    }
+    cout << "U =" << endl;
     cout << bMtx.dataToString() << endl;
     bMtx.T();
+    cout << "U.T = " << endl;
     cout << bMtx.dataToString() << endl;
 
     cout << "getDataAccessor transposed" << endl;
