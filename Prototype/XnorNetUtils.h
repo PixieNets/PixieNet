@@ -4,6 +4,14 @@
 
 #pragma once
 
-class XnorNetUtils {
+#include <armadillo>
 
+#include "BinaryMatrix.h"
+
+#define BMatArr BinaryMatrix**
+
+class XnorNetUtils {
+public:
+    BinaryMatrix* centerDataMat(arma::mat data);
+    BMatArr binarizeImage(arma::cube image);
 };
