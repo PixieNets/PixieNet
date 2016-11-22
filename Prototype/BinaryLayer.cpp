@@ -16,6 +16,12 @@ BinaryLayer::~BinaryLayer() {
         delete this->binMtx;
 }
 
+/**
+ * Converts double precision weights matrix to single-bit representation
+ * binary weights matrix
+ * @param weights - double precision weights values matrix
+ * @param size - #elements in the weights matrix
+ */
 void BinaryLayer::binarizeWeights(double *weights, int size) {
     assert(size == (this->binMtx->width * this->binMtx->height));
 
@@ -27,6 +33,11 @@ void BinaryLayer::binarizeWeights(double *weights, int size) {
     this->alpha = alpha / size;
 }
 
+/**
+ *
+ * @param weights
+ * @param size
+ */
 void BinaryLayer::getDoubleWeights(double **weights, int *size) {
     if(*weights == nullptr) {
         *weights = new double[binMtx->width*binMtx->height];
