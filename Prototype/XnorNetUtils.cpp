@@ -13,7 +13,7 @@
  */
 BinaryMatrix* XnorNetUtils::centerDataMat(arma::mat data) {
     BinaryMatrix *ch = new BinaryMatrix(data.n_rows, data.n_cols);
-    arma::mat centered_data = data - mean(mean(data));
+    arma::mat centered_data = (data - mean(mean(data))) / stddev(stddev(data));
     int n_elems = data.n_rows * data.n_cols;
     for (int i = 0; i < n_elems; ++i) {
         ch->setValueAt(i, (centered_data(i) >= 0.0) ? BIT_ONE:BIT_ZERO);
