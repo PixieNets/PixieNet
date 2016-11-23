@@ -6,6 +6,6 @@ include_directories(${ARMADILLO_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp BinaryMatrix.cpp BinaryMatrix.h BinaryLayer.cpp BinaryLayer.h TestBinaryMatrix.cpp TestBinaryMatrix.h XnorNet.cpp XnorNet.h XnorNetUtils.cpp XnorNetUtils.h)
+set(SOURCE_FILES main.cpp BinaryMatrix.cpp BinaryMatrix.h BinaryLayer.cpp BinaryLayer.h TestBinaryMatrix.cpp TestBinaryMatrix.h XnorNet.cpp XnorNet.h XnorNetUtils.cpp XnorNetUtils.h TestArmadillo.cpp TestArmadillo.h)
 add_executable(Prototype ${SOURCE_FILES})
 target_link_libraries(Prototype ${ARMADILLO_LIBRARIES})
