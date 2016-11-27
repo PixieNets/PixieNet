@@ -10,7 +10,11 @@ using namespace arma;
 
 class TestArmadillo {
 public:
-    void runTest();
+    void testGeneral();
+    void testSoftmax();
+
+    void runTest(); // runs all tests
+
 };
 
 

@@ -4,7 +4,34 @@
 
 #include "TestArmadillo.h"
 
-void TestArmadillo::runTest() {
+void TestArmadillo::testSoftmax() {
+    std::cout << "--- TEST SOFTMAX" << std::endl;
+    // The test will have 10 output from previous layers
+    // and 5 possible classes as an output
+    // the activation function is a sigmoid
+    int numOutput = 8;
+    int numLastOutput = 12;
+
+    std::cout << "SUM [1] :" << std::endl;
+    vec S = ones<vec>(numLastOutput);
+    std::cout << accu(S) << std::endl;
+
+    std::cout << "EXP^[1]:" << std::endl;
+    std::cout << exp(S) << std::endl;
+
+    std::cout << "DIV [1]/2:" << std::endl;
+    std::cout << S/2.0 << std::endl;
+
+    std::cout << "SOFTMAX:" << std::endl;
+    mat W = ones<mat>(numLastOutput,numOutput);
+    mat lastOutput = ones<vec>(numLastOutput);
+    vec Y = exp(tanh(W.t() * lastOutput));
+    double normC = accu(Y);
+    std::cout << "Expected value: " << 1/double(numOutput) << std::endl;
+    std::cout << Y/normC << std::endl;
+}
+
+void TestArmadillo::testGeneral() {
     // Test armadillo loading
     mat A = randu<mat>(4,5);
     mat B = randu<mat>(4,5);
@@ -32,4 +59,9 @@ void TestArmadillo::runTest() {
     std::cout << "sum(sum(A)): " << sum(sum(A)) << std::endl;
     std::cout << "Multiplying two random 4 x 5 matrices using Armadillo:\n";
     std::cout << A * B.t() << std::endl;
+}
+
+void TestArmadillo::runTest() {
+    this->testGeneral();
+    this->testSoftmax();
 }
