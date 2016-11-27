@@ -3,6 +3,7 @@
 //
 
 #include "TestArmadillo.h"
+#include <algorithm> // for std::sort
 
 void TestArmadillo::testSoftmax() {
     std::cout << "--- TEST SOFTMAX" << std::endl;
@@ -29,6 +30,21 @@ void TestArmadillo::testSoftmax() {
     double normC = accu(Y);
     std::cout << "Expected value: " << 1/double(numOutput) << std::endl;
     std::cout << Y/normC << std::endl;
+}
+
+void TestArmadillo::testRank() {
+    std::cout << "--- TEST RANK VECTOR" << std::endl;
+
+    arma::vec randVec = arma::randn(10);
+    std::cout << "randVec:" << std::endl;
+    std::cout << randVec << std::endl;
+
+    arma::uvec sortedIdxVec = arma::sort_index(randVec, "descend");
+    std::cout << "sorted vec idx:" << std::endl;
+    std::cout << sortedIdxVec << std::endl;
+
+    std::cout << "Position of first elems: " << arma::find(sortedIdxVec == 5 ) << std::endl;
+
 }
 
 void TestArmadillo::testGeneral() {
@@ -64,4 +80,5 @@ void TestArmadillo::testGeneral() {
 void TestArmadillo::runTest() {
     this->testGeneral();
     this->testSoftmax();
+    this->testRank();
 }

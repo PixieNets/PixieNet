@@ -12,6 +12,7 @@ class TestArmadillo {
 public:
     void testGeneral();
     void testSoftmax();
+    void testRank();
 
     void runTest(); // runs all tests
 
