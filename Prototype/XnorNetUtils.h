@@ -6,13 +6,12 @@
 
 #include <armadillo>
 
-#include "BinaryMatrix.h"
+#include "BinaryLayer.h"
 
-#define BMatArr BinaryMatrix**
+using namespace bd;
 
 class XnorNetUtils {
 public:
     BinaryMatrix* centerDataMat(arma::mat data);
-    BMatArr normalizeData(arma::cube data);
-
+    BinaryTensor normalizeData(arma::cube data);
 };

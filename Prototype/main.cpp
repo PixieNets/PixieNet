@@ -4,7 +4,6 @@
 #include "TestBinaryMatrix.h"
 
 
-
 int main() {
     TestArmadillo testArma;
     TestBinaryMatrix testBinaryMatrix;
