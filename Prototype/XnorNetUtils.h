@@ -14,4 +14,6 @@ class XnorNetUtils {
 public:
     BinaryMatrix* centerDataMat(arma::mat data);
     BinaryTensor normalizeData(arma::cube data);
+
+    arma::vec softmax(arma::mat weight, arma::vec prevOutput);
 };

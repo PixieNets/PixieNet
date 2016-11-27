@@ -51,3 +51,9 @@ arma::cube relu3D(arma::cube data) {
     return output;
 }
 
+arma::vec XnorNetUtils::softmax(arma::mat W, arma::vec prevOutput) {
+    assert(W.n_rows == prevOutput.n_elem);
+
+    vec Y = exp( tanh(W.t() * prevOutput) );
+    return Y/accu(Y);
+}
