@@ -41,7 +41,7 @@ void BinaryMatrix::init(int w, int h, uchar initVal) {
     if (n % baseSize != 0)
         ++this->dataLength;
     this->data = new uchar[dataLength];
-    uchar val = (initVal == BIT_ZERO)? 0 : ~0;  //all zeroes or all ones
+    uchar val = (initVal == BIT_ZERO)? 0 : ~0;  //8 zeroes or 8 ones
     for(int i = 0; i < this->dataLength; ++i) {
         this->data[i] = val;
     }
@@ -56,6 +56,10 @@ void BinaryMatrix::T() {
 
 int BinaryMatrix::transposeIndex(int idx) {
     return (idx / this->width + ((idx % this->width) * this->width));
+}
+
+int BinaryMatrix::transposeIndex(int idx, int width) {
+    return (idx / width + ((idx % width) * width));
 }
 
 IntPair BinaryMatrix::getDataAccessor(int row, int col) {
@@ -168,35 +172,46 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix &other) {
  * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
  */
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
-    assert(this->width == other.height);
-    assert(this->height == other.width);
-
-    int w = this->width;
-    int h = this->height;
-    if (this->transposed) {
-        w = other.width;
-        h = other.height;
+    // Verify that dimensions correspond
+    if( (this->transposed && !other.transposed) ||
+        (!this->transposed && other.transposed) ) {
+        assert(this->width == other.height);
+        assert(this->height == other.width);
     }
-    BinaryMatrix res(w, h);
+    else {
+        assert(this->height == other.height);
+        assert(this->width == other.width);
+    }
+
+    // Since this is the haddamard by design we choose to keep the
+    // dimensions of the non-transposed matrix, since by transposing
+    // we are trying to align the matrix to be multiplied
+    int resW = this->width;
+    int resH = this->height;
+    if (this->transposed) {
+        resW = other.width;
+        resH = other.height;
+    }
+    BinaryMatrix res(resW, resH);
+
     int this_n = this->dataLength;
     int other_n = other.dataLength;
-    IntPair this_rc;
-    IntPair other_rc;
-    IntPair res_rc;
-    uchar   this_c, other_c, answer_c;
+    IntPair this_rc, other_rc, res_rc;
+    uchar   answer_c;
     int     thisIdx, otherIdx;
-    for (int row = 0; row < this->height; ++row) {
-        for(int col = 0; col < this->width; ++col) {
-            thisIdx = getLinearIndex(row, col, this->height, this->width, this->transposed);
-            otherIdx = getLinearIndex(row, col, other.height, other.width, other.transposed);
-            this_rc = this->elemAccessor(thisIdx, this_n, this->baseSize, false);
-            other_rc = this->elemAccessor(otherIdx, other_n, other.baseSize, false);
-            res_rc = this->transposed? other_rc : this_rc;
 
-            answer_c = (uchar) (~(getBit(this->data[this_rc.first], this_rc.second)
-                                  ^ getBit(other.data[other_rc.first], other_rc.second)) & 1);
-            res.data[res_rc.first] = setBit(res.data[res_rc.first], res_rc.second, answer_c);
-        }
+    int numBits = this->height * this->width;
+    for(int i=0; i < numBits; ++i) {
+        thisIdx = (this->transposed)? transposeIndex(i, this->width) : i;
+        otherIdx = (other.transposed)? transposeIndex(i, other.width) : i;
+
+        this_rc = this->elemAccessor(thisIdx, this->dataLength, this->baseSize, false);
+        other_rc = this->elemAccessor(otherIdx, other.dataLength, other.baseSize, false);
+        res_rc = this->transposed? other_rc : this_rc;
+
+        answer_c = (uchar) (~(getBit(this->data[this_rc.first], this_rc.second)
+                              ^ getBit(other.data[other_rc.first], other_rc.second)) & 1);
+        res.data[res_rc.first] = setBit(res.data[res_rc.first], res_rc.second, answer_c);
     }
 
     return res;

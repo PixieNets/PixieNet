@@ -30,18 +30,19 @@ public:
     BinaryMatrix(int w, int h, uchar initVal);
     ~BinaryMatrix();
 
-    void init(int w, int h, uchar initVal);
-    void T();
+    void        init(int w, int h, uchar initVal);
+    void        T();
     BinaryMatrix binMultiply(const BinaryMatrix &other);
     BinaryMatrix tBinMultiply(const BinaryMatrix &other);
-    mat          doubleMultiply(const mat &other);
-    int          bitCount();
+    mat         doubleMultiply(const mat &other);
+    int         bitCount();
 
     IntPair     elemAccessor(int i, int rows, int cols, bool transposed);
     uchar       getBit(uchar elem, int bit_id);
     uchar       setBit(uchar elem, int bit_id, uchar bitValue);
 
     int         transposeIndex(int idx);
+    int         transposeIndex(int idx, int width);
     int         getLinearIndex(int row, int col, int height, int width, bool transposed);
     IntPair     getDataAccessor(int row, int col);
     uchar       getValueAt(int idx);
