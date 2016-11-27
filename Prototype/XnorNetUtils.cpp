@@ -57,3 +57,6 @@ arma::vec XnorNetUtils::softmax(arma::mat W, arma::vec prevOutput) {
     vec Y = exp( tanh(W.t() * prevOutput) );
     return Y/accu(Y);
 }
+
+
+
