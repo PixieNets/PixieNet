@@ -35,7 +35,9 @@ void TestArmadillo::testSoftmax() {
 void TestArmadillo::testRank() {
     std::cout << "--- TEST RANK VECTOR" << std::endl;
 
-    arma::vec randVec = arma::randn(10);
+
+    arma_rng::set_seed(1234);
+    arma::vec randVec = arma::randn(10)*10;
     std::cout << "randVec:" << std::endl;
     std::cout << randVec << std::endl;
 
@@ -43,7 +45,9 @@ void TestArmadillo::testRank() {
     std::cout << "sorted vec idx:" << std::endl;
     std::cout << sortedIdxVec << std::endl;
 
-    std::cout << "Position of first elems: " << arma::find(sortedIdxVec == 5 ) << std::endl;
+    for(int i=0; i < 5; ++i) {
+        std::cout << randVec.at(sortedIdxVec(i)) << std::endl;
+    }
 
 }
 
