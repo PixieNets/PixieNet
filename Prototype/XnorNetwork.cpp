@@ -36,5 +36,13 @@ void XnorNetwork::loadLabelsFromFile(std::string path) {
 VecStrDblPair XnorNetwork::getTopNLabels(int N, arma::vec outputVec) {
     VecStrDblPair rankedVec;
 
+    //Obtain the indices in descending order
+    arma::uvec rankedIdx = arma::sort_index(outputVec, "descend");
+    int entryIdx;
+    for(int rank=0; rank<N; ++rank) {
+        entryIdx = rankedIdx(rank);
+        StrDblPair newEntry = StrDblPair(this->XN_labels[entryIdx], outputVec(entryIdx));
+        rankedVec.push_back(newEntry);
+    }
     return rankedVec;
 }
