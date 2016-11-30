@@ -17,7 +17,7 @@ BinaryMatrix::BinaryMatrix(int w, int h) {
  * @param h - height of matrix
  * @return (none)
  */
-BinaryMatrix::BinaryMatrix(int w, int h, uchar initVal) {
+BinaryMatrix::BinaryMatrix(int w, int h, uint8 initVal) {
     this->init(w, h, initVal);
 }
 
@@ -29,19 +29,19 @@ BinaryMatrix::~BinaryMatrix() {
         delete[] this->data;
 }
 
-void BinaryMatrix::init(int w, int h, uchar initVal) {
+void BinaryMatrix::init(int w, int h, uint8 initVal) {
     this->width = w;
     this->height = h;
-    this->baseSize = sizeof(uchar) * 8;
+    this->baseBitSize = sizeof(uint8) * 8;
     this->transposed = false;
 
     //Initialize data, data is stored in a linear form
     int n = w * h;
-    this->dataLength = n / baseSize;
-    if (n % baseSize != 0)
+    this->dataLength = n / baseBitSize;
+    if (n % baseBitSize != 0)
         ++this->dataLength;
-    this->data = new uchar[dataLength];
-    uchar val = (initVal == BIT_ZERO)? 0 : ~0;  //8 zeroes or 8 ones
+    this->data = new uint8[dataLength];
+    uint8 val = (initVal == BIT_ZERO)? 0 : ~0;  //8 zeroes or 8 ones
     for(int i = 0; i < this->dataLength; ++i) {
         this->data[i] = val;
     }
@@ -64,7 +64,7 @@ int BinaryMatrix::transposeIndex(int idx, int width) {
 
 IntPair BinaryMatrix::getDataAccessor(int row, int col) {
     int idx = (this->transposed)? (col * this->width + row):(row * this->width + col);
-    return std::make_pair(idx / this->baseSize, idx % this->baseSize);
+    return std::make_pair(idx / this->baseBitSize, idx % this->baseBitSize);
 }
 
 int BinaryMatrix::getLinearIndex(int row, int col, int height, int width, bool transposed) {
@@ -94,8 +94,8 @@ IntPair BinaryMatrix::elemAccessor(int i, int rows, int cols, bool transposed) {
  * @param bit_id - the index of the bit in the row
  * @return - the bit stored at 'bit_id'
  */
-uchar BinaryMatrix::getBit(uchar elem, int bit_id) {
-    return ((elem >> (this->baseSize-1 - bit_id)) & 1) ? BIT_ONE:BIT_ZERO;
+uint8 BinaryMatrix::getBit(uint8 elem, int bit_id) {
+    return ((elem >> (this->baseBitSize-1 - bit_id)) & 1) ? BIT_ONE:BIT_ZERO;
 }
 
 /**
@@ -105,8 +105,8 @@ uchar BinaryMatrix::getBit(uchar elem, int bit_id) {
  * @param bitValue - the new bit value
  * @return - the row with the new modified bit
  */
-uchar BinaryMatrix::setBit(uchar elem, int bit_id, uchar bitValue) {
-    uchar mask = (uchar) (1 << (this->baseSize-1 - bit_id));
+uint8 BinaryMatrix::setBit(uint8 elem, int bit_id, uint8 bitValue) {
+    uint8 mask = (uint8) (1 << (this->baseBitSize-1 - bit_id));
     if (bitValue == 0) {
         return (elem & !mask);
     } else {
@@ -114,36 +114,36 @@ uchar BinaryMatrix::setBit(uchar elem, int bit_id, uchar bitValue) {
     }
 }
 
-uchar BinaryMatrix::getValueAt(int idx) {
+uint8 BinaryMatrix::getValueAt(int idx) {
     assert(idx < this->height*this->width);
 
     if(this->transposed)    idx = transposeIndex(idx);
-    IntPair pos = std::make_pair(idx / this->baseSize, idx % this->baseSize);
+    IntPair pos = std::make_pair(idx / this->baseBitSize, idx % this->baseBitSize);
     return this->getBit(this->data[pos.first], pos.second);
 }
 
-uchar BinaryMatrix::getValueAt(int row, int col) {
+uint8 BinaryMatrix::getValueAt(int row, int col) {
     assert( row < this->height);
     assert( col < this->width);
 
-    //IntPair pos = elemAccessor(row*this->width+col, this->dataLength, this->baseSize, this->transposed);
+    //IntPair pos = elemAccessor(row*this->width+col, this->dataLength, this->baseBitSize, this->transposed);
     IntPair pos = this->getDataAccessor(row, col);
     return this->getBit(this->data[pos.first], pos.second);
 }
 
-void BinaryMatrix::setValueAt(int idx, uchar bitValue) {
+void BinaryMatrix::setValueAt(int idx, uint8 bitValue) {
     assert(idx < this->height*this->width);
 
     if(this->transposed)    idx = transposeIndex(idx);
-    IntPair pos = std::make_pair(idx / this->baseSize, idx % this->baseSize);
+    IntPair pos = std::make_pair(idx / this->baseBitSize, idx % this->baseBitSize);
     this->setBit(this->data[pos.first], pos.second, bitValue);
 }
 
-void BinaryMatrix::setValueAt(int row, int col, uchar bitValue) {
+void BinaryMatrix::setValueAt(int row, int col, uint8 bitValue) {
     assert( row < this->height);
     assert( col < this->width);
 
-    //IntPair pos = this->elemAccessor( (row*this->width)+col, this->dataLength, this->baseSize, this->transposed);
+    //IntPair pos = this->elemAccessor( (row*this->width)+col, this->dataLength, this->baseBitSize, this->transposed);
     IntPair pos = this->getDataAccessor(row, col);
     this->data[pos.first] = this->setBit(this->data[pos.first], pos.second, bitValue);
 }
@@ -197,7 +197,7 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     int this_n = this->dataLength;
     int other_n = other.dataLength;
     IntPair this_rc, other_rc, res_rc;
-    uchar   answer_c;
+    uint8   answer_c;
     int     thisIdx, otherIdx;
 
     int numBits = this->height * this->width;
@@ -205,11 +205,11 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
         thisIdx = (this->transposed)? transposeIndex(i, this->width) : i;
         otherIdx = (other.transposed)? transposeIndex(i, other.width) : i;
 
-        this_rc = this->elemAccessor(thisIdx, this->dataLength, this->baseSize, false);
-        other_rc = this->elemAccessor(otherIdx, other.dataLength, other.baseSize, false);
+        this_rc = this->elemAccessor(thisIdx, this->dataLength, this->baseBitSize, false);
+        other_rc = this->elemAccessor(otherIdx, other.dataLength, other.baseBitSize, false);
         res_rc = this->transposed? other_rc : this_rc;
 
-        answer_c = (uchar) (~(getBit(this->data[this_rc.first], this_rc.second)
+        answer_c = (uint8) (~(getBit(this->data[this_rc.first], this_rc.second)
                               ^ getBit(other.data[other_rc.first], other_rc.second)) & 1);
         res.data[res_rc.first] = setBit(res.data[res_rc.first], res_rc.second, answer_c);
     }
@@ -240,7 +240,7 @@ mat BinaryMatrix::doubleMultiply(const mat &other) {
 int BinaryMatrix::bitCount() {
     int count = 0;
     for(int i=0; i<this->dataLength; ++i) {
-        for(int b=0; b<this->baseSize; ++b) {
+        for(int b=0; b<this->baseBitSize; ++b) {
             if(this->data[i]>>b & 1)
                 count++;
         }

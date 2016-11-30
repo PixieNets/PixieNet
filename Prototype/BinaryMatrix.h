@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <armadillo>
 
 using namespace arma;
 
-#define uchar unsigned char
+#define uint8 uint8_t
 #define IntPair std::pair<int, int>
 
 #define BIT_ZERO ((unsigned char) 0)
@@ -22,15 +23,15 @@ public:
     int     width;
     int     height;
     int     dataLength;
-    uchar   *data;
-    int     baseSize;
+    uint8   *data;
+    int     baseBitSize;
 
 public:
     BinaryMatrix(int w, int h);
-    BinaryMatrix(int w, int h, uchar initVal);
+    BinaryMatrix(int w, int h, uint8 initVal);
     ~BinaryMatrix();
 
-    void        init(int w, int h, uchar initVal);
+    void        init(int w, int h, uint8 initVal);
     void        T();
     BinaryMatrix binMultiply(const BinaryMatrix &other);
     BinaryMatrix tBinMultiply(const BinaryMatrix &other);
@@ -38,17 +39,17 @@ public:
     int         bitCount();
 
     IntPair     elemAccessor(int i, int rows, int cols, bool transposed);
-    uchar       getBit(uchar elem, int bit_id);
-    uchar       setBit(uchar elem, int bit_id, uchar bitValue);
+    uint8       getBit(uint8 elem, int bit_id);
+    uint8       setBit(uint8 elem, int bit_id, uint8 bitValue);
 
     int         transposeIndex(int idx);
     int         transposeIndex(int idx, int width);
     int         getLinearIndex(int row, int col, int height, int width, bool transposed);
     IntPair     getDataAccessor(int row, int col);
-    uchar       getValueAt(int idx);
-    uchar       getValueAt(int row, int col);
-    void        setValueAt(int idx, uchar bitValue);
-    void        setValueAt(int row, int col, uchar bitValue);
+    uint8       getValueAt(int idx);
+    uint8       getValueAt(int row, int col);
+    void        setValueAt(int idx, uint8 bitValue);
+    void        setValueAt(int row, int col, uint8 bitValue);
 
     BinaryMatrix operator*(const BinaryMatrix &other);
 
