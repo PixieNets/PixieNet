@@ -21,6 +21,7 @@ private:
     uint           bc_padding;
     bool           bc_pool;
     Pooling        bc_pool_type;
+    uint           bc_pool_size;
     uint           bc_pool_stride;
     arma::mat      bc_box_filter;   // the kernel k applied to input A to get K
     BinaryTensor4D bc_conv_weights; // Weights matrix for convolution
@@ -30,7 +31,7 @@ public:
     // doesn't have to provide pooling parameters
     BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride, uint padding,
                       bool pool=true, Pooling pool_type=Pooling::max,
-                      uint pool_stride=2);
+                      uint pool_size=2, uint pool_stride=2);
     ~BinaryConvolution();
 
     // 1. Normalize input data by mean and variance
@@ -55,6 +56,7 @@ public:
     uint padding()            {    return bc_padding;  }
     bool pool()               {    return bc_pool;     }
     Pooling pool_type()       {    return bc_pool_type; }
+    uint pool_size()          {    return bc_pool_size; }
     uint pool_stride()        {    return bc_pool_stride; }
 
 };
