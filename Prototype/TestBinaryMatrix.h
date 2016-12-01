@@ -25,8 +25,10 @@ class TestBinaryMatrix {
     void testTBinMultiply();
     void testDoubleMultiply();
 
+    bool test_im2col();
+
 public:
-    void runAllTests();
+    bool runAllTests();
 };
 
 

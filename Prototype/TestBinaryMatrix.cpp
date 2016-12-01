@@ -243,7 +243,12 @@ void TestBinaryMatrix::testDoubleMultiply(){
     cout << endl;
 }
 
-void TestBinaryMatrix::runAllTests(){
+bool TestBinaryMatrix::test_im2col() {
+    // TODO fix
+    return true;
+}
+
+bool TestBinaryMatrix::runAllTests(){
     testCreateAndPrint();
     testGetBit();
     testSetBit();
@@ -252,4 +257,5 @@ void TestBinaryMatrix::runAllTests(){
     testBinMultiply();
     testTBinMultiply();
     testDoubleMultiply();
+    return test_im2col();
 }

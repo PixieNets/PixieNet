@@ -30,6 +30,7 @@ public:
 public:
     BinaryMatrix(uint w, uint h);
     BinaryMatrix(uint w, uint h, uint8 initVal);
+    BinaryMatrix(uint w, uint h, bool randomized=false);
     ~BinaryMatrix();
 
     void         init(uint w, uint h, uint8 initVal);

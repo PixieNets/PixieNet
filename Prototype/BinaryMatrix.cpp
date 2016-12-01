@@ -5,6 +5,9 @@
 #include <assert.h>
 #include <utility>
 #include <cstdio>
+#include <vector>
+#include <stdlib.h>
+
 #include "BinaryMatrix.h"
 
 BinaryMatrix::BinaryMatrix(uint w, uint h) {
@@ -19,6 +22,31 @@ BinaryMatrix::BinaryMatrix(uint w, uint h) {
  */
 BinaryMatrix::BinaryMatrix(uint w, uint h, uint8 initVal) {
     this->init(w, h, initVal);
+}
+
+BinaryMatrix::BinaryMatrix(uint w, uint h, bool randomized) {
+    this->init(w, h, 0);
+    if (randomized) {
+        // randomly set some bits to 1
+        uint n = rand() % this->bm_dataLength;
+        std::vector<uint> indices;
+        indices.reserve(n);
+        uint total = 0;
+        while (total != n) {
+            uint idx = rand() % this->bm_dataLength;
+            bool used = false;
+            for (uint j : indices) {
+                if (idx == j) {
+                    used = true;
+                    break;
+                }
+            }
+            if (!used) {
+                setValueAt(idx, BIT_ONE);
+                ++total;
+            }
+        }
+    }
 }
 
 /**
