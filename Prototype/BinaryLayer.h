@@ -9,7 +9,6 @@
 #include <armadillo>
 #include <vector>
 
-typedef unsigned int uint;
 
 namespace bd {
     class BinaryLayer;
@@ -30,14 +29,15 @@ public:
     BinaryLayer(uint w, uint h);
     ~BinaryLayer();
 
-    void binarizeMat(arma::mat data);
-    void binarizeWeights(double *weights, int size);
-    void getDoubleWeights(double **weights, int *size);
+    void        binarizeMat(arma::mat data);
+    void        binarizeWeights(double *weights, int size);
+    void        getDoubleWeights(double **weights, int *size);
+    BinaryLayer operator*(const BinaryLayer &other);
 
     // Accessor functions for data members
-    uint width() {   return bl_width; }
-    uint height() {   return bl_height; }
-    BinaryMatrix* binMtx() {   return bl_binMtx; }
-    double alpha() {    return bl_alpha; }
+    uint width()            {   return bl_width;  }
+    uint height()           {   return bl_height; }
+    BinaryMatrix* binMtx()  {   return bl_binMtx; }
+    double alpha()          {   return bl_alpha;  }
 
 };
