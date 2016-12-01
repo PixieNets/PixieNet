@@ -16,20 +16,21 @@ private:
     uint         bc_width;
     uint         bc_height;
     uint         bc_channels;
+    uint         bc_filters;
     uint         bc_stride;
+    uint         bc_padding;
     bool         bc_pool;
     Pooling      bc_pool_type;
-    uint         bc_pool_stride_width;
-    uint         bc_pool_stride_height;
+    uint         bc_pool_stride;
     arma::mat    bc_box_filter;   // the kernel k applied to input A to get K
     BinaryTensor bc_conv_weights; // Weights matrix for convolution
 
 public:
     // Adding default values for pooling so that if pooling is set to false, user
     // doesn't have to provide pooling parameters
-    BinaryConvolution(uint w, uint h, uint ch, uint stride,
+    BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride, uint padding,
                       bool pool=true, Pooling pool_type=Pooling::max,
-                      uint pool_stride_width=2, uint pool_stride_height=2);
+                      uint pool_stride=2);
     ~BinaryConvolution();
 
     // 1. Normalize input data by mean and variance
@@ -49,11 +50,12 @@ public:
     uint width()              {    return bc_width;    }
     uint height()             {    return bc_height;   }
     uint channels()           {    return bc_channels; }
+    uint filters()            {    return bc_filters;  }
     uint stride()             {    return bc_stride;   }
+    uint padding()            {    return bc_padding;  }
     bool pool()               {    return bc_pool;     }
     Pooling pool_type()       {    return bc_pool_type; }
-    uint pool_stride_width()  {    return bc_pool_stride_width; }
-    uint pool_stride_height() {    return bc_pool_stride_height; }
+    uint pool_stride()        {    return bc_pool_stride; }
 
 };
 
