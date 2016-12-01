@@ -10,9 +10,11 @@
 
 #include "BinaryMatrix.h"
 
+/*
 BinaryMatrix::BinaryMatrix(uint w, uint h) {
     this->init(w, h, 0);
 }
+*/
 
 /**
  * Initializes a 2D binary matrix
@@ -29,6 +31,7 @@ BinaryMatrix::BinaryMatrix(uint w, uint h, bool randomized) {
     if (randomized) {
         // randomly set some bits to 1
         uint n = rand() % this->bm_dataLength;
+        printf("random n = %d\n", n);
         std::vector<uint> indices;
         indices.reserve(n);
         uint total = 0;
@@ -43,9 +46,15 @@ BinaryMatrix::BinaryMatrix(uint w, uint h, bool randomized) {
             }
             if (!used) {
                 setValueAt(idx, BIT_ONE);
+                indices[total] = idx;
                 ++total;
             }
         }
+        std::cout << "indices: \n";
+        for (uint i = 0; i < n; ++i) {
+            std::cout << indices[i] << ", ";
+        }
+        std::cout << std::endl;
     }
 }
 
@@ -166,7 +175,8 @@ void BinaryMatrix::setValueAt(uint idx, uint8 bitValue) {
     if(this->bm_transposed)
         idx = transposeIndex(idx);
     uIntPair pos = std::make_pair(idx / this->bm_baseBitSize, idx % this->bm_baseBitSize);
-    this->setBit(this->bm_data[pos.first], pos.second, bitValue);
+    std::cout << "pos = " << pos.first << ", " << pos.second << std::endl;
+    this->bm_data[pos.first] = this->setBit(this->bm_data[pos.first], pos.second, bitValue);
 }
 
 void BinaryMatrix::setValueAt(uint row, uint col, uint8 bitValue) {
@@ -325,28 +335,34 @@ BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix &other ) {
 }
 
 
-BinaryMatrix BinaryMatrix::im2col(BinaryMatrix &input, uint block_width, uint block_height,
+BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
                                   uint padding, uint stride) {
     uint n = block_width * block_height;
-    uint rows_out = (input.bm_height - block_height + 2 * padding) / stride + 1;
-    uint cols_out = (input.bm_width - block_width + 2 * padding) / stride + 1;
-    BinaryMatrix result(rows_out * cols_out, n);
+    uint rows_out = (this->bm_height - block_height + 2 * padding) / stride + 1;
+    uint cols_out = (this->bm_width - block_width + 2 * padding) / stride + 1;
+    uint all_out = rows_out * cols_out;
+    BinaryMatrix result(all_out, n);
+
+    printf("n = %d, rows_out = %d, cols_out = %d, all_out = %d\n", n, rows_out, cols_out, all_out);
 
     uint res_row = 0;
-    for (uint row = padding; row < (input.bm_height - padding - 1); ++row) {
-        for (uint col = padding; col < (input.bm_width - padding - 1); ++col) {
+    for (uint row = padding+1; row < (this->bm_height - padding - 1); ++row) {
+        for (uint col = padding+1; col < (this->bm_width - padding - 1); ++col) {
+            printf("row = %d, col = %d\n", row, col);
             uint res_col = 0;
             for (uint srow = row - padding; srow < (row + padding); ++srow) {
                 for (uint scol = col - padding; scol < (col + padding); ++scol) {
                     // In general
                     // result[res_row, res_col++] = input[srow, scol];
-                    result.setValueAt(res_row, res_col, input.getValueAt(srow, scol));
+                    result.setValueAt(res_row, res_col, getValueAt(srow, scol));
                     ++res_col;
                 }
             }
             ++res_row;
         }
     }
+    printf("res_row = %d\n", res_row);
+
     // Check that we capture as many blocks as we had to
     assert(res_row == (rows_out * cols_out));
 

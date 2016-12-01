@@ -28,7 +28,7 @@ public:
     uint     bm_baseBitSize;
 
 public:
-    BinaryMatrix(uint w, uint h);
+    //BinaryMatrix(uint w, uint h);
     BinaryMatrix(uint w, uint h, uint8 initVal);
     BinaryMatrix(uint w, uint h, bool randomized=false);
     ~BinaryMatrix();
@@ -54,8 +54,7 @@ public:
     void         setValueAt(uint row, uint col, uint8 bitValue);
 
     BinaryMatrix operator*(const BinaryMatrix &other);
-    BinaryMatrix im2col(BinaryMatrix &input, uint block_width, uint block_height,
-                        uint padding, uint stride);
+    BinaryMatrix im2col(uint block_width, uint block_height, uint padding, uint stride);
 
     void         print();
     std::string  toString();
