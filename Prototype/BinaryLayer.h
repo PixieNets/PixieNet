@@ -7,15 +7,16 @@
 #include "BinaryMatrix.h"
 
 #include <armadillo>
+#include <vector>
 
 typedef unsigned int uint;
 
 namespace bd {
     class BinaryLayer;
     // Concatenate multiple binary layer channels to form a 3D binary tensor
-    typedef BinaryLayer**    BinaryTensor3D;
-    // Concatenate multiple 3D binary tesnsors to form a 4D binary tensor
-    typedef BinaryTensor3D*  BinaryTensor4D;
+    typedef std::vector<BinaryLayer*>     BinaryTensor3D;
+    // Concatenate multiple 3D binary tensors to form a 4D binary tensor
+    typedef std::vector<BinaryTensor3D>  BinaryTensor4D;
 }
 
 class bd::BinaryLayer {

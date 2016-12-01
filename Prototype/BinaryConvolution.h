@@ -13,18 +13,18 @@ enum class Pooling {max, min, average};
 
 class BinaryConvolution {
 private:
-    uint           bc_width;
-    uint           bc_height;
-    uint           bc_channels;
-    uint           bc_filters;
-    uint           bc_stride;
-    uint           bc_padding;
-    bool           bc_pool;
-    Pooling        bc_pool_type;
-    uint           bc_pool_size;
-    uint           bc_pool_stride;
-    arma::mat      bc_box_filter;   // the kernel k applied to input A to get K
-    BinaryTensor4D bc_conv_weights; // Weights matrix for convolution
+    uint               bc_width;
+    uint               bc_height;
+    uint               bc_channels;
+    uint               bc_filters;
+    uint               bc_stride;
+    uint               bc_padding;
+    bool               bc_pool;
+    Pooling            bc_pool_type;
+    uint               bc_pool_size;
+    uint               bc_pool_stride;
+    arma::mat          bc_box_filter;   // the kernel k applied to input A to get K
+    BinaryTensor4D     bc_conv_weights; // Weights matrix for convolution
 
 public:
     // Adding default values for pooling so that if pooling is set to false, user
@@ -42,10 +42,12 @@ public:
     // 3. Compute sign(I)
     BinaryTensor3D binarizeInput(arma::cube norm_data);
     // 4. Binary convolution
-    arma::cube     doBinaryConv(BinaryTensor4D input, arma::mat K);
+    arma::cube     doBinaryConv(BinaryTensor3D input, arma::mat K);
     // 5. Pooling
     arma::mat      poolMat(arma::mat data);
     arma::cube     doPooling(arma::cube data);
+    // Set weights
+    void           setWeights(BinaryTensor4D conv_weights);
 
     // Accessor functions for class members
     uint width()              {    return bc_width;    }
