@@ -13,7 +13,7 @@ using namespace arma;
 
 typedef uint8_t uint8;
 typedef unsigned int uint;
-typedef std::pair<int, int> IntPair;
+typedef std::pair<uint, uint> uIntPair;
 
 #define BIT_ZERO ((unsigned char) 0)
 #define BIT_ONE  ((unsigned char) 1)
@@ -39,14 +39,14 @@ public:
     mat          doubleMultiply(const mat &other);
     uint         bitCount();
 
-    IntPair      elemAccessor(uint i, uint rows, uint cols, bool transposed);
+    uIntPair     elemAccessor(uint i, uint rows, uint cols, bool transposed);
     uint8        getBit(uint8 elem, uint bit_id);
     uint8        setBit(uint8 elem, uint bit_id, uint8 bitValue);
 
     uint         transposeIndex(uint idx);
     uint         transposeIndex(uint idx, uint width);
     uint         getLinearIndex(uint row, uint col, uint height, uint width, bool transposed);
-    IntPair      getDataAccessor(uint row, uint col);
+    uIntPair     getDataAccessor(uint row, uint col);
     uint8        getValueAt(uint idx);
     uint8        getValueAt(uint row, uint col);
     void         setValueAt(uint idx, uint8 bitValue);

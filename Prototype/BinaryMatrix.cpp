@@ -7,7 +7,7 @@
 #include <cstdio>
 #include "BinaryMatrix.h"
 
-BinaryMatrix::BinaryMatrix(int w, int h) {
+BinaryMatrix::BinaryMatrix(uint w, uint h) {
     this->init(w, h, 0);
 }
 
@@ -17,7 +17,7 @@ BinaryMatrix::BinaryMatrix(int w, int h) {
  * @param h - height of matrix
  * @return (none)
  */
-BinaryMatrix::BinaryMatrix(int w, int h, uint8 initVal) {
+BinaryMatrix::BinaryMatrix(uint w, uint h, uint8 initVal) {
     this->init(w, h, initVal);
 }
 
@@ -29,21 +29,21 @@ BinaryMatrix::~BinaryMatrix() {
         delete[] this->data;
 }
 
-void BinaryMatrix::init(int w, int h, uint8 initVal) {
-    this->width = w;
-    this->height = h;
-    this->baseBitSize = sizeof(uint8) * 8;
-    this->transposed = false;
+void BinaryMatrix::init(uint w, uint h, uint8 initVal) {
+    this->bm_width = w;
+    this->bm_height = h;
+    this->bm_baseBitSize = sizeof(uint8) * 8;
+    this->bm_transposed = false;
 
     //Initialize data, data is stored in a linear form
     int n = w * h;
-    this->dataLength = n / baseBitSize;
-    if (n % baseBitSize != 0)
-        ++this->dataLength;
-    this->data = new uint8[dataLength];
-    uint8 val = (initVal == BIT_ZERO)? 0 : ~0;  //8 zeroes or 8 ones
-    for(int i = 0; i < this->dataLength; ++i) {
-        this->data[i] = val;
+    this->bm_dataLength = n / bm_baseBitSize;
+    if (n % bm_baseBitSize != 0)
+        ++this->bm_dataLength;
+    this->bm_data = new uint8[dataLength];
+    uint8 val = (uint8) ((initVal == BIT_ZERO) ? 0 : ~0);  //8 zeroes or 8 ones
+    for(int i = 0; i < this->bm_dataLength; ++i) {
+        this->bm_data[i] = val;
     }
 }
 
@@ -51,24 +51,24 @@ void BinaryMatrix::init(int w, int h, uint8 initVal) {
  * Toggles the "transposed" switch for binary matrix
  */
 void BinaryMatrix::T() {
-    this->transposed = !this->transposed;
+    this->bm_transposed = !this->bm_transposed;
 }
 
-int BinaryMatrix::transposeIndex(int idx) {
-    return (idx / this->width + ((idx % this->width) * this->width));
+uint BinaryMatrix::transposeIndex(uint idx) {
+    return (idx / this->bm_width + ((idx % this->bm_width) * this->bm_width));
 }
 
-int BinaryMatrix::transposeIndex(int idx, int width) {
+uint BinaryMatrix::transposeIndex(uint idx, uint width) {
     return (idx / width + ((idx % width) * width));
 }
 
-IntPair BinaryMatrix::getDataAccessor(int row, int col) {
-    int idx = (this->transposed)? (col * this->width + row):(row * this->width + col);
-    return std::make_pair(idx / this->baseBitSize, idx % this->baseBitSize);
+uIntPair BinaryMatrix::getDataAccessor(uint row, uint col) {
+    uint idx = (this->bm_transposed)? (col * this->bm_width + row): (row * this->bm_width + col);
+    return std::make_pair((idx / this->bm_baseBitSize), (idx % this->bm_baseBitSize));
 }
 
-int BinaryMatrix::getLinearIndex(int row, int col, int height, int width, bool transposed) {
-    return (transposed)? (col * width + row):(row * width + col);
+uint BinaryMatrix::getLinearIndex(uint row, uint col, uint height, uint width, bool transposed) {
+    return (transposed)? (col * width + row): (row * width + col);
 }
 
 /**
@@ -80,7 +80,7 @@ int BinaryMatrix::getLinearIndex(int row, int col, int height, int width, bool t
  * @param transposed - boolean to test if the matrix is tranposed and hence read differently
  * @return - (dataPos, bitIndex) position of the bit in the array
  */
-IntPair BinaryMatrix::elemAccessor(int i, int rows, int cols, bool transposed) {
+uIntPair BinaryMatrix::elemAccessor(uint i, uint rows, uint cols, bool transposed) {
     if (transposed) {
         return std::make_pair(i % rows, i / rows);
     } else {
@@ -94,8 +94,8 @@ IntPair BinaryMatrix::elemAccessor(int i, int rows, int cols, bool transposed) {
  * @param bit_id - the index of the bit in the row
  * @return - the bit stored at 'bit_id'
  */
-uint8 BinaryMatrix::getBit(uint8 elem, int bit_id) {
-    return ((elem >> (this->baseBitSize-1 - bit_id)) & 1) ? BIT_ONE:BIT_ZERO;
+uint8 BinaryMatrix::getBit(uint8 elem, uint bit_id) {
+    return ((elem >> (this->bm_baseBitSize-1 - bit_id)) & 1) ? BIT_ONE:BIT_ZERO;
 }
 
 /**
@@ -105,8 +105,8 @@ uint8 BinaryMatrix::getBit(uint8 elem, int bit_id) {
  * @param bitValue - the new bit value
  * @return - the row with the new modified bit
  */
-uint8 BinaryMatrix::setBit(uint8 elem, int bit_id, uint8 bitValue) {
-    uint8 mask = (uint8) (1 << (this->baseBitSize-1 - bit_id));
+uint8 BinaryMatrix::setBit(uint8 elem, uint bit_id, uint8 bitValue) {
+    uint8 mask = (uint8) (1 << (this->bm_baseBitSize-1 - bit_id));
     if (bitValue == 0) {
         return (elem & !mask);
     } else {
@@ -114,38 +114,40 @@ uint8 BinaryMatrix::setBit(uint8 elem, int bit_id, uint8 bitValue) {
     }
 }
 
-uint8 BinaryMatrix::getValueAt(int idx) {
-    assert(idx < this->height*this->width);
+uint8 BinaryMatrix::getValueAt(uint idx) {
+    assert(idx < this->bm_height*this->bm_width);
 
-    if(this->transposed)    idx = transposeIndex(idx);
-    IntPair pos = std::make_pair(idx / this->baseBitSize, idx % this->baseBitSize);
-    return this->getBit(this->data[pos.first], pos.second);
+    if(this->bm_transposed)
+        idx = transposeIndex(idx);
+    uIntPair pos = std::make_pair(idx / this->bm_baseBitSize, idx % this->bm_baseBitSize);
+    return this->getBit(this->bm_data[pos.first], pos.second);
 }
 
-uint8 BinaryMatrix::getValueAt(int row, int col) {
-    assert( row < this->height);
-    assert( col < this->width);
+uint8 BinaryMatrix::getValueAt(uint row, uint col) {
+    assert( row < this->bm_height);
+    assert( col < this->bm_width);
 
     //IntPair pos = elemAccessor(row*this->width+col, this->dataLength, this->baseBitSize, this->transposed);
-    IntPair pos = this->getDataAccessor(row, col);
-    return this->getBit(this->data[pos.first], pos.second);
+    uIntPair pos = this->getDataAccessor(row, col);
+    return this->getBit(this->bm_data[pos.first], pos.second);
 }
 
-void BinaryMatrix::setValueAt(int idx, uint8 bitValue) {
-    assert(idx < this->height*this->width);
+void BinaryMatrix::setValueAt(uint idx, uint8 bitValue) {
+    assert(idx < this->bm_height*this->bm_width);
 
-    if(this->transposed)    idx = transposeIndex(idx);
-    IntPair pos = std::make_pair(idx / this->baseBitSize, idx % this->baseBitSize);
-    this->setBit(this->data[pos.first], pos.second, bitValue);
+    if(this->bm_transposed)
+        idx = transposeIndex(idx);
+    uIntPair pos = std::make_pair(idx / this->bm_baseBitSize, idx % this->bm_baseBitSize);
+    this->setBit(this->bm_data[pos.first], pos.second, bitValue);
 }
 
-void BinaryMatrix::setValueAt(int row, int col, uint8 bitValue) {
-    assert( row < this->height);
-    assert( col < this->width);
+void BinaryMatrix::setValueAt(uint row, uint col, uint8 bitValue) {
+    assert( row < this->bm_height);
+    assert( col < this->bm_width);
 
     //IntPair pos = this->elemAccessor( (row*this->width)+col, this->dataLength, this->baseBitSize, this->transposed);
-    IntPair pos = this->getDataAccessor(row, col);
-    this->data[pos.first] = this->setBit(this->data[pos.first], pos.second, bitValue);
+    uIntPair pos = this->getDataAccessor(row, col);
+    this->bm_data[pos.first] = this->setBit(this->bm_data[pos.first], pos.second, bitValue);
 }
 
 /**
@@ -155,13 +157,13 @@ void BinaryMatrix::setValueAt(int row, int col, uint8 bitValue) {
  * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
  */
 BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix &other) {
-    assert(this->transposed == other.transposed);
+    assert(this->bm_transposed == other.bm_transposed);
 
-    BinaryMatrix res(this->width, this->height);
-    for(int i = 0; i < this->dataLength; ++i) {
-        res.data[i] = ~(this->data[i] ^ other.data[i]);
+    BinaryMatrix res(this->bm_width, this->bm_height);
+    for(uint i = 0; i < this->bm_dataLength; ++i) {
+        res.bm_data[i] = ~(this->bm_data[i] ^ other.bm_data[i]);
     }
-    res.transposed = this->transposed;
+    res.bm_transposed = this->bm_transposed;
     return res;
 }
 
@@ -173,8 +175,8 @@ BinaryMatrix BinaryMatrix::binMultiply(const BinaryMatrix &other) {
  */
 BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     // Verify that dimensions correspond
-    if( (this->transposed && !other.transposed) ||
-        (!this->transposed && other.transposed) ) {
+    if( (this->bm_transposed && !other.bm_transposed) ||
+        (!this->bm_transposed && other.bm_transposed) ) {
         assert(this->width == other.height);
         assert(this->height == other.width);
     }
@@ -186,30 +188,30 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     // Since this is the haddamard by design we choose to keep the
     // dimensions of the non-transposed matrix, since by transposing
     // we are trying to align the matrix to be multiplied
-    int resW = this->width;
-    int resH = this->height;
-    if (this->transposed) {
-        resW = other.width;
-        resH = other.height;
+    int resW = this->bm_width;
+    int resH = this->bm_height;
+    if (this->bm_transposed) {
+        resW = other.bm_width;
+        resH = other.bm_height;
     }
     BinaryMatrix res(resW, resH);
 
-    IntPair this_rc, other_rc, res_rc;
-    uint8   answer_c;
-    int     thisIdx, otherIdx;
+    uIntPair this_rc, other_rc, res_rc;
+    uint8    answer_c;
+    uint     thisIdx, otherIdx;
 
-    int numBits = this->height * this->width;
-    for(int i=0; i < numBits; ++i) {
-        thisIdx = (this->transposed)? transposeIndex(i, this->width) : i;
-        otherIdx = (other.transposed)? transposeIndex(i, other.width) : i;
+    uint numBits = this->bm_height * this->bm_width;
+    for(uint i = 0; i < numBits; ++i) {
+        thisIdx = (this->bm_transposed)? transposeIndex(i, this->bm_width) : i;
+        otherIdx = (other.bm_transposed)? transposeIndex(i, other.bm_width) : i;
 
-        this_rc = this->elemAccessor(thisIdx, this->dataLength, this->baseBitSize, false);
-        other_rc = this->elemAccessor(otherIdx, other.dataLength, other.baseBitSize, false);
-        res_rc = this->transposed? other_rc : this_rc;
+        this_rc = this->elemAccessor(thisIdx, this->bm_dataLength, this->bm_baseBitSize, false);
+        other_rc = this->elemAccessor(otherIdx, other.bm_dataLength, other.bm_baseBitSize, false);
+        res_rc = this->bm_transposed? other_rc : this_rc;
 
-        answer_c = (uint8) (~(getBit(this->data[this_rc.first], this_rc.second)
-                              ^ getBit(other.data[other_rc.first], other_rc.second)) & 1);
-        res.data[res_rc.first] = setBit(res.data[res_rc.first], res_rc.second, answer_c);
+        answer_c = (uint8) (~(getBit(this->bm_data[this_rc.first], this_rc.second)
+                              ^ getBit(other.bm_data[other_rc.first], other_rc.second)) & 1);
+        res.bm_data[res_rc.first] = setBit(res.bm_data[res_rc.first], res_rc.second, answer_c);
     }
 
     return res;
@@ -220,13 +222,13 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
  **/
 
 mat BinaryMatrix::doubleMultiply(const mat &other) {
-    mat res(this->height, this->width);
-    IntPair linearPos;
+    mat res(this->bm_height, this->bm_width);
+    uIntPair linearPos;
 
-    for(int row=0; row < this->height; ++row) {
-        for(int col=0; col < this->width; ++col) {
+    for(uint row = 0; row < this->bm_height; ++row) {
+        for(uint col = 0; col < this->bm_width; ++col) {
             if( this->getValueAt(row,col) == BIT_ZERO)
-                res(row, col) = other(row,col)*-1;
+                res(row, col) = other(row,col) * -1;
             else
                 res(row, col) = other(row,col);
         }
@@ -235,20 +237,20 @@ mat BinaryMatrix::doubleMultiply(const mat &other) {
     return res;
 }
 
-int BinaryMatrix::bitCount() {
-    int count = 0;
-    for(int i=0; i<this->dataLength; ++i) {
-        for(int b=0; b<this->baseBitSize; ++b) {
-            if(this->data[i]>>b & 1)
-                count++;
+uint BinaryMatrix::bitCount() {
+    uint count = 0;
+    for(uint i = 0; i < this->bm_dataLength; ++i) {
+        for(uint b = 0; b < this->bm_baseBitSize; ++b) {
+            if(this->bm_data[i]>>b & 1)
+                ++count;
         }
     }
     return count;
 }
 
 void BinaryMatrix::print() {
-    for(int row = 0; row < this->height; ++row) {
-        for(int col = 0; col < this->width; ++col) {
+    for(uint row = 0; row < this->bm_height; ++row) {
+        for(uint col = 0; col < this->bm_width; ++col) {
             printf("%u ", getValueAt(row, col));
         }
         printf("\n");
@@ -256,9 +258,9 @@ void BinaryMatrix::print() {
 }
 
 std::string BinaryMatrix::toString() {
-    std::string transStr = (this->transposed) ? "Yes":"No";
-    std::string res = "< BinaryMatrix rows:" + std::to_string(this->height)
-                        + " cols:" + std::to_string(this->width)
+    std::string transStr = (this->bm_transposed) ? "Yes":"No";
+    std::string res = "< BinaryMatrix rows:" + std::to_string(this->bm_height)
+                        + " cols:" + std::to_string(this->bm_width)
                         + " transposed:" + transStr + " >";
     return res;
 }
@@ -266,8 +268,8 @@ std::string BinaryMatrix::toString() {
 std::string BinaryMatrix::dataToString() {
     std::string res;
 
-    for(int row=0; row < this->height; ++row) {
-        for(int col=0; col < this->width; ++col) {
+    for(uint row = 0; row < this->bm_height; ++row) {
+        for(uint col = 0; col < this->bm_width; ++col) {
             res += std::to_string(getValueAt(row, col)) + " ";
         }
         res += "\n";
@@ -282,14 +284,14 @@ std::string BinaryMatrix::dataToString() {
  * @return - BinaryMatrix containing the same number of total bits as the 2 input matrices
  */
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix &other ) {
-    if(this->transposed != other.transposed) {
-        assert(this->width == other.height);
-        assert(this->height == other.width);
+    if(this->bm_transposed != other.bm_transposed) {
+        assert(this->bm_width == other.bm_height);
+        assert(this->bm_height == other.bm_width);
         return this->tBinMultiply(other);
     }
     else {
-        assert(this->width == other.width);
-        assert(this->height == other.height);
+        assert(this->bm_width == other.bm_width);
+        assert(this->bm_height == other.bm_height);
         return this->binMultiply(other);
     }
 }
