@@ -26,10 +26,11 @@ BinaryMatrix* XnorNetUtils::centerDataMat(arma::mat data) {
  * @param data - a 3D matrix of size H X W X N
  * @return 3D binary matrix representation of input data
  */
-BinaryTensor XnorNetUtils::normalizeData(arma::cube data) {
-    BinaryTensor binMat = new BinaryLayer*[data.n_slices];
+BinaryTensor3D XnorNetUtils::normalizeData3D(arma::cube data) {
+    BinaryTensor3D binMat = new BinaryLayer*[data.n_slices];
     for (int ch = 0; ch < data.n_slices; ++ch) {
-        arma::mat centered_data = (data.slice(ch) - mean(mean(data.slice(ch)))) / stddev(stddev(data.slice(ch)));
+        arma::mat centered_data = (data.slice(ch) - arma::mean(mean(data.slice(ch))))
+                                  / arma::stddev(arma::stddev(data.slice(ch)));
         binMat[ch] = new BinaryLayer(data.n_cols, data.n_rows);
         binMat[ch]->binarizeMat(centered_data);
     }
@@ -40,22 +41,22 @@ BinaryTensor XnorNetUtils::normalizeData(arma::cube data) {
 arma::mat relu2D(arma::mat data) {
     // max(0, data)
     arma::mat output = data;
-    output.elem( find(output < 0) ).zeros();
+    output.elem( arma::find(output < 0) ).zeros();
     return output;
 }
 
 arma::cube relu3D(arma::cube data) {
     // max(0, data)
     arma::cube output = data;
-    output.elem( find(output < 0) ).zeros();
+    output.elem( arma::find(output < 0) ).zeros();
     return output;
 }
 
 arma::vec XnorNetUtils::softmax(arma::mat W, arma::vec prevOutput) {
     assert(W.n_rows == prevOutput.n_elem);
 
-    vec Y = exp( tanh(W.t() * prevOutput) );
-    return Y/accu(Y);
+    vec Y = arma::exp( arma::tanh(W.t() * prevOutput) );
+    return Y / arma::accu(Y);
 }
 
 

@@ -25,7 +25,7 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
     this->bc_box_filter = arma::ones<arma::mat>(w, h) * (1.0 / (w * h));
 
     // The 4D hyper-cube weights of the convolution layer
-    this->bc_conv_weights = new BinaryTensor3D*[this->bc_filters];
+    this->bc_conv_weights = new BinaryTensor3D[this->bc_filters];
     for (int i = 0; i < this->bc_filters; ++i) {
         this->bc_conv_weights[i] = new BinaryLayer*[this->bc_channels];
         for (int j = 0; j < this->bc_channels; ++j) {
