@@ -21,11 +21,16 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
     this->bc_pool_type = pool_type;
     this->bc_pool_stride = pool_stride;
 
+    // The convolution filter k for computing the scales of each input sub-tensor
     this->bc_box_filter = arma::ones<arma::mat>(w, h) * (1.0 / (w * h));
 
-    this->bc_conv_weights = new BinaryLayer*[ch];
-    for (int i = 0; i < ch; ++i) {
-        this->bc_conv_weights[i] = new BinaryLayer(w, h);
+    // The 4D hyper-cube weights of the convolution layer
+    this->bc_conv_weights = new BinaryTensor3D*[this->bc_filters];
+    for (int i = 0; i < this->bc_filters; ++i) {
+        this->bc_conv_weights[i] = new BinaryLayer*[this->bc_channels];
+        for (int j = 0; j < this->bc_channels; ++j) {
+            this->bc_conv_weights[i][j] = new BinaryLayer(w, h);
+        }
     }
 }
 
@@ -62,11 +67,11 @@ arma::mat BinaryConvolution::input2KMat(arma::cube norm_data) {
     return K;
 }
 
-BinaryTensor BinaryConvolution::binarizeInput(arma::cube norm_data) {
+BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
     uint width = norm_data.n_cols;
     uint height = norm_data.n_rows;
     uint channels = norm_data.n_slices;
-    BinaryTensor tensor = new BinaryLayer*[channels];
+    BinaryTensor3D tensor = new BinaryLayer*[channels];
     for (int ch = 0; ch < channels; ++ch) {
         tensor[ch] = new BinaryLayer(width, height);
         tensor[ch]->binarizeMat(norm_data.slice(ch));
@@ -74,7 +79,7 @@ BinaryTensor BinaryConvolution::binarizeInput(arma::cube norm_data) {
     return tensor;
 }
 
-arma::cube BinaryConvolution::doBinaryConv(BinaryTensor input, arma::mat K) {
+arma::cube BinaryConvolution::doBinaryConv(BinaryTensor4D input, arma::mat K) {
 
     // (sign(I) xnor_conv sign(W)) xnor_prod K,w_alpha
     arma::cube output;
