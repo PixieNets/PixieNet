@@ -27,9 +27,9 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
 
     // The 4D hyper-cube weights of the convolution layer
     this->bc_conv_weights = new BinaryTensor3D[this->bc_filters];
-    for (int i = 0; i < this->bc_filters; ++i) {
+    for (uint i = 0; i < this->bc_filters; ++i) {
         this->bc_conv_weights[i] = new BinaryLayer*[this->bc_channels];
-        for (int j = 0; j < this->bc_channels; ++j) {
+        for (uint j = 0; j < this->bc_channels; ++j) {
             this->bc_conv_weights[i][j] = new BinaryLayer(w, h);
         }
     }
@@ -37,9 +37,11 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
 
 BinaryConvolution::~BinaryConvolution() {
     // Weights matrix
-    for (uint i = 0; i < this->bc_channels; ++i) {
+    for (uint i = 0; i < this->bc_filters; ++i) {
         // delete each member of the array
-        delete this->bc_conv_weights[i];
+        for (uint j = 0; j < this->bc_channels; ++j) {
+            delete this->bc_conv_weights[i][j];
+        }
     }
     // delete the array
     delete[] bc_conv_weights;
