@@ -109,8 +109,8 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
     }
 
     // Output dimensions
-    uint rows_out = (input[0]->width() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
-    uint cols_out = (input[0]->height() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    uint rows_out = (input[0]->height() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    uint cols_out = (input[0]->width() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
     output = arma::zeros(rows_out, cols_out, this->bc_filters);
 
     // Simple for-loop implementation
@@ -119,8 +119,8 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
         BinaryTensor3D cur_weights = this->bc_conv_weights[f];
         for (uint ch = 0; ch < this->bc_channels; ++ch) {
             // 1. XNOR product of input and weights
-            BinaryLayer input_ch = *(input[ch]);
-            BinaryLayer xnor_res = input_ch.binMtx()
+            //BinaryLayer xnor_res = (*input[ch]) * (*cur_weights[ch]); // WRONG!
+            // 2. Bit count the result
         }
     }
     */

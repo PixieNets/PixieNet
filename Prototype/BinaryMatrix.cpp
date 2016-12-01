@@ -295,3 +295,32 @@ BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix &other ) {
         return this->binMultiply(other);
     }
 }
+
+
+BinaryMatrix BinaryMatrix::im2col(BinaryMatrix &input, uint block_width, uint block_height,
+                                  uint padding, uint stride) {
+    uint n = block_width * block_height;
+    uint rows_out = (input.bm_height - block_height + 2 * padding) / stride + 1;
+    uint cols_out = (input.bm_width - block_width + 2 * padding) / stride + 1;
+    BinaryMatrix result(rows_out * cols_out, n);
+
+    uint res_row = 0;
+    for (uint row = padding; row < (input.bm_height - padding - 1); ++row) {
+        for (uint col = padding; col < (input.bm_width - padding - 1); ++col) {
+            uint res_col = 0;
+            for (uint srow = row - padding; srow < (row + padding); ++srow) {
+                for (uint scol = col - padding; scol < (col + padding); ++scol) {
+                    // In general
+                    // result[res_row, res_col++] = input[srow, scol];
+                    result.setValueAt(res_row, res_col, input.getValueAt(srow, scol));
+                    ++res_col;
+                }
+            }
+            ++res_row;
+        }
+    }
+    // Check that we capture as many blocks as we had to
+    assert(res_row == (rows_out * cols_out));
+
+    return result;
+}

@@ -53,13 +53,15 @@ public:
     void         setValueAt(uint row, uint col, uint8 bitValue);
 
     BinaryMatrix operator*(const BinaryMatrix &other);
+    BinaryMatrix im2col(BinaryMatrix &input, uint block_width, uint block_height,
+                        uint padding, uint stride);
 
     void         print();
     std::string  toString();
     std::string  dataToString();
 
     // Accessor functions for class members
-    bool transposed()   {    return bm_transposed;  }
+    bool transposed()  {    return bm_transposed;  }
     uint width()       {    return bm_width;       }
     uint height()      {    return bm_height;      }
     uint dataLength()  {    return bm_dataLength;  }
