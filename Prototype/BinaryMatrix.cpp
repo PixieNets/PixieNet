@@ -194,8 +194,6 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     }
     BinaryMatrix res(resW, resH);
 
-    int this_n = this->dataLength;
-    int other_n = other.dataLength;
     IntPair this_rc, other_rc, res_rc;
     uint8   answer_c;
     int     thisIdx, otherIdx;
