@@ -7,16 +7,17 @@
 #include <assert.h>
 
 BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride,
-                                     uint padding, bool pool, Pooling pool_type,
-                                     uint pool_size, uint pool_stride) {
+                                     uint padding, Convolution conv_type, bool pool,
+                                     Pooling pool_type, uint pool_size, uint pool_stride) {
     assert(w > 0 && h > 0 && ch > 0 && stride > 0);
 
     this->bc_width = w;
     this->bc_height = h;
     this->bc_channels = ch;
     this->bc_filters = k;
-    this->bc_stride = stride;
+    this->bc_conv_stride = stride;
     this->bc_padding = padding;
+    this->bc_conv_type = conv_type;
     this->bc_pool = pool;
     this->bc_pool_type = pool_type;
     this->bc_pool_size = pool_size;
@@ -82,13 +83,47 @@ BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
     return tensor;
 }
 
-arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
+BinaryTensor3D BinaryConvolution::padInput(BinaryTensor3D input) {
+    // TODO: Fix!
+    return input;
+}
 
+arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
 
     // (sign(I) xnor_conv sign(W)) xnor_prod K,w_alpha
     arma::cube output;
 
+    if (input.empty() || input[0]->width() < this->bc_width || input[0]->height() < this->bc_height) {
+        // result is an empty matrix
+        return output;
+    }
 
+    if (input.size() != this->bc_channels) {
+        std::cerr << "BinaryConv::doBinConv - Input [arg1] and conv weights should have the same number of channels\n";
+        return output;
+    }
+
+    // For padding, augment input
+    if (this->bc_conv_type == Convolution::same) {
+        input = padInput(input);
+    }
+
+    // Output dimensions
+    uint rows_out = (input[0]->width() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    uint cols_out = (input[0]->height() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    output = arma::zeros(rows_out, cols_out, this->bc_filters);
+
+    // Simple for-loop implementation
+    /*
+    for (uint f = 0; f < this->bc_filters; ++f) {
+        BinaryTensor3D cur_weights = this->bc_conv_weights[f];
+        for (uint ch = 0; ch < this->bc_channels; ++ch) {
+            // 1. XNOR product of input and weights
+            BinaryLayer input_ch = *(input[ch]);
+            BinaryLayer xnor_res = input_ch.binMtx()
+        }
+    }
+    */
 
     return output;
 }

@@ -25,8 +25,8 @@ BinaryMatrix::BinaryMatrix(uint w, uint h, uint8 initVal) {
  * Destructor for binary matrix, delete the data
  */
 BinaryMatrix::~BinaryMatrix() {
-    if(this->data != nullptr)
-        delete[] this->data;
+    if(this->bm_data != nullptr)
+        delete[] this->bm_data;
 }
 
 void BinaryMatrix::init(uint w, uint h, uint8 initVal) {
@@ -40,7 +40,7 @@ void BinaryMatrix::init(uint w, uint h, uint8 initVal) {
     this->bm_dataLength = n / bm_baseBitSize;
     if (n % bm_baseBitSize != 0)
         ++this->bm_dataLength;
-    this->bm_data = new uint8[dataLength];
+    this->bm_data = new uint8[this->bm_dataLength];
     uint8 val = (uint8) ((initVal == BIT_ZERO) ? 0 : ~0);  //8 zeroes or 8 ones
     for(int i = 0; i < this->bm_dataLength; ++i) {
         this->bm_data[i] = val;
@@ -177,12 +177,12 @@ BinaryMatrix BinaryMatrix::tBinMultiply(const BinaryMatrix &other) {
     // Verify that dimensions correspond
     if( (this->bm_transposed && !other.bm_transposed) ||
         (!this->bm_transposed && other.bm_transposed) ) {
-        assert(this->width == other.height);
-        assert(this->height == other.width);
+        assert(this->bm_width == other.bm_height);
+        assert(this->bm_height == other.bm_width);
     }
     else {
-        assert(this->height == other.height);
-        assert(this->width == other.width);
+        assert(this->bm_height == other.bm_height);
+        assert(this->bm_width == other.bm_width);
     }
 
     // Since this is the haddamard by design we choose to keep the

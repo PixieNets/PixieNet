@@ -43,7 +43,7 @@ void BinaryLayer::binarizeMat(arma::mat data) {
  * @param size - #elements in the weights matrix
  */
 void BinaryLayer::binarizeWeights(double *weights, int size) {
-    assert(size == (this->bl_binMtx->width * this->bl_binMtx->height));
+    assert(size == (this->bl_binMtx->width() * this->bl_binMtx->height()));
 
     double bl_alpha = 0.0;
     for (uint i = 0;  i < size; ++i) {
@@ -60,13 +60,21 @@ void BinaryLayer::binarizeWeights(double *weights, int size) {
  */
 void BinaryLayer::getDoubleWeights(double **weights, int *size) {
     if(*weights == nullptr) {
-        *weights = new double[bl_binMtx->width*bl_binMtx->height];
-        *size = bl_binMtx->width*bl_binMtx->height;
+        *weights = new double[bl_binMtx->width()*bl_binMtx->height()];
+        *size = bl_binMtx->width()*bl_binMtx->height();
     }
     else {
-        assert(bl_binMtx->width*bl_binMtx->height == *size);
+        assert(bl_binMtx->width()*bl_binMtx->height() == *size);
     }
     for(int i = 0; i < *size; ++i) {
         *weights[i] = this->bl_binMtx->getValueAt(i);
     }
+}
+
+BinaryLayer BinaryLayer::operator*(const BinaryLayer&other) {
+    BinaryMatrix resultMtx = (*(this->bl_binMtx)) * (*(other.bl_binMtx));
+    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
+    *result.bl_binMtx = resultMtx;
+    result.bl_alpha = this->bl_alpha * other.bl_alpha;
+    return result;
 }

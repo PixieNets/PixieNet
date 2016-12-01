@@ -10,9 +10,9 @@
 
 class TestBinaryMatrix {
     // Generate
-    BinaryMatrix generateDiag(int n);
-    BinaryMatrix generateUpperDiag(int n);
-    BinaryMatrix generateLowerDiag(int n);
+    BinaryMatrix generateDiag(uint n);
+    BinaryMatrix generateUpperDiag(uint n);
+    BinaryMatrix generateLowerDiag(uint n);
 
     // Tests
     void testCreateAndPrint();

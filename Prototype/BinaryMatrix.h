@@ -59,7 +59,7 @@ public:
     std::string  dataToString();
 
     // Accessor functions for class members
-    bool tranposed()   {    return bm_transposed;  }
+    bool transposed()   {    return bm_transposed;  }
     uint width()       {    return bm_width;       }
     uint height()      {    return bm_height;      }
     uint dataLength()  {    return bm_dataLength;  }

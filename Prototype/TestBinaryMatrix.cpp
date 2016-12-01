@@ -9,28 +9,28 @@
 using namespace std;
 using namespace arma;
 
-BinaryMatrix TestBinaryMatrix::generateDiag(int n) {
+BinaryMatrix TestBinaryMatrix::generateDiag(uint n) {
     BinaryMatrix res(n,n);
-    for(int i=0; i<n; ++i) {
+    for(uint i=0; i<n; ++i) {
         res.setValueAt(i,i,1);
     }
     return res;
 }
 
-BinaryMatrix TestBinaryMatrix::generateUpperDiag(int n) {
+BinaryMatrix TestBinaryMatrix::generateUpperDiag(uint n) {
     BinaryMatrix res(n,n);
-    for(int i=0; i<n; ++i) {
-        for(int j=i; j < n; ++j) {
+    for(uint i=0; i<n; ++i) {
+        for(uint j=i; j < n; ++j) {
             res.setValueAt(i,j,1);
         }
     }
     return res;
 }
 
-BinaryMatrix TestBinaryMatrix::generateLowerDiag(int n) {
+BinaryMatrix TestBinaryMatrix::generateLowerDiag(uint n) {
     BinaryMatrix res(n,n);
-    for(int i=0; i<n; ++i) {
-        for(int j=i; j < n; ++j) {
+    for(uint i=0; i<n; ++i) {
+        for(uint j=i; j < n; ++j) {
             res.setValueAt(j,i,1);
         }
     }
@@ -42,19 +42,19 @@ void TestBinaryMatrix::testCreateAndPrint(){
     int testSize = 5;
     cout << "Default ctor:" << endl;
     BinaryMatrix bMtx(testSize, testSize);
-    cout << "Data Length: " << bMtx.dataLength << endl;
+    cout << "Data Length: " << bMtx.dataLength() << endl;
     cout << bMtx.toString() << endl;
     cout << bMtx.dataToString() << endl;
 
     cout << "Init 0 ctor:" << endl;
     BinaryMatrix bMtx0(testSize, testSize,BIT_ZERO);
-    cout << "Data Length: " << bMtx0.dataLength << endl;
+    cout << "Data Length: " << bMtx0.dataLength() << endl;
     cout << bMtx0.toString() << endl;
     cout << bMtx0.dataToString() << endl;
 
     cout << "Init 1 ctor:" << endl;
     BinaryMatrix bMtx1(testSize, testSize, BIT_ONE);
-    cout << "Data Length: " << bMtx1.dataLength << endl;
+    cout << "Data Length: " << bMtx1.dataLength() << endl;
     cout << bMtx1.toString() << endl;
     cout << bMtx1.dataToString() << endl;
 }
@@ -65,10 +65,10 @@ void TestBinaryMatrix::testGetBit(){
     cout << "get_bit" << endl;
     BinaryMatrix bMtx(testSize, testSize, 1);
     cout << bMtx.toString() << endl;
-    for(int i=0; i<bMtx.dataLength; ++i) {
-        printf("%u ",bMtx.data[i]);
-        for(int j=0; j<bMtx.baseBitSize; ++j) {
-            printf("%u ", bMtx.getBit(bMtx.data[i],j));
+    for(uint i=0; i<bMtx.dataLength(); ++i) {
+        printf("%u ",bMtx.data()[i]);
+        for(uint j=0; j<bMtx.baseBitSize(); ++j) {
+            printf("%u ", bMtx.getBit(bMtx.data()[i],j));
         }
         cout << endl;
     }
@@ -76,25 +76,25 @@ void TestBinaryMatrix::testGetBit(){
 
     cout << "elem_accessor" << endl;
     cout << bMtx.toString() << endl;
-    for(int i=0; i<bMtx.height; ++i) {
-        for(int j=0; j<bMtx.width; ++j) {
-            std::pair<int, int> pos = bMtx.elemAccessor(i*bMtx.width+j,bMtx.dataLength, bMtx.baseBitSize, bMtx.transposed);
+    for(uint i=0; i<bMtx.height(); ++i) {
+        for(uint j=0; j<bMtx.width(); ++j) {
+            std::pair<uint, uint> pos = bMtx.elemAccessor(i*bMtx.width()+j,bMtx.dataLength(), bMtx.baseBitSize(), bMtx.transposed());
             printf("[%d,%d]: ", pos.first, pos.second);
-            printf("%u\n", bMtx.getBit(bMtx.data[pos.first], pos.second));
+            printf("%u\n", bMtx.getBit(bMtx.data()[pos.first], pos.second));
         }
     }
 }
 
 void TestBinaryMatrix::testSetBit(){
     cout << "----- TEST SET BITS" << endl;
-    int testSize = 6;
+    uint testSize = 6;
     BinaryMatrix bMtx = this->generateDiag(testSize);
 
     cout << bMtx.toString() << endl;
     cout << bMtx.dataToString() << endl;
 
     BinaryMatrix bMtx1(testSize, testSize,0);
-    for(int i=0; i<testSize; ++i) {
+    for(uint i=0; i<testSize; ++i) {
         bMtx1.setValueAt(0,i,1);
         bMtx1.setValueAt(testSize-1,i,1);
         bMtx1.setValueAt(i,0,1);
@@ -106,7 +106,7 @@ void TestBinaryMatrix::testSetBit(){
     cout << "Toggle Linear Index:" << endl;
     BinaryMatrix bMtx2(testSize, testSize,0);
     bool toggle = true;
-    for(int i=0; i<testSize*testSize; ++i) {
+    for(uint i=0; i<testSize*testSize; ++i) {
         bMtx2.setValueAt(i,toggle? 1:0);
         toggle = !toggle;
     }
@@ -115,14 +115,14 @@ void TestBinaryMatrix::testSetBit(){
 
 void TestBinaryMatrix::testTransposeIdx() {
     cout << "----- TEST TRANSPOSE INDEX" << endl;
-    int testSize = 4;
+    uint testSize = 4;
     BinaryMatrix bMtx(testSize,testSize);
 
-    for(int i=0; i<testSize*testSize; ++i) {
+    for(uint i=0; i<testSize*testSize; ++i) {
         printf("%d ", i);
     }
     cout << endl;
-    for(int i=0; i<testSize*testSize; ++i) {
+    for(uint i=0; i<testSize*testSize; ++i) {
         printf("%d ", bMtx.transposeIndex(i));
     }
     cout << endl << endl;
@@ -130,7 +130,7 @@ void TestBinaryMatrix::testTransposeIdx() {
 
 void TestBinaryMatrix::testTranspose(){
     cout << "----- TEST TRANSPOSE" << endl;
-    int testSize = 3;
+    uint testSize = 3;
     BinaryMatrix bMtx = this->generateUpperDiag(testSize);
 
     cout << "U =" << endl;
@@ -140,18 +140,18 @@ void TestBinaryMatrix::testTranspose(){
     cout << bMtx.dataToString() << endl;
 
     cout << "getDataAccessor transposed" << endl;
-    for(int i=0; i<bMtx.height; ++i) {
-        for(int j=0; j<bMtx.width; ++j) {
-            std::pair<int, int> pos = bMtx.getDataAccessor(i, j);
+    for(uint i=0; i<bMtx.height(); ++i) {
+        for(uint j=0; j<bMtx.width(); ++j) {
+            std::pair<uint, uint> pos = bMtx.getDataAccessor(i, j);
             printf("[%d,%d]: ", pos.first, pos.second);
-            printf("%u\n", bMtx.getBit(bMtx.data[pos.first], pos.second));
+            printf("%u\n", bMtx.getBit(bMtx.data()[pos.first], pos.second));
         }
     }
 }
 
 void TestBinaryMatrix::testBinMultiply(){
     cout << "----- TEST MULTIPLY" << endl;
-    int testSize = 6;
+    uint testSize = 6;
     BinaryMatrix mtx0(testSize, testSize, 0);
     BinaryMatrix mtx1(testSize, testSize, 1);
 
@@ -176,12 +176,12 @@ void TestBinaryMatrix::testBinMultiply(){
 
 void TestBinaryMatrix::testTBinMultiply(){
     cout << "----- TEST TRANSPOSE MULTIPLY" << endl;
-    int testSize = 6;
+    uint testSize = 6;
     BinaryMatrix uDiag(testSize,testSize);
     BinaryMatrix lDiag(testSize,testSize);
     //Fill upper triangle
-    for(int i=0; i<testSize; ++i) {
-        for(int j=i; j < testSize; ++j) {
+    for(uint i=0; i<testSize; ++i) {
+        for(uint j=i; j < testSize; ++j) {
             uDiag.setValueAt(i,j,1);
             lDiag.setValueAt(j,i,1);
         }

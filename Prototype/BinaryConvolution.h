@@ -10,6 +10,8 @@ using namespace bd;
 
 // Multiple types of pooling
 enum class Pooling {max, min, average};
+// Multiple types of convolution
+enum class Convolution {same, valid};
 
 class BinaryConvolution {
 private:
@@ -17,8 +19,9 @@ private:
     uint               bc_height;
     uint               bc_channels;
     uint               bc_filters;
-    uint               bc_stride;
+    uint               bc_conv_stride;
     uint               bc_padding;
+    Convolution        bc_conv_type;
     bool               bc_pool;
     Pooling            bc_pool_type;
     uint               bc_pool_size;
@@ -30,8 +33,8 @@ public:
     // Adding default values for pooling so that if pooling is set to false, user
     // doesn't have to provide pooling parameters
     BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride, uint padding,
-                      bool pool=true, Pooling pool_type=Pooling::max,
-                      uint pool_size=2, uint pool_stride=2);
+                      Convolution conv_type=Convolution::same, bool pool=true,
+                      Pooling pool_type=Pooling::max, uint pool_size=2, uint pool_stride=2);
     ~BinaryConvolution();
 
     // 1. Normalize input data by mean and variance
@@ -42,6 +45,7 @@ public:
     // 3. Compute sign(I)
     BinaryTensor3D binarizeInput(arma::cube norm_data);
     // 4. Binary convolution
+    BinaryTensor3D padInput(BinaryTensor3D input);
     arma::cube     doBinaryConv(BinaryTensor3D input, arma::mat K);
     // 5. Pooling
     arma::mat      poolMat(arma::mat data);
@@ -50,15 +54,16 @@ public:
     void           setWeights(BinaryTensor4D conv_weights);
 
     // Accessor functions for class members
-    uint width()              {    return bc_width;    }
-    uint height()             {    return bc_height;   }
-    uint channels()           {    return bc_channels; }
-    uint filters()            {    return bc_filters;  }
-    uint stride()             {    return bc_stride;   }
-    uint padding()            {    return bc_padding;  }
-    bool pool()               {    return bc_pool;     }
-    Pooling pool_type()       {    return bc_pool_type; }
-    uint pool_size()          {    return bc_pool_size; }
+    uint width()              {    return bc_width;       }
+    uint height()             {    return bc_height;      }
+    uint channels()           {    return bc_channels;    }
+    uint filters()            {    return bc_filters;     }
+    uint conv_stride()        {    return bc_conv_stride; }
+    uint padding()            {    return bc_padding;     }
+    Convolution conv_type()   {    return bc_conv_type;   }
+    bool pool()               {    return bc_pool;        }
+    Pooling pool_type()       {    return bc_pool_type;   }
+    uint pool_size()          {    return bc_pool_size;   }
     uint pool_stride()        {    return bc_pool_stride; }
 
 };
