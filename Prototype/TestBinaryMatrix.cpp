@@ -63,7 +63,7 @@ void TestBinaryMatrix::testGetBit(){
     cout << "----- TEST GET BITS" << endl;
     int testSize = 4;
     cout << "get_bit" << endl;
-    BinaryMatrix bMtx(testSize, testSize, 1);
+    BinaryMatrix bMtx(testSize, testSize, BIT_ONE);
     cout << bMtx.toString() << endl;
     for(uint i=0; i<bMtx.dataLength(); ++i) {
         printf("%u ",bMtx.data()[i]);
@@ -93,7 +93,7 @@ void TestBinaryMatrix::testSetBit(){
     cout << bMtx.toString() << endl;
     cout << bMtx.dataToString() << endl;
 
-    BinaryMatrix bMtx1(testSize, testSize,0);
+    BinaryMatrix bMtx1(testSize, testSize, BIT_ZERO);
     for(uint i=0; i<testSize; ++i) {
         bMtx1.setValueAt(0,i,1);
         bMtx1.setValueAt(testSize-1,i,1);
@@ -104,10 +104,10 @@ void TestBinaryMatrix::testSetBit(){
     cout << bMtx1.dataToString() << endl;
 
     cout << "Toggle Linear Index:" << endl;
-    BinaryMatrix bMtx2(testSize, testSize,0);
+    BinaryMatrix bMtx2(testSize, testSize, BIT_ZERO);
     bool toggle = true;
     for(uint i=0; i<testSize*testSize; ++i) {
-        bMtx2.setValueAt(i,toggle? 1:0);
+        bMtx2.setValueAt(i,toggle? BIT_ONE:BIT_ZERO);
         toggle = !toggle;
     }
     cout << bMtx2.dataToString() << endl;
@@ -152,8 +152,8 @@ void TestBinaryMatrix::testTranspose(){
 void TestBinaryMatrix::testBinMultiply(){
     cout << "----- TEST MULTIPLY" << endl;
     uint testSize = 6;
-    BinaryMatrix mtx0(testSize, testSize, 0);
-    BinaryMatrix mtx1(testSize, testSize, 1);
+    BinaryMatrix mtx0(testSize, testSize, BIT_ZERO);
+    BinaryMatrix mtx1(testSize, testSize, BIT_ONE);
 
     cout << "0 = "<<endl;
     cout << mtx0.dataToString() << endl;
@@ -207,7 +207,7 @@ void TestBinaryMatrix::testDoubleMultiply(){
     cout << "----- TEST DOUBLE MULTIPLY" << endl;
     int testSize = 3;
     BinaryMatrix zerosMtx(testSize, testSize);
-    BinaryMatrix onesMtx(testSize, testSize, 1);
+    BinaryMatrix onesMtx(testSize, testSize, BIT_ONE);
     BinaryMatrix uDiag = this->generateUpperDiag(testSize);
     BinaryMatrix diag = this->generateDiag(testSize);
 
@@ -243,12 +243,53 @@ void TestBinaryMatrix::testDoubleMultiply(){
     cout << endl;
 }
 
+bool TestBinaryMatrix::test_initWithArma_single(uint rows, uint cols) {
+    // Initialize a random arma matrix
+    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+
+    // Initialize a BinaryMatrix
+    BinaryMatrix bm(input2D);
+
+    // Test values of binary matrix are equal to that of the arma::umat
+    return bm.equalsArmaMat(input2D);
+}
+
+bool TestBinaryMatrix::test_initWithArma() {
+    // Test with multiple inputs
+    return test_initWithArma_single(3, 3)
+        && test_initWithArma_single(50, 50)
+        && test_initWithArma_single(30, 101)
+        && test_initWithArma_single(57, 98);
+}
+
+bool TestBinaryMatrix::test_im2col_single(uint rows, uint cols, uint block_width, uint block_height,
+                                   uint padding, uint stride) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    BinaryMatrix bm(input2D);
+
+    // Compare im2col result for binary matrix and arma
+    BinaryMatrix bmResult = bm.im2col(block_width, block_height, padding, stride);
+    arma::umat armaResult = BinaryMatrix::im2colArmaMat(input2D, block_width, block_height, padding, stride);
+
+    return bmResult.equalsArmaMat(armaResult);
+}
+
 bool TestBinaryMatrix::test_im2col() {
-    // TODO fix
-    return true;
+    // Tests with different inputs
+    return test_im2col_single();
+    /*
+        && test_im2col_single(3, 3)
+        && test_im2col_single(3, 3, 3, 3, 1, 1)
+        && test_im2col_single(3, 3, 3, 3, 1, 2)
+        && test_im2col_single(5, 5, 3, 3, 1, 2)
+        && test_im2col_single(7, 9, 5, 5, 2, 1)
+        && test_im2col_single(8, 6, 3, 3, 1, 2);
+    */
 }
 
 bool TestBinaryMatrix::runAllTests(){
+    /*
     testCreateAndPrint();
     testGetBit();
     testSetBit();
@@ -257,5 +298,6 @@ bool TestBinaryMatrix::runAllTests(){
     testBinMultiply();
     testTBinMultiply();
     testDoubleMultiply();
-    return test_im2col();
+    */
+    return test_initWithArma() && test_im2col();
 }

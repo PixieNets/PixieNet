@@ -13,9 +13,9 @@
  */
 BinaryMatrix* XnorNetUtils::centerDataMat(arma::mat data) {
     BinaryMatrix *ch = new BinaryMatrix(data.n_rows, data.n_cols);
-    arma::mat centered_data = (data - mean(mean(data))) / stddev(stddev(data));
-    int n_elems = data.n_rows * data.n_cols;
-    for (int i = 0; i < n_elems; ++i) {
+    arma::mat centered_data = (data - arma::mean(arma::mean(data))) / arma::stddev(arma::stddev(data));
+    uint n_elems = (uint) data.n_rows * data.n_cols;
+    for (uint i = 0; i < n_elems; ++i) {
         ch->setValueAt(i, (centered_data(i) >= 0.0) ? BIT_ONE:BIT_ZERO);
     }
     return ch;
@@ -30,9 +30,9 @@ BinaryTensor3D XnorNetUtils::normalizeData3D(arma::cube data) {
     BinaryTensor3D binMat;
     binMat.reserve(data.n_slices);
     for (int ch = 0; ch < data.n_slices; ++ch) {
-        arma::mat centered_data = (data.slice(ch) - arma::mean(mean(data.slice(ch))))
+        arma::mat centered_data = (data.slice(ch) - arma::mean(arma::mean(data.slice(ch))))
                                   / arma::stddev(arma::stddev(data.slice(ch)));
-        binMat[ch] = new BinaryLayer(data.n_cols, data.n_rows);
+        binMat[ch] = new BinaryLayer((uint) data.n_cols, (uint) data.n_rows);
         binMat[ch]->binarizeMat(centered_data);
     }
 

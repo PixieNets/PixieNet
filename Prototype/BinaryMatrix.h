@@ -15,8 +15,8 @@ typedef uint8_t uint8;
 typedef unsigned int uint;
 typedef std::pair<uint, uint> uIntPair;
 
-#define BIT_ZERO ((unsigned char) 0)
-#define BIT_ONE  ((unsigned char) 1)
+#define BIT_ZERO ((uint8) 0)
+#define BIT_ONE  ((uint8) 1)
 
 class BinaryMatrix {
 public:
@@ -28,9 +28,9 @@ public:
     uint     bm_baseBitSize;
 
 public:
-    //BinaryMatrix(uint w, uint h);
     BinaryMatrix(uint w, uint h, uint8 initVal);
-    BinaryMatrix(uint w, uint h, bool randomized=false);
+    BinaryMatrix(uint w, uint h, bool randomized=false, uint n=0);
+    BinaryMatrix(arma::umat input2D);
     ~BinaryMatrix();
 
     void         init(uint w, uint h, uint8 initVal);
@@ -52,13 +52,23 @@ public:
     uint8        getValueAt(uint row, uint col);
     void         setValueAt(uint idx, uint8 bitValue);
     void         setValueAt(uint row, uint col, uint8 bitValue);
+    bool         equalsArmaMat(arma::umat armaMat);
 
+    // Operations on Binary Matrices
     BinaryMatrix operator*(const BinaryMatrix &other);
     BinaryMatrix im2col(uint block_width, uint block_height, uint padding, uint stride);
 
-    void         print();
-    std::string  toString();
-    std::string  dataToString();
+    void                      print();
+    std::string               toString();
+    std::string               dataToString();
+    std::string               uint8ToString(uint8 value);
+
+    // Static methods
+    static arma::umat         randomArmaMat(uint rows, uint cols);
+    static std::vector<uint>  randIndices(uint highest, uint n=0);
+    static arma::umat         im2colArmaMat(arma::umat input, uint block_width, uint block_height,
+                                            uint padding, uint stride);
+
 
     // Accessor functions for class members
     bool transposed()  {    return bm_transposed;  }

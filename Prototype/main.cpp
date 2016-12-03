@@ -8,7 +8,7 @@ int main() {
     TestArmadillo testArma;
     TestBinaryMatrix testBinaryMatrix;
 
-    testArma.runTest();
+    //testArma.runTest();
     testBinaryMatrix.runAllTests();
 
     return 0;

@@ -6,15 +6,10 @@
 #include <utility>
 #include <cstdio>
 #include <vector>
-#include <stdlib.h>
+#include <stdexcept>
 
 #include "BinaryMatrix.h"
 
-/*
-BinaryMatrix::BinaryMatrix(uint w, uint h) {
-    this->init(w, h, 0);
-}
-*/
 
 /**
  * Initializes a 2D binary matrix
@@ -26,35 +21,27 @@ BinaryMatrix::BinaryMatrix(uint w, uint h, uint8 initVal) {
     this->init(w, h, initVal);
 }
 
-BinaryMatrix::BinaryMatrix(uint w, uint h, bool randomized) {
+BinaryMatrix::BinaryMatrix(uint w, uint h, bool randomized, uint n) {
     this->init(w, h, 0);
     if (randomized) {
         // randomly set some bits to 1
-        uint n = rand() % this->bm_dataLength;
-        printf("random n = %d\n", n);
-        std::vector<uint> indices;
-        indices.reserve(n);
-        uint total = 0;
-        while (total != n) {
-            uint idx = rand() % this->bm_dataLength;
-            bool used = false;
-            for (uint j : indices) {
-                if (idx == j) {
-                    used = true;
-                    break;
-                }
-            }
-            if (!used) {
-                setValueAt(idx, BIT_ONE);
-                indices[total] = idx;
-                ++total;
-            }
+        std::vector<uint> indices = this->randIndices(this->bm_dataLength, n);
+        for (uint idx : indices) {
+            setValueAt(idx, BIT_ONE);
         }
-        std::cout << "indices: \n";
-        for (uint i = 0; i < n; ++i) {
-            std::cout << indices[i] << ", ";
+    }
+}
+
+BinaryMatrix::BinaryMatrix(arma::umat input2D) {
+    if (input2D.is_empty()) {
+        throw std::invalid_argument("[BinaryMatrix::constructor] arma::mat input2D (arg1) should be a non-empty matrix\n");
+    }
+
+    this->init((uint) input2D.n_cols, (uint) input2D.n_rows, BIT_ZERO);
+    for (uint row = 0; row < this->bm_height; ++row) {
+        for (uint col = 0; col < this->bm_width; ++col) {
+            this->setValueAt(row, col, (uint8) input2D(row, col));
         }
-        std::cout << std::endl;
     }
 }
 
@@ -65,6 +52,7 @@ BinaryMatrix::~BinaryMatrix() {
     if(this->bm_data != nullptr)
         delete[] this->bm_data;
 }
+
 
 void BinaryMatrix::init(uint w, uint h, uint8 initVal) {
     this->bm_width = w;
@@ -82,6 +70,47 @@ void BinaryMatrix::init(uint w, uint h, uint8 initVal) {
     for(int i = 0; i < this->bm_dataLength; ++i) {
         this->bm_data[i] = val;
     }
+}
+
+std::vector<uint> BinaryMatrix::randIndices(uint highest, uint n) {
+    if (n <= 0) {
+        n = rand() % highest;
+    }
+    if (n >= highest) {
+        throw std::invalid_argument("[BinaryMatrix::randIndices] #random elements, n (arg2) should be positive and lower than (arg1)");
+    }
+    std::vector<uint> indices;
+    indices.reserve(n);
+    uint total = 0;
+    while (total != n) {
+        uint idx = rand() % highest;
+        bool used = false;
+        for (uint j : indices) {
+            if (idx == j) {
+                used = true;
+                break;
+            }
+        }
+        if (!used) {
+            indices.emplace_back(idx);
+            ++total;
+        }
+    }
+    return indices;
+}
+
+arma::umat BinaryMatrix::randomArmaMat(uint rows, uint cols) {
+    arma::umat input2D(rows, cols);
+    input2D.zeros();
+    uint totalElems = rows * cols;
+    std::vector<uint> indices = BinaryMatrix::randIndices(totalElems, totalElems/2);
+    uint row = 0, col = 0;
+    for (uint idx : indices) {
+        col = idx % cols;
+        row = idx / cols;
+        input2D(row, col) = 1;
+    }
+    return input2D;
 }
 
 /**
@@ -145,7 +174,7 @@ uint8 BinaryMatrix::getBit(uint8 elem, uint bit_id) {
 uint8 BinaryMatrix::setBit(uint8 elem, uint bit_id, uint8 bitValue) {
     uint8 mask = (uint8) (1 << (this->bm_baseBitSize-1 - bit_id));
     if (bitValue == 0) {
-        return (elem & !mask);
+        return (elem & ~mask);
     } else {
         return (elem | mask);
     }
@@ -175,7 +204,6 @@ void BinaryMatrix::setValueAt(uint idx, uint8 bitValue) {
     if(this->bm_transposed)
         idx = transposeIndex(idx);
     uIntPair pos = std::make_pair(idx / this->bm_baseBitSize, idx % this->bm_baseBitSize);
-    std::cout << "pos = " << pos.first << ", " << pos.second << std::endl;
     this->bm_data[pos.first] = this->setBit(this->bm_data[pos.first], pos.second, bitValue);
 }
 
@@ -286,6 +314,17 @@ uint BinaryMatrix::bitCount() {
     return count;
 }
 
+std::string BinaryMatrix::uint8ToString(uint8 value) {
+    std::string res = "";
+    uint i = 0;
+    while (i < 8) {
+        res = std::to_string(value % 2) + res;
+        value /= 2;
+        ++i;
+    }
+    return res;
+}
+
 void BinaryMatrix::print() {
     for(uint row = 0; row < this->bm_height; ++row) {
         for(uint col = 0; col < this->bm_width; ++col) {
@@ -340,31 +379,81 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     uint n = block_width * block_height;
     uint rows_out = (this->bm_height - block_height + 2 * padding) / stride + 1;
     uint cols_out = (this->bm_width - block_width + 2 * padding) / stride + 1;
+    uint block_ht_half = block_height / 2;
+    uint block_wd_half = block_width / 2;
     uint all_out = rows_out * cols_out;
-    BinaryMatrix result(all_out, n);
-
-    printf("n = %d, rows_out = %d, cols_out = %d, all_out = %d\n", n, rows_out, cols_out, all_out);
+    BinaryMatrix result(n, all_out);
 
     uint res_row = 0;
-    for (uint row = padding+1; row < (this->bm_height - padding - 1); ++row) {
-        for (uint col = padding+1; col < (this->bm_width - padding - 1); ++col) {
-            printf("row = %d, col = %d\n", row, col);
+    for (uint row = padding + 1; row < (this->bm_height - padding - 1); ++row) {
+        for (uint col = padding + 1; col < (this->bm_width - padding - 1); ++col) {
             uint res_col = 0;
-            for (uint srow = row - padding; srow < (row + padding); ++srow) {
-                for (uint scol = col - padding; scol < (col + padding); ++scol) {
+            for (uint srow = (row - block_ht_half); srow < (row + block_ht_half + 1); ++srow) {
+                for (uint scol = (col - block_wd_half); scol < (col + block_wd_half + 1); ++scol) {
+
                     // In general
                     // result[res_row, res_col++] = input[srow, scol];
-                    result.setValueAt(res_row, res_col, getValueAt(srow, scol));
+                    result.setValueAt(res_row, res_col, this->getValueAt(srow, scol));
                     ++res_col;
                 }
             }
             ++res_row;
         }
     }
-    printf("res_row = %d\n", res_row);
 
     // Check that we capture as many blocks as we had to
     assert(res_row == (rows_out * cols_out));
+
+    return result;
+}
+
+arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint block_height,
+                                       uint padding, uint stride) {
+    uint n = block_width * block_height;
+    uint rows_out = (uint) (input.n_rows - block_height + 2 * padding) / stride + 1;
+    uint cols_out = (uint) (input.n_cols - block_width + 2 * padding) / stride + 1;
+    uint block_ht_half = block_height / 2;
+    uint block_wd_half = block_width / 2;
+    uint all_out = rows_out * cols_out;
+
+    arma::umat result(all_out, n);
+
+    uint res_row = 0;
+    uint row_end = (uint) input.n_rows - padding - 1;
+    uint col_end = (uint) input.n_cols - padding - 1;
+    for (uint row = padding + 1; row < row_end; ++row) {
+        for (uint col = padding + 1; col < row_end; ++col) {
+            uint res_col = 0;
+            uint srow_start = (row - block_ht_half);
+            uint srow_end = (row + block_ht_half);
+            uint scol_start = (col - block_wd_half);
+            uint scol_end = (col + block_wd_half);
+            result.row(res_row) = arma::vectorise(input(arma::span(srow_start, srow_end),
+                                                        arma::span(scol_start, scol_end)), 1);
+            ++res_row;
+        }
+    }
+
+    // Check that we capture as many blocks as we had to
+    assert(res_row == (rows_out * cols_out));
+
+    return result;
+}
+
+bool BinaryMatrix::equalsArmaMat(arma::umat armaMat) {
+    bool result = (armaMat.n_rows == this->bm_height) && (armaMat.n_cols == this->bm_width);
+    if (!result) {
+        return false;
+    }
+
+    for (uint row = 0; row < this->bm_height; ++row) {
+        for (uint col = 0; col < this->bm_width; ++col) {
+            result &= (this->getValueAt(row, col) == (uint8) armaMat(row, col));
+            if (!result) {
+                return false;
+            }
+        }
+    }
 
     return result;
 }

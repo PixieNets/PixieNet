@@ -2,8 +2,7 @@
 // Created by Zal on 11/20/16.
 //
 
-#ifndef PROTOTYPE_TESTBINARYMATRIX_H
-#define PROTOTYPE_TESTBINARYMATRIX_H
+#pragma once
 
 #include <iostream>
 #include "BinaryMatrix.h"
@@ -25,11 +24,15 @@ class TestBinaryMatrix {
     void testTBinMultiply();
     void testDoubleMultiply();
 
+    bool test_initWithArma_single(uint rows = 10, uint cols = 10);
+    bool test_im2col_single(uint rows = 10, uint cols = 10,
+                            uint block_width = 3, uint block_height = 3,
+                            uint padding = 0, uint stride = 1);
+
+    bool test_initWithArma();
     bool test_im2col();
 
 public:
     bool runAllTests();
 };
 
-
-#endif //PROTOTYPE_TESTBINARYMATRIX_H
