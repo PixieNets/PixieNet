@@ -46,6 +46,20 @@ BinaryMatrix::BinaryMatrix(arma::umat input2D) {
     }
 }
 
+// Copy Constructor
+BinaryMatrix::BinaryMatrix(const BinaryMatrix &other) {
+    this->bm_width = other.bm_width;
+    this->bm_height = other.bm_height;
+    this->bm_baseBitSize = other.bm_baseBitSize;
+    this->bm_transposed = other.bm_transposed;
+    this->bm_dataLength = other.bm_dataLength;
+    // Deep copy of data
+    this->bm_data = new uint8[this->bm_dataLength];
+    for (int i = 0; i < this->bm_dataLength; ++i) {
+        this->bm_data[i] = other.bm_data[i];
+    }
+}
+
 /**
  * Destructor for binary matrix, delete the data
  */

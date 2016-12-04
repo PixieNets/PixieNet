@@ -44,6 +44,51 @@ bool TestBinaryLayer::test_binarizeMat() {
         && test_binarizeMat_single(81, 102);
 }
 
+bool TestBinaryLayer::test_operatorMult_single(uint rows1, uint cols1, uint rows2, uint cols2) {
+     // Generate 2 random binary matrices
+    arma::umat input2D_a = BinaryMatrix::randomArmaUMat(rows1, cols1);
+    BinaryLayer bl_a(input2D_a);
+    arma::umat input2D_b = BinaryMatrix::randomArmaUMat(rows2, cols2);
+    BinaryLayer bl_b(input2D_b);
+
+#ifdef DEBUG
+    std::cout << "[test_operatorMult_single] arma input 1: \n" << input2D_a << std::endl;
+    std::cout << "[test_operatorMult_single] binary matrix input 1: \n";
+    bl_a.binMtx()->print();
+    std::cout << std::endl;
+    std::cout << "[test_operatorMult_single] arma input 2: \n" << input2D_b << std::endl;
+    std::cout << "[test_operatorMult_single] binary matrix input 2: \n";
+    bl_b.binMtx()->print();
+    std::cout << std::endl;
+#endif
+
+    // ARMA product
+    arma::imat ia = arma::conv_to<imat>::from(input2D_a);
+    ia.replace(0, -1);
+    arma::imat ib = arma::conv_to<imat>::from(input2D_b);
+    ib.replace(0, -1);
+    arma::imat ires = ia % ib;
+    ires.replace(-1, 0);
+    arma::umat armaResult = arma::conv_to<umat>::from(ires);
+
+    // XNOR product
+    BinaryLayer result = bl_a * bl_b;
+
+#ifdef DEBUG
+    std::cout << "[test_operatorMult_single] Arma result: \n" << armaResult << std::endl;
+    std::cout << "[test_operatorMult_single] Binary layer result: \n";
+    result.binMtx()->print();
+    std::cout << std::endl;
+#endif
+
+    return result.binMtx()->equalsArmaMat(armaResult);
+}
+
+bool TestBinaryLayer::test_operatorMult() {
+    return test_operatorMult_single();
+}
+
 bool TestBinaryLayer::runAllTests() {
-    return test_binarizeMat();
+//    return test_binarizeMat();
+    return test_operatorMult();
 }

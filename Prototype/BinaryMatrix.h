@@ -31,6 +31,9 @@ public:
     BinaryMatrix(uint w, uint h, uint8 initVal);
     BinaryMatrix(uint w, uint h, bool randomized=false, uint n=0);
     BinaryMatrix(arma::umat input2D);
+    // Copy Constructor
+    BinaryMatrix(const BinaryMatrix &other);
+    // Destructor
     ~BinaryMatrix();
 
     void         init(uint w, uint h, uint8 initVal);

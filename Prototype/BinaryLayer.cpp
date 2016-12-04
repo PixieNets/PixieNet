@@ -16,7 +16,15 @@ BinaryLayer::BinaryLayer(uint w, uint h) {
     this->bl_alpha = 1.0;
 }
 
+BinaryLayer::BinaryLayer(arma::umat input2D) {
+    this->bl_width = input2D.n_cols;
+    this->bl_height = input2D.n_rows;
+    this->bl_binMtx = new BinaryMatrix(input2D);
+    this->bl_alpha = arma::mean(arma::mean(arma::abs(input2D)));
+}
+
 BinaryLayer::~BinaryLayer() {
+    std::cout << "Called destructor binary layer, for pointer " << this->bl_binMtx << "\n";
     if(this->bl_binMtx != nullptr)
         delete this->bl_binMtx;
 }
@@ -79,7 +87,7 @@ void BinaryLayer::getDoubleWeights(double **weights, int *size) {
 BinaryLayer BinaryLayer::operator*(const BinaryLayer&other) {
     BinaryMatrix resultMtx = (*(this->bl_binMtx)) * (*(other.bl_binMtx));
     BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
-    *result.bl_binMtx = resultMtx;
+    result.bl_binMtx = new BinaryMatrix(resultMtx);
     result.bl_alpha = this->bl_alpha * other.bl_alpha;
     return result;
 }
