@@ -86,3 +86,11 @@ BinaryLayer BinaryLayer::im2col(uint block_width, uint block_height, uint paddin
     result.bl_alpha = this->bl_alpha;
     return result;
 }
+
+BinaryLayer BinaryLayer::repmat(uint n_rows, uint n_cols) {
+    BinaryMatrix resultMtx = this->bl_binMtx->repmat(n_rows, n_cols);
+    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
+    *result.bl_binMtx = resultMtx;
+    result.bl_alpha = this->bl_alpha;
+    return result;
+}
