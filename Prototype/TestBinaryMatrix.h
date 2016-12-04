@@ -34,11 +34,15 @@ class TestBinaryMatrix {
     bool test_repmat_single(uint rows = 2, uint cols = 3, uint n_rows = 2, uint n_cols = 3);
     bool test_reshape_single(uint rows = 2, uint cols = 3, uint new_rows = 3, uint new_cols = 2);
     bool test_reshape_invalid(uint rows = 2, uint cols = 3, uint new_rows = 3, uint new_cols = 2);
+    bool test_bitCountPerRow_single(uint rows = 10, uint cols = 100, bool reshape = false, uint new_rows = 0, uint new_cols = 0);
+    bool test_bitCountPerCol_single(uint rows = 10, uint cols = 100, bool reshape = false, uint new_rows = 0, uint new_cols = 0);
 
     bool test_initWithArma();
     bool test_im2col();
     bool test_repmat();
     bool test_reshape();
+    bool test_bitCountPerRow();
+    bool test_bitCountPerCol();
 
 public:
     bool runAllTests();

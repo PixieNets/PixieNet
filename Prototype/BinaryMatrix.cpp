@@ -315,6 +315,41 @@ uint BinaryMatrix::bitCount() {
     return count;
 }
 
+arma::mat BinaryMatrix::bitCountPerRow(bool reshape, uint new_rows, uint new_cols) {
+    arma::mat result(this->bm_height, 1);
+    result.zeros();
+    for (uint row = 0; row < this->bm_height; ++row) {
+        for (uint col = 0; col < this->bm_width; ++col) {
+            if (this->getValueAt(row, col) == BIT_ONE) {
+                ++result(row, 0);
+            }
+        }
+    }
+
+    if (reshape) {
+        // Arma is column major
+        result = arma::reshape(result.t(), new_cols, new_rows).t();
+    }
+    return result;
+}
+
+arma::mat BinaryMatrix::bitCountPerCol(bool reshape, uint new_rows, uint new_cols) {
+    arma::mat result(1, this->bm_width);
+    result.zeros();
+    for (uint row = 0; row < this->bm_height; ++row) {
+        for (uint col = 0; col < this->bm_width; ++col) {
+            if (this->getValueAt(row, col) == BIT_ONE) {
+                ++result(0, col);
+            }
+        }
+    }
+    if (reshape) {
+        // Arma is column major
+        result = arma::reshape(result.t(), new_cols, new_rows).t();
+    }
+    return result;
+}
+
 std::string BinaryMatrix::uint8ToString(uint8 value) {
     std::string res = "";
     uint i = 0;

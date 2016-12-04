@@ -348,6 +348,49 @@ bool TestBinaryMatrix::test_reshape() {
         && test_reshape_invalid(7, 9, 3, 2);
 }
 
+bool TestBinaryMatrix::test_bitCountPerRow_single(uint rows, uint cols, bool reshape, uint new_rows, uint new_cols) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    BinaryMatrix bm(input2D);
+
+    // Compare arma result to BinaryMatrix result
+    arma::mat doubleInput2D = arma::conv_to<mat>::from(input2D);
+    arma::mat armaResult = arma::sum(doubleInput2D, 1);
+    if (reshape) {
+        armaResult = arma::reshape(armaResult.t(), new_cols, new_rows).t();
+    }
+    arma::mat bmResult = bm.bitCountPerRow(reshape, new_rows, new_cols);
+
+    return arma::approx_equal(armaResult, bmResult, "absdiff", 0);
+}
+
+bool TestBinaryMatrix::test_bitCountPerRow() {
+    return test_bitCountPerRow_single()
+        && test_bitCountPerRow_single(8, 12, true, 2, 4);
+}
+
+bool TestBinaryMatrix::test_bitCountPerCol_single(uint rows, uint cols, bool reshape, uint new_rows, uint new_cols) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    BinaryMatrix bm(input2D);
+
+    // Compare arma result to BinaryMatrix result
+    arma::mat doubleInput2D = arma::conv_to<mat>::from(input2D);
+    arma::mat armaResult = arma::sum(doubleInput2D, 0);
+    if (reshape) {
+        armaResult = arma::reshape(armaResult.t(), new_cols, new_rows).t();
+    }
+    arma::mat bmResult = bm.bitCountPerCol(reshape, new_rows, new_cols);
+
+    return arma::approx_equal(armaResult, bmResult, "absdiff", 0);
+}
+
+bool TestBinaryMatrix::test_bitCountPerCol() {
+    return test_bitCountPerCol_single()
+        && test_bitCountPerRow_single(8, 12, true, 3, 4);
+}
+
+
 bool TestBinaryMatrix::runAllTests(){
     /*
     testCreateAndPrint();
@@ -359,5 +402,6 @@ bool TestBinaryMatrix::runAllTests(){
     testTBinMultiply();
     testDoubleMultiply();
     */
-    return test_initWithArma() && test_im2col() && test_repmat() && test_reshape();
+    return test_initWithArma() && test_im2col() && test_repmat() && test_reshape()
+           && test_bitCountPerRow() && test_bitCountPerCol();
 }

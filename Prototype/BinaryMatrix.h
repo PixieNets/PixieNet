@@ -37,8 +37,10 @@ public:
     void         T();
     BinaryMatrix binMultiply(const BinaryMatrix &other);
     BinaryMatrix tBinMultiply(const BinaryMatrix &other);
-    mat          doubleMultiply(const mat &other);
+    arma::mat    doubleMultiply(const arma::mat &other);
     uint         bitCount();
+    arma::mat    bitCountPerRow(bool reshape=false, uint new_rows=0, uint new_cols=0);
+    arma::mat    bitCountPerCol(bool reshape=false, uint new_rows=0, uint new_cols=0);
 
     uIntPair     elemAccessor(uint i, uint rows, uint cols, bool transposed);
     uint8        getBit(uint8 elem, uint bit_id);
