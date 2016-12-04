@@ -94,3 +94,11 @@ BinaryLayer BinaryLayer::repmat(uint n_rows, uint n_cols) {
     result.bl_alpha = this->bl_alpha;
     return result;
 }
+
+BinaryLayer BinaryLayer::reshape(uint new_rows, uint new_cols) {
+    BinaryMatrix resultMtx = this->bl_binMtx->reshape(new_rows, new_cols);
+    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
+    *result.bl_binMtx = resultMtx;
+    result.bl_alpha = this->bl_alpha;
+    return result;
+}

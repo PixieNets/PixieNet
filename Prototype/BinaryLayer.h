@@ -35,6 +35,7 @@ public:
     BinaryLayer operator*(const BinaryLayer &other);
     BinaryLayer im2col(uint block_width, uint block_height, uint padding, uint stride);
     BinaryLayer repmat(uint n_rows, uint n_cols);
+    BinaryLayer reshape(uint new_rows, uint new_cols);
 
     // Accessor functions for data members
     uint width()            {   return bl_width;  }
