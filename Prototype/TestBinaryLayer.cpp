@@ -102,7 +102,59 @@ bool TestBinaryLayer::test_operatorMult() {
         && test_operatorMult_invalid(5, 6, 7, 8);
 }
 
+bool TestBinaryLayer::test_im2col_single(uint rows, uint cols, uint block_width, uint block_height, uint padding,
+                                         uint stride) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
+    BinaryLayer bl(input2D);
+
+#ifdef DEBUG
+    std::cout << "[test_im2col_single] arma input:\n" << input2D << std::endl;
+    std::cout << "[test_im2col_single] bm input:\n" ;
+    bl.binMtx()->print();
+    std::cout << std::endl;
+#endif
+
+    // Compare im2col result for binary matrix and arma
+    arma::umat armaResult = BinaryMatrix::im2colArmaMat(input2D, block_width, block_height, padding, stride);
+    BinaryLayer blResult = bl.im2col(block_width, block_height, padding, stride);
+
+#ifdef DEBUG
+    std::cout << "[test_im2col_single] arma result:\n" << armaResult << std::endl;
+    std::cout << "[test_im2col_single] bm result:\n" ;
+    blResult.binMtx()->print();
+    std::cout << std::endl;
+#endif
+
+    return blResult.binMtx()->equalsArmaMat(armaResult);
+}
+
+bool TestBinaryLayer::test_im2col_invalid(uint rows, uint cols, uint block_width, uint block_height, uint padding, uint stride) {
+    try {
+        test_im2col_single(rows, cols, block_width, block_height, padding, stride);
+    } catch (std::exception e) {
+        return true;
+    }
+    std::cerr << "[test_im2col_invalid] Test didn't raise exception\n";
+    // This test should raise an exception
+    return false;
+}
+
+
+bool TestBinaryLayer::test_im2col() {
+    return test_im2col_single()
+        && test_im2col_single(3, 3)
+        && test_im2col_single(3, 3, 3, 3, 1, 1)
+        && test_im2col_single(3, 3, 3, 3, 1, 2)
+        && test_im2col_single(5, 5, 3, 3, 1, 2)
+        && test_im2col_single(7, 9, 5, 5, 2, 1)
+        && test_im2col_invalid(8, 6, 3, 3, 1, 2)
+        && test_im2col_invalid(7, 9, 5, 5, 3, 1)
+        && test_im2col_invalid(10, 10, 3, 3, 0, 2);
+}
+
 bool TestBinaryLayer::runAllTests() {
-    return test_binarizeMat()
-        && test_operatorMult();
+//    return test_binarizeMat()
+//        && test_operatorMult();
+    return test_im2col();
 }
