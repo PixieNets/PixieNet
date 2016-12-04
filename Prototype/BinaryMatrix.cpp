@@ -100,7 +100,7 @@ std::vector<uint> BinaryMatrix::randIndices(uint highest, uint n) {
     return indices;
 }
 
-arma::umat BinaryMatrix::randomArmaMat(uint rows, uint cols) {
+arma::umat BinaryMatrix::randomArmaUMat(uint rows, uint cols) {
     arma::umat input2D(rows, cols);
     input2D.zeros();
     uint totalElems = rows * cols;
@@ -110,6 +110,20 @@ arma::umat BinaryMatrix::randomArmaMat(uint rows, uint cols) {
         col = idx % cols;
         row = idx / cols;
         input2D(row, col) = 1;
+    }
+    return input2D;
+}
+
+arma::mat BinaryMatrix::randomArmaMat(uint rows, uint cols) {
+    arma::mat input2D(rows, cols);
+    input2D.zeros();
+    uint totalElems = rows * cols;
+    std::vector<uint> indices = BinaryMatrix::randIndices(totalElems);
+    uint row = 0, col = 0;
+    for (uint idx : indices) {
+        col = idx % cols;
+        row = idx / cols;
+        input2D(row, col) = arma::randn();
     }
     return input2D;
 }

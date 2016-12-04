@@ -68,7 +68,8 @@ public:
     std::string               uint8ToString(uint8 value);
 
     // Static methods
-    static arma::umat         randomArmaMat(uint rows, uint cols);
+    static arma::mat          randomArmaMat(uint rows, uint cols);
+    static arma::umat         randomArmaUMat(uint rows, uint cols);
     static std::vector<uint>  randIndices(uint highest, uint n=0);
     static arma::umat         im2colArmaMat(arma::umat input, uint block_width, uint block_height,
                                             uint padding, uint stride);

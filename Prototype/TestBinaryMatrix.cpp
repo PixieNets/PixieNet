@@ -5,6 +5,7 @@
 #include "TestBinaryMatrix.h"
 #include <armadillo>
 
+//#define DEBUG 0
 
 using namespace std;
 using namespace arma;
@@ -243,9 +244,47 @@ void TestBinaryMatrix::testDoubleMultiply(){
     cout << endl;
 }
 
+bool TestBinaryMatrix::test_setValueAtIdx_single(uint rows, uint cols, uint8 value) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
+    BinaryMatrix bm(input2D);
+
+#ifdef DEBUG
+    std::cout << "[test_setValueAtIdx_single] arma input: \n" << input2D << std::endl;
+    std::cout << "[test_setValueAtIdx_single] binary matrix input: \n";
+    bm.print();
+    std::cout << std::endl;
+#endif
+
+    for (uint idx = 0; idx < (rows * cols); ++idx) {
+        if (std::rand() % 2) {
+            bm.setValueAt(idx, value);
+            uint row_idx = idx / cols;
+            uint col_idx = idx % cols;
+            input2D(row_idx, col_idx) = (arma::uword) (value == BIT_ONE ? 1 : 0);
+        }
+    }
+
+#ifdef DEBUG
+    std::cout << "[test_setValueAtIdx_single] arma result: \n" << input2D << std::endl;
+    std::cout << "[test_setValueAtIdx_single] bm result: \n";
+    bm.print();
+    std::cout << std::endl;
+#endif
+
+    return bm.equalsArmaMat(input2D);
+}
+
+bool TestBinaryMatrix::test_setValueAtIdx() {
+    return test_setValueAtIdx_single()
+        && test_setValueAtIdx_single(7, 9)
+        && test_setValueAtIdx_single(28, 92);
+}
+
+
 bool TestBinaryMatrix::test_initWithArma_single(uint rows, uint cols) {
     // Initialize a random arma matrix
-    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
 
     // Initialize a BinaryMatrix
     BinaryMatrix bm(input2D);
@@ -265,7 +304,7 @@ bool TestBinaryMatrix::test_initWithArma() {
 bool TestBinaryMatrix::test_im2col_single(uint rows, uint cols, uint block_width, uint block_height,
                                    uint padding, uint stride) {
     // Generate a random binary matrix
-    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
     BinaryMatrix bm(input2D);
 
     // Compare im2col result for binary matrix and arma
@@ -301,7 +340,7 @@ bool TestBinaryMatrix::test_im2col() {
 
 bool TestBinaryMatrix::test_repmat_single(uint rows, uint cols, uint n_rows, uint n_cols) {
     // Generate a random binary matrix
-    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
     BinaryMatrix bm(input2D);
 
     // Compare repmat result for BinaryMatrix and arma
@@ -318,7 +357,7 @@ bool TestBinaryMatrix::test_repmat() {
 
 bool TestBinaryMatrix::test_reshape_single(uint rows, uint cols, uint new_rows, uint new_cols) {
     // Generate a random binary matrix
-    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
     BinaryMatrix bm(input2D);
 
     // Compare reshape result for BinaryMatrix and arma
@@ -350,7 +389,7 @@ bool TestBinaryMatrix::test_reshape() {
 
 bool TestBinaryMatrix::test_bitCountPerRow_single(uint rows, uint cols, bool reshape, uint new_rows, uint new_cols) {
     // Generate a random binary matrix
-    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
     BinaryMatrix bm(input2D);
 
     // Compare arma result to BinaryMatrix result
@@ -371,7 +410,7 @@ bool TestBinaryMatrix::test_bitCountPerRow() {
 
 bool TestBinaryMatrix::test_bitCountPerCol_single(uint rows, uint cols, bool reshape, uint new_rows, uint new_cols) {
     // Generate a random binary matrix
-    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
     BinaryMatrix bm(input2D);
 
     // Compare arma result to BinaryMatrix result
@@ -403,5 +442,5 @@ bool TestBinaryMatrix::runAllTests(){
     testDoubleMultiply();
     */
     return test_initWithArma() && test_im2col() && test_repmat() && test_reshape()
-           && test_bitCountPerRow() && test_bitCountPerCol();
+           && test_bitCountPerRow() && test_bitCountPerCol() && test_setValueAtIdx();
 }

@@ -30,8 +30,13 @@ void BinaryLayer::binarizeMat(arma::mat data) {
     assert((this->bl_width * this->bl_height) == (data.n_rows * data.n_cols));
 
     uint n_elems = this->bl_width * this->bl_height;
-    for (uint i = 0; i < n_elems; ++i) {
-        this->bl_binMtx->setValueAt(i, (data[i] >= 0)? BIT_ONE:BIT_ZERO);
+    for (uint row = 0; row < data.n_rows; ++row) {
+        for (uint col = 0; col < data.n_cols; ++col) {
+            uint8 result = (data(row, col) >= 0.0) ? BIT_ONE : BIT_ZERO;
+            printf("[binarizeMat] data[%d, %d] = %f, result = %s\n", row, col, data(row, col),
+                   this->bl_binMtx->uint8ToString(result).c_str());
+            this->bl_binMtx->setValueAt(row, col, result);
+        }
     }
     this->bl_alpha = arma::sum(arma::sum(arma::abs(data)))/ n_elems;
 }

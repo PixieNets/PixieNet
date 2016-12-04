@@ -24,6 +24,7 @@ class TestBinaryMatrix {
     void testTBinMultiply();
     void testDoubleMultiply();
 
+    bool test_setValueAtIdx_single(uint rows = 3, uint cols = 5, uint8 value=BIT_ONE);
     bool test_initWithArma_single(uint rows = 10, uint cols = 10);
     bool test_im2col_single(uint rows = 10, uint cols = 10,
                             uint block_width = 3, uint block_height = 3,
@@ -37,6 +38,7 @@ class TestBinaryMatrix {
     bool test_bitCountPerRow_single(uint rows = 10, uint cols = 100, bool reshape = false, uint new_rows = 0, uint new_cols = 0);
     bool test_bitCountPerCol_single(uint rows = 10, uint cols = 100, bool reshape = false, uint new_rows = 0, uint new_cols = 0);
 
+    bool test_setValueAtIdx();
     bool test_initWithArma();
     bool test_im2col();
     bool test_repmat();
