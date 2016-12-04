@@ -78,3 +78,11 @@ BinaryLayer BinaryLayer::operator*(const BinaryLayer&other) {
     result.bl_alpha = this->bl_alpha * other.bl_alpha;
     return result;
 }
+
+BinaryLayer BinaryLayer::im2col(uint block_width, uint block_height, uint padding, uint stride) {
+    BinaryMatrix resultMtx = this->bl_binMtx->im2col(block_width, block_height, padding, stride);
+    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
+    *result.bl_binMtx = resultMtx;
+    result.bl_alpha = this->bl_alpha;
+    return result;
+}

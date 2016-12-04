@@ -15,7 +15,7 @@ namespace bd {
     // Concatenate multiple binary layer channels to form a 3D binary tensor
     typedef std::vector<BinaryLayer*>     BinaryTensor3D;
     // Concatenate multiple 3D binary tensors to form a 4D binary tensor
-    typedef std::vector<BinaryTensor3D>  BinaryTensor4D;
+    typedef std::vector<BinaryTensor3D>   BinaryTensor4D;
 }
 
 class bd::BinaryLayer {
@@ -33,6 +33,7 @@ public:
     void        binarizeWeights(double *weights, int size);
     void        getDoubleWeights(double **weights, int *size);
     BinaryLayer operator*(const BinaryLayer &other);
+    BinaryLayer im2col(uint block_width, uint block_height, uint padding, uint stride);
 
     // Accessor functions for data members
     uint width()            {   return bl_width;  }
