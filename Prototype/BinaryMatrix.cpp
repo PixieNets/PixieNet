@@ -432,6 +432,25 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     return result;
 }
 
+BinaryMatrix BinaryMatrix::repmat(uint n_rows, uint n_cols) {
+    if (n_rows <= 0 || n_cols <= 0) {
+        throw std::invalid_argument("[BinaryMatrix::repmat] n_rows (arg1) and n_cols (arg2) should be positive");
+    }
+
+    uint new_height = this->bm_height * n_rows;
+    uint new_width = this->bm_width * n_cols;
+    BinaryMatrix result(new_width, new_height);
+    for (uint row = 0; row < new_height; ++row) {
+        for (uint col = 0; col < new_width; ++col) {
+            uint cur_row = row % this->bm_height;
+            uint cur_col = col % this->bm_width;
+            result.setValueAt(row, col, this->getValueAt(cur_row, cur_col));
+        }
+    }
+
+    return result;
+}
+
 arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint block_height,
                                        uint padding, uint stride) {
     int block_ht_half = block_height / 2;

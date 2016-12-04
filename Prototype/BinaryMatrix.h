@@ -57,6 +57,7 @@ public:
     // Operations on Binary Matrices
     BinaryMatrix operator*(const BinaryMatrix &other);
     BinaryMatrix im2col(uint block_width, uint block_height, uint padding, uint stride);
+    BinaryMatrix repmat(uint n_rows, uint n_cols);
 
     void                      print();
     std::string               toString();

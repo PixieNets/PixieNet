@@ -31,9 +31,11 @@ class TestBinaryMatrix {
     bool test_im2col_invalid(uint rows, uint cols,
                              uint block_width, uint block_height,
                              uint padding, uint stride);
+    bool test_repmat_single(uint rows = 2, uint cols = 3, uint n_rows = 2, uint n_cols = 3);
 
     bool test_initWithArma();
     bool test_im2col();
+    bool test_repmat();
 
 public:
     bool runAllTests();

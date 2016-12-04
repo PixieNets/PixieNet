@@ -299,6 +299,23 @@ bool TestBinaryMatrix::test_im2col() {
         && test_im2col_invalid(10, 10, 3, 3, 0, 2);
 }
 
+bool TestBinaryMatrix::test_repmat_single(uint rows, uint cols, uint n_rows, uint n_cols) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    BinaryMatrix bm(input2D);
+
+    // Compare repmat result for BinaryMatrix and arma
+    arma::umat armaResult = arma::repmat(input2D, n_rows, n_cols);
+    BinaryMatrix bmResult = bm.repmat(n_rows, n_cols);
+
+    return bmResult.equalsArmaMat(armaResult);
+}
+
+bool TestBinaryMatrix::test_repmat() {
+    return test_repmat_single()
+        && test_repmat_single(1, 9, 15, 1);
+}
+
 bool TestBinaryMatrix::runAllTests(){
     /*
     testCreateAndPrint();
@@ -310,5 +327,5 @@ bool TestBinaryMatrix::runAllTests(){
     testTBinMultiply();
     testDoubleMultiply();
     */
-    return test_initWithArma() && test_im2col();
+    return test_initWithArma() && test_im2col() && test_repmat();
 }
