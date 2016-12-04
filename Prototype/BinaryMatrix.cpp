@@ -6,6 +6,7 @@
 #include <utility>
 #include <cstdio>
 #include <vector>
+#include <algorithm>
 #include <stdexcept>
 
 #include "BinaryMatrix.h"
@@ -384,25 +385,46 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     uint all_out = rows_out * cols_out;
     BinaryMatrix result(n, all_out);
 
-    uint res_row = 0;
-    for (uint row = padding + 1; row < (this->bm_height - padding - 1); ++row) {
-        for (uint col = padding + 1; col < (this->bm_width - padding - 1); ++col) {
-            uint res_col = 0;
-            for (uint srow = (row - block_ht_half); srow < (row + block_ht_half + 1); ++srow) {
-                for (uint scol = (col - block_wd_half); scol < (col + block_wd_half + 1); ++scol) {
+//    printf("[im2colBinary] rows_out = %d, cols_out = %d, all_out = %d, n = %d\n", rows_out, cols_out, all_out, n);
 
+    uint res_row = 0;
+    uint start_row = 0, end_row = this->bm_height;
+    uint start_col = 0, end_col = this->bm_width;
+    if (padding == 0) {
+        start_row = padding + block_ht_half;
+        end_row = this->bm_height - padding - block_ht_half;
+        start_col = padding + block_wd_half;
+        end_col = this->bm_height - padding - block_wd_half;
+    }
+    for (uint row = start_row; row < end_row; row += stride) {
+        for (uint col = start_col; col < end_col; col += stride) {
+            uint res_col = 0;
+//            printf("[im2colBinary] row = %d, col = %d\n", row, col);
+            int srow_start = (row - block_ht_half);
+            int srow_end = (row + block_ht_half + 1);
+            int scol_start = (col - block_wd_half);
+            int scol_end = (col + block_wd_half + 1);
+//            printf("[im2colBinary] srow = (%d, %d), scol = (%d, %d)\n", srow_start, srow_end, scol_start, scol_end);
+            for (int srow = srow_start; srow < srow_end; ++srow) {
+                for (int scol = scol_start; scol < scol_end; ++scol) {
+//                    printf("[im2colBinary]\t srow = %d, scol = %d\n", srow, scol);
                     // In general
                     // result[res_row, res_col++] = input[srow, scol];
-                    result.setValueAt(res_row, res_col, this->getValueAt(srow, scol));
+                    if (srow >= 0 && srow < this->bm_height && scol >= 0 && scol < this->bm_width) {
+//                        printf("[im2colBinary] Passed iff srow, scol\n");
+                        result.setValueAt(res_row, res_col, this->getValueAt(srow, scol));
+                    }
                     ++res_col;
                 }
             }
             ++res_row;
+//            printf("[im2colBinary] res_row = %d\n", res_row);
         }
     }
 
+//    printf("[im2colBinary] res_row = %d, all_out = %d\n", res_row, all_out);
     // Check that we capture as many blocks as we had to
-    assert(res_row == (rows_out * cols_out));
+    assert(res_row == all_out);
 
     return result;
 }
@@ -412,30 +434,69 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
     uint n = block_width * block_height;
     uint rows_out = (uint) (input.n_rows - block_height + 2 * padding) / stride + 1;
     uint cols_out = (uint) (input.n_cols - block_width + 2 * padding) / stride + 1;
-    uint block_ht_half = block_height / 2;
-    uint block_wd_half = block_width / 2;
+    int block_ht_half = block_height / 2;
+    int block_wd_half = block_width / 2;
     uint all_out = rows_out * cols_out;
 
     arma::umat result(all_out, n);
+    result.zeros();
 
     uint res_row = 0;
-    uint row_end = (uint) input.n_rows - padding - 1;
-    uint col_end = (uint) input.n_cols - padding - 1;
-    for (uint row = padding + 1; row < row_end; ++row) {
-        for (uint col = padding + 1; col < row_end; ++col) {
+    int row_start = 0, col_start = 0;
+    int row_end = (uint) input.n_rows, col_end = (uint) input.n_cols;
+    if (padding == 0) {
+        row_start = block_ht_half;
+        row_end = (uint) input.n_rows - block_ht_half;
+        col_start = block_wd_half;
+        col_end = (uint) input.n_cols - block_wd_half;
+    }
+//    printf("[im2colArma] row_start = %d, row_end = %d, col_start = %d, col_end = %d\n", row_start, row_end, col_start, col_end);
+    for (int row = row_start; row < row_end; row += stride) {
+        for (int col = col_start; col < col_end; col += stride) {
             uint res_col = 0;
-            uint srow_start = (row - block_ht_half);
-            uint srow_end = (row + block_ht_half);
-            uint scol_start = (col - block_wd_half);
-            uint scol_end = (col + block_wd_half);
-            result.row(res_row) = arma::vectorise(input(arma::span(srow_start, srow_end),
-                                                        arma::span(scol_start, scol_end)), 1);
+            /*
+            uint srow_start = (uint) std::max(0, (row - block_ht_half));
+            uint srow_end = (uint) std::min((int) input.n_rows - 1, (row + block_ht_half));
+            uint scol_start = (uint) std::max(0, (col - block_wd_half));
+            uint scol_end = (uint) std::min((int) input.n_cols - 1, (col + block_wd_half));
+            */
+            int srow_start = row - block_ht_half;
+            int srow_end = row + block_ht_half;
+            int scol_start = col - block_wd_half;
+            int scol_end = col + block_wd_half;
+//            printf("[im2colArma] : srow_start = %d, srow_end = %d, scol_start = %d, scol_end = %d\n", srow_start, srow_end, scol_start, scol_end);
+            if (srow_start >= 0 && srow_start < (int) input.n_rows
+                && srow_end >= 0 && srow_end < (int) input.n_rows
+                && scol_start >= 0 && scol_start < (int) input.n_cols
+                && scol_end >= 0 && scol_end < (int) input.n_cols ){
+//                printf("[im2colArma] in iffff: srow_start = %d, srow_end = %d, scol_start = %d, scol_end = %d\n", srow_start, srow_end, scol_start, scol_end);
+                result.row(res_row) = arma::vectorise(input(arma::span(srow_start, srow_end),
+                                                            arma::span(scol_start, scol_end)), 1);
+//                printf("[im2colArma]: result.row(%d) = \n", res_row);
+//                std::cout << result.row(res_row) << std::endl;
+            } else {
+//                std::cout << "[im2colArma] in res_col = 0\n";
+                res_col = 0;
+                for (int srow = srow_start; srow < (srow_end + 1); ++srow) {
+                    for (int scol = scol_start; scol < (scol_end + 1); ++scol) {
+//                        printf("[im2colArma]: srow = %d, scol = %d\n", srow, scol);
+                        if (srow >= 0 && srow < (int) input.n_rows && scol >= 0 && scol < (int) input.n_cols ) {
+//                            printf("[im2colArma]: input(%d, %d) = %d\n", srow, scol, input(srow, scol));
+                            result(res_row, res_col) = input(srow, scol);
+                        }
+                        ++res_col;
+                    }
+                }
+//                printf("[im2colArma]: result.row(%d) = \n", res_row);
+//                std::cout << result.row(res_row) << std::endl;
+            }
             ++res_row;
         }
     }
 
+    printf("[im2colBinary] res_row = %d, all_out = %d\n", res_row, all_out);
     // Check that we capture as many blocks as we had to
-    assert(res_row == (rows_out * cols_out));
+    assert(res_row == all_out);
 
     return result;
 }
