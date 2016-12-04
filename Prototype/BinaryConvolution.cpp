@@ -71,9 +71,9 @@ arma::mat BinaryConvolution::input2KMat(arma::cube norm_data) {
 }
 
 BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
-    uint width = norm_data.n_cols;
-    uint height = norm_data.n_rows;
-    uint channels = norm_data.n_slices;
+    uint width = (uint) norm_data.n_cols;
+    uint height = (uint) norm_data.n_rows;
+    uint channels = (uint) norm_data.n_slices;
     BinaryTensor3D tensor;
     tensor.reserve(channels);
     for (int ch = 0; ch < channels; ++ch) {
@@ -81,11 +81,6 @@ BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
         tensor[ch]->binarizeMat(norm_data.slice(ch));
     }
     return tensor;
-}
-
-BinaryTensor3D BinaryConvolution::padInput(BinaryTensor3D input) {
-    // TODO: Fix!
-    return input;
 }
 
 arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
@@ -99,46 +94,50 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
     }
 
     if (input.size() != this->bc_channels) {
-        std::cerr << "BinaryConv::doBinConv - Input [arg1] and conv weights should have the same number of channels\n";
+        std::cerr << "[BinaryConv::doBinConv] Input (arg1) and conv weights should have the same number of channels\n";
         return output;
     }
 
-    // For padding, augment input
-    if (this->bc_conv_type == Convolution::same) {
-        input = padInput(input);
-    }
-
     // Output dimensions
+    uint n_filter = this->bc_height * this->bc_width;
     uint rows_out = (input[0]->height() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
     uint cols_out = (input[0]->width() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
     output = arma::zeros(rows_out, cols_out, this->bc_filters);
+    output.zeros();
 
     // Simple for-loop implementation
-    /*
     for (uint f = 0; f < this->bc_filters; ++f) {
         BinaryTensor3D cur_weights = this->bc_conv_weights[f];
         for (uint ch = 0; ch < this->bc_channels; ++ch) {
-            // 1. XNOR product of input and weights
-            //BinaryLayer xnor_res = (*input[ch]) * (*cur_weights[ch]); // WRONG!
-            // 2. Bit count the result
+            // 1 (a). Spatial column layout of input
+            BinaryLayer col_input = input[ch]->im2col(this->bc_width, this->bc_height,
+                                                      this->bc_padding, this->bc_conv_stride);
+            // 1. XNOR Product of input and weights;
+            // 1 (b). Spatial row layout of weight filter
+            BinaryLayer wt_input = cur_weights[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+            // 1 (c). XNOR product
+            BinaryLayer result = col_input * wt_input;
+            // 2. Bitcount and reshape
+            output.slice(f) += (result.binMtx()->bitCountPerRow(true, rows_out, cols_out)) * wt_input.alpha();
         }
+        // Element-wise multiply by scalar factors of input tensor
+        output.slice(f) = (output.slice(f) % K);
     }
-    */
 
     return output;
 }
 
 arma::mat BinaryConvolution::poolMat(arma::mat data) {
-    uint width = (data.n_cols - this->bc_pool_size) / this->bc_pool_stride - 1;
-    uint height = (data.n_rows - this->bc_pool_size) / this->bc_pool_stride - 1;
+    uint width = (uint) (data.n_cols - this->bc_pool_size) / this->bc_pool_stride - 1;
+    uint height = (uint) (data.n_rows - this->bc_pool_size) / this->bc_pool_stride - 1;
 
     arma::mat output = arma::zeros<arma::mat>(height, width);
-    for (int row = 0; row < height; row += this->bc_pool_stride) {
-        for (int col = 0; col < width; col += this->bc_pool_stride) {
-            int row_start = row * this->bc_pool_size;
-            int row_end = row_start + this->bc_pool_size - 1;
-            int col_start = col * this->bc_pool_size;
-            int col_end = col_start + this->bc_pool_size - 1;
+    for (uint row = 0; row < height; row += this->bc_pool_stride) {
+        for (uint col = 0; col < width; col += this->bc_pool_stride) {
+            uint row_start = row * this->bc_pool_size;
+            uint row_end = row_start + this->bc_pool_size - 1;
+            uint col_start = col * this->bc_pool_size;
+            uint col_end = col_start + this->bc_pool_size - 1;
             if (this->bc_pool_type == Pooling::max) {
                 output(row, col) = arma::max(arma::max(data(arma::span(row_start, row_end),
                                                             arma::span(col_start, col_end))));
@@ -155,9 +154,9 @@ arma::mat BinaryConvolution::poolMat(arma::mat data) {
 }
 
 arma::cube BinaryConvolution::doPooling(arma::cube data) {
-    uint width = (data.n_cols - this->bc_pool_size) / this->bc_pool_stride - 1;
-    uint height = (data.n_rows - this->bc_pool_size) / this->bc_pool_stride - 1;
-    uint channels = data.n_slices;
+    uint width = (uint) (data.n_cols - this->bc_pool_size) / this->bc_pool_stride - 1;
+    uint height = (uint) (data.n_rows - this->bc_pool_size) / this->bc_pool_stride - 1;
+    uint channels = (uint) data.n_slices;
 
     arma::cube output = arma::zeros<arma::cube>(height, width, channels);
     for (uint ch = 0; ch < channels; ++ch) {

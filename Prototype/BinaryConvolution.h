@@ -45,7 +45,6 @@ public:
     // 3. Compute sign(I)
     BinaryTensor3D binarizeInput(arma::cube norm_data);
     // 4. Binary convolution
-    BinaryTensor3D padInput(BinaryTensor3D input);
     arma::cube     doBinaryConv(BinaryTensor3D input, arma::mat K);
     // 5. Pooling
     arma::mat      poolMat(arma::mat data);

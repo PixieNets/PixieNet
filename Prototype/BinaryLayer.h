@@ -37,6 +37,7 @@ public:
     BinaryLayer repmat(uint n_rows, uint n_cols);
     BinaryLayer reshape(uint new_rows, uint new_cols);
 
+
     // Accessor functions for data members
     uint width()            {   return bl_width;  }
     uint height()           {   return bl_height; }
