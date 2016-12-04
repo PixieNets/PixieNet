@@ -25,12 +25,14 @@ private:
     bool test_im2col();
 
     /*
-    bool test_binarizeWeights();
-    bool test_getDoubleWeights();
-    bool test_operatorMult();
-    bool test_im2col();
+    // These are similar to test_im2col
     bool test_repmat();
     bool test_reshape();
+    */
+
+    /*
+    bool test_binarizeWeights();
+    bool test_getDoubleWeights();
     */
 public:
     bool runAllTests();

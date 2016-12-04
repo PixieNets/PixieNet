@@ -154,7 +154,7 @@ bool TestBinaryLayer::test_im2col() {
 }
 
 bool TestBinaryLayer::runAllTests() {
-//    return test_binarizeMat()
-//        && test_operatorMult();
-    return test_im2col();
+    return test_binarizeMat()
+        && test_operatorMult()
+        && test_im2col();
 }
