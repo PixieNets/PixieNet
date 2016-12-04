@@ -281,7 +281,7 @@ bool TestBinaryMatrix::test_im2col_invalid(uint rows, uint cols, uint block_widt
     } catch (std::exception e) {
         return true;
     }
-    std::cout << "[test_im2col_invalid] Test didn't raise exception\n";
+    std::cerr << "[test_im2col_invalid] Test didn't raise exception\n";
     // This test should raise an exception
     return false;
 }
@@ -316,6 +316,38 @@ bool TestBinaryMatrix::test_repmat() {
         && test_repmat_single(1, 9, 15, 1);
 }
 
+bool TestBinaryMatrix::test_reshape_single(uint rows, uint cols, uint new_rows, uint new_cols) {
+    // Generate a random binary matrix
+    arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
+    BinaryMatrix bm(input2D);
+
+    // Compare reshape result for BinaryMatrix and arma
+    // Arma is column major, so we reshape appropriately
+    arma::umat armaResult = arma::reshape(input2D.t(), new_cols, new_rows).t();
+    // BinaryMatrix is row major
+    BinaryMatrix bmResult = bm.reshape(new_rows, new_cols);
+
+    return bmResult.equalsArmaMat(armaResult);
+}
+
+bool TestBinaryMatrix::test_reshape_invalid(uint rows, uint cols, uint new_rows, uint new_cols) {
+    try {
+        test_reshape_single(rows, cols, new_rows, new_cols);
+    } catch (std::exception e) {
+        return true;
+    }
+    std::cerr << "[test_reshape_invalid] Test didn't raise exception\n";
+    // Didn't throw exception
+    return false;
+}
+
+bool TestBinaryMatrix::test_reshape() {
+    return test_reshape_single()
+        && test_reshape_single(5, 8, 4, 10)
+        && test_reshape_single(12, 44, 132, 4)
+        && test_reshape_invalid(7, 9, 3, 2);
+}
+
 bool TestBinaryMatrix::runAllTests(){
     /*
     testCreateAndPrint();
@@ -327,5 +359,5 @@ bool TestBinaryMatrix::runAllTests(){
     testTBinMultiply();
     testDoubleMultiply();
     */
-    return test_initWithArma() && test_im2col() && test_repmat();
+    return test_initWithArma() && test_im2col() && test_repmat() && test_reshape();
 }

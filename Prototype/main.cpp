@@ -1,4 +1,5 @@
 #include <iostream>
+#include <assert.h>
 
 #include "TestArmadillo.h"
 #include "TestBinaryMatrix.h"
@@ -9,7 +10,7 @@ int main() {
     TestBinaryMatrix testBinaryMatrix;
 
     //testArma.runTest();
-    testBinaryMatrix.runAllTests();
+    assert(testBinaryMatrix.runAllTests());
 
     return 0;
 }

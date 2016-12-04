@@ -451,6 +451,24 @@ BinaryMatrix BinaryMatrix::repmat(uint n_rows, uint n_cols) {
     return result;
 }
 
+BinaryMatrix BinaryMatrix::reshape(uint new_rows, uint new_cols) {
+    if (new_rows <= 0 || new_cols <= 0) {
+        throw std::invalid_argument("[BinaryMatrix::reshape] new_rows (arg1) and new_cols (arg2) should be positive");
+    }
+
+    uint totalElems = new_rows * new_cols;
+    if (totalElems != (this->bm_width * this->bm_height)) {
+        throw std::invalid_argument("[BinaryMatrix::reshape] The number of elements of the matrix shouldn't change after reshape, new shape is invalid");
+    }
+
+    BinaryMatrix result(new_cols, new_rows);
+    for (uint idx = 0; idx < totalElems; ++idx) {
+        result.setValueAt(idx, this->getValueAt(idx));
+    }
+
+    return result;
+}
+
 arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint block_height,
                                        uint padding, uint stride) {
     int block_ht_half = block_height / 2;

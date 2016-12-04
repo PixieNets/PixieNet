@@ -32,10 +32,13 @@ class TestBinaryMatrix {
                              uint block_width, uint block_height,
                              uint padding, uint stride);
     bool test_repmat_single(uint rows = 2, uint cols = 3, uint n_rows = 2, uint n_cols = 3);
+    bool test_reshape_single(uint rows = 2, uint cols = 3, uint new_rows = 3, uint new_cols = 2);
+    bool test_reshape_invalid(uint rows = 2, uint cols = 3, uint new_rows = 3, uint new_cols = 2);
 
     bool test_initWithArma();
     bool test_im2col();
     bool test_repmat();
+    bool test_reshape();
 
 public:
     bool runAllTests();
