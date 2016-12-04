@@ -268,40 +268,35 @@ bool TestBinaryMatrix::test_im2col_single(uint rows, uint cols, uint block_width
     arma::umat input2D = BinaryMatrix::randomArmaMat(rows, cols);
     BinaryMatrix bm(input2D);
 
-    std::cout << "[test_im2col_single] arma input: \n" << input2D << std::endl;
-    std::cout << "[test_im2col_single] bm input: \n";
-    bm.print();
-    std::cout << std::endl;
-
     // Compare im2col result for binary matrix and arma
     BinaryMatrix bmResult = bm.im2col(block_width, block_height, padding, stride);
     arma::umat armaResult = BinaryMatrix::im2colArmaMat(input2D, block_width, block_height, padding, stride);
 
-    printf("[test_im2col_single] im2col(arma, [%d, %d], pad = %d, stride = %d):\n",
-           block_width, block_height, padding, stride);
-    std::cout << armaResult << std::endl;
-    printf("[test_im2col_single] im2col(bm, [%d, %d], pad = %d, stride = %d):\n",
-            block_width, block_height, padding, stride);
-    bmResult.print();
-    std::cout << "\n";
+    return bmResult.equalsArmaMat(armaResult);
+}
 
-    //return bmResult.equalsArmaMat(armaResult);
-    return true;
+bool TestBinaryMatrix::test_im2col_invalid(uint rows, uint cols, uint block_width, uint block_height, uint padding, uint stride) {
+    try {
+        test_im2col_single(rows, cols, block_width, block_height, padding, stride);
+    } catch (std::exception e) {
+        return true;
+    }
+    std::cout << "[test_im2col_invalid] Test didn't raise exception\n";
+    // This test should raise an exception
+    return false;
 }
 
 bool TestBinaryMatrix::test_im2col() {
     // Tests with different inputs
-    /*
     return test_im2col_single()
         && test_im2col_single(3, 3)
-        && test_im2col_single(3, 3, 3, 3, 1, 1);
-    */
-    return test_im2col_single(3, 3, 3, 3, 1, 2);
-    /*
+        && test_im2col_single(3, 3, 3, 3, 1, 1)
+        && test_im2col_single(3, 3, 3, 3, 1, 2)
         && test_im2col_single(5, 5, 3, 3, 1, 2)
-        && test_im2col_single(7, 9, 5, 5, 2, 1);
-        && test_im2col_single(8, 6, 3, 3, 1, 2);
-    */
+        && test_im2col_single(7, 9, 5, 5, 2, 1)
+        && test_im2col_invalid(8, 6, 3, 3, 1, 2)
+        && test_im2col_invalid(7, 9, 5, 5, 3, 1)
+        && test_im2col_invalid(10, 10, 3, 3, 0, 2);
 }
 
 bool TestBinaryMatrix::runAllTests(){
