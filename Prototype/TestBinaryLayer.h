@@ -13,6 +13,7 @@ private:
     bool test_binarizeMat();
 
     bool test_operatorMult_single(uint rows1 = 3, uint cols1 = 3, uint rows2 = 3, uint cols2 = 3);
+    bool test_operatorMult_invalid(uint rows1, uint cols1, uint rows2, uint cols2);
     bool test_operatorMult();
     /*
     bool test_binarizeWeights();

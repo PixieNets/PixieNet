@@ -23,8 +23,15 @@ BinaryLayer::BinaryLayer(arma::umat input2D) {
     this->bl_alpha = arma::mean(arma::mean(arma::abs(input2D)));
 }
 
+BinaryLayer::BinaryLayer(BinaryMatrix bm, double alpha) {
+    this->bl_width = bm.width();
+    this->bl_height = bm.height();
+    this->bl_binMtx = new BinaryMatrix(bm);
+    // Note that if alpha is 0.0, it is not useful
+    this->bl_alpha = alpha;
+}
+
 BinaryLayer::~BinaryLayer() {
-    std::cout << "Called destructor binary layer, for pointer " << this->bl_binMtx << "\n";
     if(this->bl_binMtx != nullptr)
         delete this->bl_binMtx;
 }
@@ -86,32 +93,25 @@ void BinaryLayer::getDoubleWeights(double **weights, int *size) {
 
 BinaryLayer BinaryLayer::operator*(const BinaryLayer&other) {
     BinaryMatrix resultMtx = (*(this->bl_binMtx)) * (*(other.bl_binMtx));
-    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
-    result.bl_binMtx = new BinaryMatrix(resultMtx);
-    result.bl_alpha = this->bl_alpha * other.bl_alpha;
+    BinaryLayer result = BinaryLayer(resultMtx, this->bl_alpha * other.bl_alpha);
     return result;
 }
 
 BinaryLayer BinaryLayer::im2col(uint block_width, uint block_height, uint padding, uint stride) {
     BinaryMatrix resultMtx = this->bl_binMtx->im2col(block_width, block_height, padding, stride);
-    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
-    *result.bl_binMtx = resultMtx;
-    result.bl_alpha = this->bl_alpha;
+    BinaryLayer result = BinaryLayer(resultMtx, this->bl_alpha);
     return result;
 }
 
 BinaryLayer BinaryLayer::repmat(uint n_rows, uint n_cols) {
+    // Note that after repmat, the alpha value is not correct
     BinaryMatrix resultMtx = this->bl_binMtx->repmat(n_rows, n_cols);
-    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
-    *result.bl_binMtx = resultMtx;
-    result.bl_alpha = this->bl_alpha;
+    BinaryLayer result = BinaryLayer(resultMtx);
     return result;
 }
 
 BinaryLayer BinaryLayer::reshape(uint new_rows, uint new_cols) {
     BinaryMatrix resultMtx = this->bl_binMtx->reshape(new_rows, new_cols);
-    BinaryLayer result = BinaryLayer(resultMtx.width(), resultMtx.height());
-    *result.bl_binMtx = resultMtx;
-    result.bl_alpha = this->bl_alpha;
+    BinaryLayer result = BinaryLayer(resultMtx, this->bl_alpha);
     return result;
 }

@@ -75,6 +75,8 @@ bool TestBinaryLayer::test_operatorMult_single(uint rows1, uint cols1, uint rows
     BinaryLayer result = bl_a * bl_b;
 
 #ifdef DEBUG
+    ires.replace(0, -1);
+    std::cout << "[test_operatorMult_single] Arma integer result: \n" << ires << std::endl;
     std::cout << "[test_operatorMult_single] Arma result: \n" << armaResult << std::endl;
     std::cout << "[test_operatorMult_single] Binary layer result: \n";
     result.binMtx()->print();
@@ -84,11 +86,23 @@ bool TestBinaryLayer::test_operatorMult_single(uint rows1, uint cols1, uint rows
     return result.binMtx()->equalsArmaMat(armaResult);
 }
 
+bool TestBinaryLayer::test_operatorMult_invalid(uint rows1, uint cols1, uint rows2, uint cols2) {
+    try {
+        test_operatorMult_single(rows1, cols1, rows2, cols2);
+    } catch (std::exception e) {
+        return true;
+    }
+    // didn't raise exception
+    return false;
+}
+
 bool TestBinaryLayer::test_operatorMult() {
-    return test_operatorMult_single();
+    return test_operatorMult_single()
+        && test_operatorMult_single(5, 6, 5, 6)
+        && test_operatorMult_invalid(5, 6, 7, 8);
 }
 
 bool TestBinaryLayer::runAllTests() {
-//    return test_binarizeMat();
-    return test_operatorMult();
+    return test_binarizeMat()
+        && test_operatorMult();
 }

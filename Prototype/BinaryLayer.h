@@ -28,6 +28,7 @@ private:
 public:
     BinaryLayer(uint w, uint h);
     BinaryLayer(arma::umat input2D);
+    BinaryLayer(BinaryMatrix bm, double alpha=0.0);
     ~BinaryLayer();
 
     void        binarizeMat(arma::mat data);
