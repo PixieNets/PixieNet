@@ -16,6 +16,14 @@ BinaryLayer::BinaryLayer(uint w, uint h) {
     this->bl_alpha = 1.0;
 }
 
+BinaryLayer::BinaryLayer(uint w, uint h, uint8 value) {
+    this->bl_width = w;
+    this->bl_height = h;
+    this->bl_binMtx = new BinaryMatrix(w, h, value);
+    this->bl_alpha = 1.0;
+}
+
+
 BinaryLayer::BinaryLayer(arma::mat input2D) {
     this->bl_width = (uint) input2D.n_cols;
     this->bl_height = (uint) input2D.n_rows;
@@ -35,6 +43,13 @@ BinaryLayer::BinaryLayer(BinaryMatrix bm, double alpha) {
     this->bl_height = bm.height();
     this->bl_binMtx = new BinaryMatrix(bm);
     // Note that if alpha is 0.0, it is not useful
+    this->bl_alpha = alpha;
+}
+
+BinaryLayer::BinaryLayer(uint w, uint h, double alpha, bool randomized, uint n) {
+    this->bl_width = w;
+    this->bl_height = h;
+    this->bl_binMtx = new BinaryMatrix(w, h, randomized, n);
     this->bl_alpha = alpha;
 }
 

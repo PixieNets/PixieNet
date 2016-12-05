@@ -28,9 +28,11 @@ private:
 
 public:
     BinaryLayer(uint w, uint h);
+    BinaryLayer(uint w, uint h, uint8 value);
     BinaryLayer(arma::mat input2D);
     BinaryLayer(arma::umat input2D);
     BinaryLayer(BinaryMatrix bm, double alpha=0.0);
+    BinaryLayer(uint w, uint h, double alpha, bool randomized=false, uint n=0);
     ~BinaryLayer();
 
     void        binarizeMat(arma::mat data);

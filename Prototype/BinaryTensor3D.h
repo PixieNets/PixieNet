@@ -18,9 +18,9 @@ private:
 
 public:
     // Initialize using a fixed value
-    BinaryTensor3D(uint rows, uint cols, uint channels, uint8 value);
+    BinaryTensor3D(uint rows, uint cols, uint channels, uint8 value, double alpha=1.0);
     // Initialize to random values
-    BinaryTensor3D(uint rows, uint cols, uint channels, bool randomized=false, uint n=0);
+    BinaryTensor3D(uint rows, uint cols, uint channels, double alpha=1.0, bool randomized=false, uint n=0);
     // Initialize using Armadillo cube
     BinaryTensor3D(arma::ucube tensor);
     // Initialize using copy constructor
