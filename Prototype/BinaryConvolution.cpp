@@ -8,23 +8,32 @@
 
 using namespace bd;
 
-BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride,
-                                     uint padding, Convolution conv_type, bool pool,
-                                     Pooling pool_type, uint pool_size, uint pool_stride) {
-    assert(w > 0 && h > 0 && ch > 0 && stride > 0);
+BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride, Convolution conv_type,
+                                     Nonlinearity actv_type, Pooling pool_type, uint pool_size, uint pool_stride) {
 
+    this->init_convolution(w, h, ch, k, stride, conv_type);
+    this->init_pooling(pool_type, pool_size, pool_stride);
+    this->init_nonlinearity(actv_type);
+
+}
+
+void BinaryConvolution::init_convolution(uint w, uint h, uint ch, uint k, uint stride, Convolution conv_type) {
+
+    if (w <= 0 || h <= 0 || ch <= 0 || k <= 0 || stride <= 0) {
+        throw std::invalid_argument("[BinaryConvolution::init_convolution] Convolution weights matrix dimensions, stride should be positive");
+    }
     this->bc_width = w;
     this->bc_height = h;
     this->bc_channels = ch;
     this->bc_filters = k;
     this->bc_conv_stride = stride;
-    this->bc_padding = padding;
-    this->bc_conv_type = conv_type;
-    this->bc_pool = pool;
-    this->bc_pool_type = pool_type;
-    this->bc_pool_size = pool_size;
-    this->bc_pool_stride = pool_stride;
 
+    if (conv_type == Convolution::same) {
+        this->bc_padding = w / 2;
+    }
+    if (conv_type == Convolution::valid) {
+        this->bc_padding = 0;
+    }
     // The convolution filter k for computing the scales of each input sub-tensor
     this->bc_box_filter = arma::ones<arma::mat>(w, h) * (1.0 / (w * h));
 
@@ -33,6 +42,25 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
     for (uint f = 0; f < this->bc_filters; ++f) {
         this->bc_conv_weights.emplace_back(BinaryTensor3D(this->bc_height, this->bc_width, this->bc_channels, BIT_ZERO));
     }
+}
+
+void BinaryConvolution::init_pooling(Pooling pool_type, uint pool_size, uint pool_stride) {
+    if (pool_size <= 0 || pool_stride <= 0) {
+        throw std::invalid_argument("[BinaryConvolution::init_pooling] Pooling kernel dimensions, stride should be positive");
+    }
+    if (pool_type == Pooling::none) {
+        this->bc_pool = false;
+    }
+    this->bc_pool_type = pool_type;
+    this->bc_pool_size = pool_size;
+    this->bc_pool_stride = pool_stride;
+}
+
+void BinaryConvolution::init_nonlinearity(Nonlinearity actv_type) {
+    if (actv_type == Nonlinearity::none) {
+        this->bc_nonlinear_actv = false;
+    }
+    this->bc_nonlinearity = actv_type;
 }
 
 BinaryConvolution::~BinaryConvolution() {

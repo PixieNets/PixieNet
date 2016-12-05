@@ -10,9 +10,11 @@
 using namespace bd;
 
 // Multiple types of pooling
-enum class Pooling {max, min, average};
+enum class Pooling {none, max, min, average};
 // Multiple types of convolution
 enum class Convolution {same, valid};
+// Multiple types of non-linearities
+enum class Nonlinearity {none, relu};
 
 class BinaryConvolution {
 private:
@@ -23,6 +25,8 @@ private:
     uint               bc_conv_stride;
     uint               bc_padding;
     Convolution        bc_conv_type;
+    bool               bc_nonlinear_actv;
+    Nonlinearity       bc_nonlinearity;
     bool               bc_pool;
     Pooling            bc_pool_type;
     uint               bc_pool_size;
@@ -30,11 +34,17 @@ private:
     arma::mat          bc_box_filter;   // the kernel k applied to input A to get K
     BinaryTensor4D     bc_conv_weights; // Weights matrix for convolution
 
+    void init_convolution(uint w, uint h, uint ch, uint k, uint stride, Convolution conv_type);
+    void init_pooling(Pooling pool_type=Pooling::none, uint pool_size=0, uint pool_stride=0);
+    void init_nonlinearity(Nonlinearity actv_type=Nonlinearity::none);
+
 public:
     // Adding default values for pooling so that if pooling is set to false, user
     // doesn't have to provide pooling parameters
-    BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride, uint padding,
-                      Convolution conv_type=Convolution::same, bool pool=true,
+    // Note: the kernel is of different width and height but presently works for square padding
+    BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride,
+                      Convolution conv_type=Convolution::same,
+                      Nonlinearity actv_type=Nonlinearity::relu,
                       Pooling pool_type=Pooling::max, uint pool_size=2, uint pool_stride=2);
     ~BinaryConvolution();
 
@@ -47,6 +57,8 @@ public:
     BinaryTensor3D binarizeInput(arma::cube norm_data);
     // 4. Binary convolution
     arma::cube     doBinaryConv(BinaryTensor3D input, arma::mat K);
+    // 5. Non-linearity
+    arma::cube     nonLinearActivate(arma::cube data);
     // 5. Pooling
     arma::mat      poolMat(arma::mat data);
     arma::cube     doPooling(arma::cube data);
