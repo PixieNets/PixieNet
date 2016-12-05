@@ -107,5 +107,5 @@ bool TestBinaryTensor3D::test_im2col() {
 void TestBinaryTensor3D::runAllTests() {
     std::cout << "----Testing BinaryTensor3D class functions...\n";
     bool result = test_im2col();
-    std::cout << "[TestBinaryLayer] Tests completed! Result = " << (result? "PASSED" : "FAILED") << std::endl;
+    std::cout << "[TestBinaryTensor3D] Tests completed! Result = " << (result? "PASSED" : "FAILED") << std::endl;
 }

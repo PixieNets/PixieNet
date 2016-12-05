@@ -9,14 +9,17 @@
 
 using namespace bd;
 
-// Multiple types of pooling
-enum class Pooling {none, max, min, average};
-// Multiple types of convolution
-enum class Convolution {same, valid};
-// Multiple types of non-linearities
-enum class Nonlinearity {none, relu};
+namespace bconv {
+    // Multiple types of pooling
+    enum class Pooling {none, max, min, average};
+    // Multiple types of convolution
+    enum class Convolution {same, valid};
+    // Multiple types of non-linearities
+    enum class Nonlinearity {none, relu};
+    class BinaryConvolution;
+};
 
-class BinaryConvolution {
+class bconv::BinaryConvolution {
 private:
     uint               bc_width;
     uint               bc_height;

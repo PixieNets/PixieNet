@@ -7,6 +7,7 @@
 #include <assert.h>
 
 using namespace bd;
+using namespace bconv;
 
 BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride, Convolution conv_type,
                                      Nonlinearity actv_type, Pooling pool_type, uint pool_size, uint pool_stride) {
