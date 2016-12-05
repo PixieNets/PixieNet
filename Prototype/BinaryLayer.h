@@ -53,4 +53,5 @@ public:
     BinaryMatrix* binMtx()  {   return bl_binMtx; }
     double alpha()          {   return bl_alpha;  }
 
+    void setAlpha(double alpha) {   this->bl_alpha = alpha; }
 };

@@ -57,6 +57,7 @@ public:
     uint8        getValueAt(uint row, uint col);
     void         setValueAt(uint idx, uint8 bitValue);
     void         setValueAt(uint row, uint col, uint8 bitValue);
+
     bool         equalsArmaMat(arma::umat armaMat);
 
     // Operations on Binary Matrices

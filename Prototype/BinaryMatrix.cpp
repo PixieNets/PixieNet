@@ -23,7 +23,7 @@ BinaryMatrix::BinaryMatrix(uint w, uint h, uint8 initVal) {
 }
 
 BinaryMatrix::BinaryMatrix(uint w, uint h, bool randomized, uint n) {
-    this->init(w, h, 0);
+    this->init(w, h, BIT_ZERO);
     if (randomized) {
         // randomly set some bits to 1
         std::vector<uint> indices = this->randIndices(this->bm_dataLength, n);
