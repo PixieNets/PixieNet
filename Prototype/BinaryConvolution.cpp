@@ -70,11 +70,11 @@ arma::mat BinaryConvolution::input2KMat(arma::cube norm_data) {
     return K;
 }
 
-BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
+BinaryTensor3DVec BinaryConvolution::binarizeInput(arma::cube norm_data) {
     uint width = (uint) norm_data.n_cols;
     uint height = (uint) norm_data.n_rows;
     uint channels = (uint) norm_data.n_slices;
-    BinaryTensor3D tensor;
+    BinaryTensor3DVec tensor;
     tensor.reserve(channels);
     for (int ch = 0; ch < channels; ++ch) {
         tensor[ch] = new BinaryLayer(width, height);
@@ -83,7 +83,7 @@ BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
     return tensor;
 }
 
-arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
+arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3DVec input, arma::mat K) {
 
     // (sign(I) xnor_conv sign(W)) xnor_prod K,w_alpha
     arma::cube output;
@@ -107,7 +107,7 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
 
     // Simple for-loop implementation
     for (uint f = 0; f < this->bc_filters; ++f) {
-        BinaryTensor3D cur_weights = this->bc_conv_weights[f];
+        BinaryTensor3DVec cur_weights = this->bc_conv_weights[f];
         for (uint ch = 0; ch < this->bc_channels; ++ch) {
             // 1 (a). Spatial column layout of input
             BinaryLayer col_input = input[ch]->im2col(this->bc_width, this->bc_height,

@@ -426,13 +426,23 @@ std::string BinaryMatrix::dataToString() {
  */
 BinaryMatrix BinaryMatrix::operator*(const BinaryMatrix &other ) {
     if(this->bm_transposed != other.bm_transposed) {
-        assert(this->bm_width == other.bm_height);
-        assert(this->bm_height == other.bm_width);
+        if (this->bm_width != other.bm_height || this->bm_height != other.bm_width) {
+            std::string errStr = std::string("[BinaryMatrix::operator*] Transposed input matrix dimensions ")
+                  + "for this (" + std::to_string(this->bm_width) + ", " + std::to_string(this->bm_height)
+                  + ") and other ("+ std::to_string(other.bm_width) + ", " + std::to_string(other.bm_height)
+                  + ") should match";
+            throw std::invalid_argument(errStr.c_str());
+        }
         return this->tBinMultiply(other);
     }
     else {
-        assert(this->bm_width == other.bm_width);
-        assert(this->bm_height == other.bm_height);
+        if (this->bm_width != other.bm_width || this->bm_height != other.bm_height) {
+            std::string errStr = std::string("[BinaryMatrix::operator*] Transposed input matrix dimensions ")
+                     + "for this (" + std::to_string(this->bm_width) + ", " + std::to_string(this->bm_height)
+                     + ") and other ("+ std::to_string(other.bm_width) + ", " + std::to_string(other.bm_height)
+                     + ") should match";
+            throw std::invalid_argument(errStr.c_str());
+        }
         return this->binMultiply(other);
     }
 }

@@ -35,5 +35,5 @@ private:
     bool test_getDoubleWeights();
     */
 public:
-    bool runAllTests();
+    void runAllTests();
 };

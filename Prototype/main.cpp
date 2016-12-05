@@ -12,8 +12,8 @@ int main() {
     TestBinaryLayer testBinaryLayer;
 
     //testArma.runTest();
-    //assert(testBinaryMatrix.runAllTests());
-    assert(testBinaryLayer.runAllTests());
+    testBinaryMatrix.runAllTests();
+    testBinaryLayer.runAllTests();
 
     return 0;
 }

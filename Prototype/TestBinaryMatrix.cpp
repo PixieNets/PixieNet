@@ -430,7 +430,7 @@ bool TestBinaryMatrix::test_bitCountPerCol() {
 }
 
 
-bool TestBinaryMatrix::runAllTests(){
+void TestBinaryMatrix::runAllTests(){
     /*
     testCreateAndPrint();
     testGetBit();
@@ -441,6 +441,9 @@ bool TestBinaryMatrix::runAllTests(){
     testTBinMultiply();
     testDoubleMultiply();
     */
-    return test_initWithArma() && test_im2col() && test_repmat() && test_reshape()
-           && test_bitCountPerRow() && test_bitCountPerCol() && test_setValueAtIdx();
+
+    std::cout << "----Testing BinaryMatrix class functions...\n";
+    bool result = test_initWithArma() && test_im2col() && test_repmat() && test_reshape()
+                   && test_bitCountPerRow() && test_bitCountPerCol() && test_setValueAtIdx();
+    std::cout << "[TestBinaryMatrix] Tests completed! Result = " << (result? "PASSED" : "FAILED") << std::endl;
 }

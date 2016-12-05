@@ -6,7 +6,7 @@
 #include "BinaryLayer.h"
 #include "TestBinaryLayer.h"
 
-#define DEBUG 0
+//#define DEBUG 0
 
 using namespace bd;
 
@@ -62,6 +62,9 @@ bool TestBinaryLayer::test_operatorMult_single(uint rows1, uint cols1, uint rows
     std::cout << std::endl;
 #endif
 
+    // XNOR product
+    BinaryLayer result = bl_a * bl_b;
+
     // ARMA product
     arma::imat ia = arma::conv_to<imat>::from(input2D_a);
     ia.replace(0, -1);
@@ -71,8 +74,6 @@ bool TestBinaryLayer::test_operatorMult_single(uint rows1, uint cols1, uint rows
     ires.replace(-1, 0);
     arma::umat armaResult = arma::conv_to<umat>::from(ires);
 
-    // XNOR product
-    BinaryLayer result = bl_a * bl_b;
 
 #ifdef DEBUG
     ires.replace(0, -1);
@@ -153,8 +154,8 @@ bool TestBinaryLayer::test_im2col() {
         && test_im2col_invalid(10, 10, 3, 3, 0, 2);
 }
 
-bool TestBinaryLayer::runAllTests() {
-    return test_binarizeMat()
-        && test_operatorMult()
-        && test_im2col();
+void TestBinaryLayer::runAllTests() {
+    std::cout << "----Testing BinaryLayer class functions...\n";
+    bool result = test_binarizeMat() && test_operatorMult() && test_im2col();
+    std::cout << "[TestBinaryLayer] Tests completed! Result = " << (result? "PASSED" : "FAILED") << std::endl;
 }

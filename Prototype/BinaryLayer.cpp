@@ -48,8 +48,6 @@ void BinaryLayer::binarizeMat(arma::mat data) {
     for (uint row = 0; row < data.n_rows; ++row) {
         for (uint col = 0; col < data.n_cols; ++col) {
             uint8 result = (data(row, col) >= 0.0) ? BIT_ONE : BIT_ZERO;
-            printf("[binarizeMat] data[%d, %d] = %f, result = %s\n", row, col, data(row, col),
-                   this->bl_binMtx->uint8ToString(result).c_str());
             this->bl_binMtx->setValueAt(row, col, result);
         }
     }

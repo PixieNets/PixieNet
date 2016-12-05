@@ -47,6 +47,6 @@ class TestBinaryMatrix {
     bool test_bitCountPerCol();
 
 public:
-    bool runAllTests();
+    void runAllTests();
 };
 

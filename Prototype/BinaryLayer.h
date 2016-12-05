@@ -12,10 +12,11 @@
 
 namespace bd {
     class BinaryLayer;
+    class BinaryTensor3D;
     // Concatenate multiple binary layer channels to form a 3D binary tensor
-    typedef std::vector<BinaryLayer*>     BinaryTensor3D;
+    typedef std::vector<BinaryLayer*>     BinaryTensor3DVec;
     // Concatenate multiple 3D binary tensors to form a 4D binary tensor
-    typedef std::vector<BinaryTensor3D>   BinaryTensor4D;
+    typedef std::vector<BinaryTensor3DVec>   BinaryTensor4D;
 }
 
 class bd::BinaryLayer {
