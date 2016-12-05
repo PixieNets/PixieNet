@@ -16,9 +16,16 @@ BinaryLayer::BinaryLayer(uint w, uint h) {
     this->bl_alpha = 1.0;
 }
 
+BinaryLayer::BinaryLayer(arma::mat input2D) {
+    this->bl_width = (uint) input2D.n_cols;
+    this->bl_height = (uint) input2D.n_rows;
+    this->binarizeMat(input2D);
+}
+
+
 BinaryLayer::BinaryLayer(arma::umat input2D) {
-    this->bl_width = input2D.n_cols;
-    this->bl_height = input2D.n_rows;
+    this->bl_width = (uint) input2D.n_cols;
+    this->bl_height = (uint) input2D.n_rows;
     this->bl_binMtx = new BinaryMatrix(input2D);
     this->bl_alpha = arma::mean(arma::mean(arma::abs(input2D)));
 }
@@ -42,8 +49,15 @@ BinaryLayer::~BinaryLayer() {
  * @param data - double precision 2D weights matrix
  */
 void BinaryLayer::binarizeMat(arma::mat data) {
-    assert((this->bl_width * this->bl_height) == (data.n_rows * data.n_cols));
+    if (this->bl_width != data.n_cols || this->bl_height != data.n_rows) {
+        std::string err = std::string("[BinaryLayer::binarizeMat] Input arma mat (") + std::to_string(data.n_rows)
+                          + ", " + std::to_string(data.n_cols) + std::string(") should have same size as binary layer (")
+                          + std::to_string(this->bl_height) + std::string(", ") + std::to_string(this->bl_width)
+                          + std::string("). Invalid input!");
+        throw std::invalid_argument(err);
+    }
 
+    this->bl_binMtx = new BinaryMatrix(this->bl_width, this->bl_height);
     uint n_elems = this->bl_width * this->bl_height;
     for (uint row = 0; row < data.n_rows; ++row) {
         for (uint col = 0; col < data.n_cols; ++col) {
@@ -51,7 +65,7 @@ void BinaryLayer::binarizeMat(arma::mat data) {
             this->bl_binMtx->setValueAt(row, col, result);
         }
     }
-    this->bl_alpha = arma::sum(arma::sum(arma::abs(data)))/ n_elems;
+    this->bl_alpha = arma::accu(arma::abs(data))/ n_elems;
 }
 
 /**

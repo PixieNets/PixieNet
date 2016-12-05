@@ -22,7 +22,7 @@ public:
     // Initialize to random values
     BinaryTensor3D(uint rows, uint cols, uint channels, bool randomized=false, uint n=0);
     // Initialize using Armadillo cube
-    BinaryTensor3D(arma::cube tensor);
+    BinaryTensor3D(arma::ucube tensor);
     // Initialize using copy constructor
     BinaryTensor3D(const BinaryTensor3D &tensor);
     // Destructor
@@ -39,5 +39,3 @@ public:
     std::vector<BinaryLayer*> tensor()   {    return bt3_tensor;      }
 };
 
-
-#endif //PROTOTYPE_BINARYTENSOR3D_H

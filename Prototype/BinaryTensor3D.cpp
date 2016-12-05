@@ -14,8 +14,17 @@ BinaryTensor3D::BinaryTensor3D(uint rows, uint cols, uint channels, bool randomi
 
 }
 
-BinaryTensor3D::BinaryTensor3D(arma::cube tensor) {
+BinaryTensor3D::BinaryTensor3D(arma::ucube tensor) {
+    this->bt3_rows = (uint) tensor.n_rows;
+    this->bt3_cols = (uint) tensor.n_cols;
+    this->bt3_channels = (uint) tensor.n_slices;
+    uint n_elems = this->bt3_rows * this->bt3_cols * this->bt3_channels;
 
+    this->bt3_tensor.reserve(this->bt3_channels);
+    for (uint ch = 0; ch < this->bt3_channels; ++ch) {
+        this->bt3_tensor.emplace_back(new BinaryLayer(tensor.slice(ch)));
+    }
+    this->bt3_alpha = arma::accu(arma::abs(tensor)) / (double) n_elems;
 }
 
 BinaryTensor3D::BinaryTensor3D(const BinaryTensor3D &tensor) {
