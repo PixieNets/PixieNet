@@ -26,6 +26,8 @@ private:
     BinaryMatrix    *bl_binMtx;
     double          bl_alpha;
 
+    void            init(uint width, uint height, double alpha=1.0);
+
 public:
     BinaryLayer(uint w, uint h);
     BinaryLayer(uint w, uint h, uint8 value);
@@ -33,6 +35,7 @@ public:
     BinaryLayer(arma::umat input2D);
     BinaryLayer(BinaryMatrix bm, double alpha=0.0);
     BinaryLayer(uint w, uint h, double alpha, bool randomized=false, uint n=0);
+    BinaryLayer(const BinaryLayer &bl);
     ~BinaryLayer();
 
     void        binarizeMat(arma::mat data);

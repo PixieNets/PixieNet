@@ -10,46 +10,46 @@
 using namespace bd;
 
 BinaryLayer::BinaryLayer(uint w, uint h) {
-    this->bl_width = w;
-    this->bl_height = h;
+    this->init(w, h, 1.0);
     this->bl_binMtx = new BinaryMatrix(w, h);
-    this->bl_alpha = 1.0;
 }
 
 BinaryLayer::BinaryLayer(uint w, uint h, uint8 value) {
-    this->bl_width = w;
-    this->bl_height = h;
+    this->init(w, h, 1.0);
     this->bl_binMtx = new BinaryMatrix(w, h, value);
-    this->bl_alpha = 1.0;
 }
 
-
 BinaryLayer::BinaryLayer(arma::mat input2D) {
-    this->bl_width = (uint) input2D.n_cols;
-    this->bl_height = (uint) input2D.n_rows;
+    this->init((uint) input2D.n_cols, (uint) input2D.n_rows);
     this->binarizeMat(input2D);
 }
 
 
 BinaryLayer::BinaryLayer(arma::umat input2D) {
-    this->bl_width = (uint) input2D.n_cols;
-    this->bl_height = (uint) input2D.n_rows;
+    this->init((uint) input2D.n_cols, (uint) input2D.n_rows);
     this->bl_binMtx = new BinaryMatrix(input2D);
     this->bl_alpha = arma::mean(arma::mean(arma::abs(input2D)));
 }
 
 BinaryLayer::BinaryLayer(BinaryMatrix bm, double alpha) {
-    this->bl_width = bm.width();
-    this->bl_height = bm.height();
+    this->init(bm.width(), bm.height(), alpha);
     this->bl_binMtx = new BinaryMatrix(bm);
-    // Note that if alpha is 0.0, it is not useful
-    this->bl_alpha = alpha;
 }
 
 BinaryLayer::BinaryLayer(uint w, uint h, double alpha, bool randomized, uint n) {
-    this->bl_width = w;
-    this->bl_height = h;
+    this->init(w, h, alpha);
     this->bl_binMtx = new BinaryMatrix(w, h, randomized, n);
+}
+
+BinaryLayer::BinaryLayer(const BinaryLayer &bl) {
+    this->init(bl.bl_width, bl.bl_height, bl.bl_alpha);
+    // Deep copy the matrix
+    this->bl_binMtx = new BinaryMatrix(*(bl.bl_binMtx));
+}
+
+void BinaryLayer::init(uint width, uint height, double alpha) {
+    this->bl_width = width;
+    this->bl_height = height;
     this->bl_alpha = alpha;
 }
 

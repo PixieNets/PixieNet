@@ -16,6 +16,9 @@ private:
     double                    bt3_alpha;
     std::vector<BinaryLayer*> bt3_tensor;
 
+    // Helper for all constructors
+    void                      init(uint rows, uint cols, uint channels, double alpha=1.0);
+
 public:
     // Initialize using a fixed value
     BinaryTensor3D(uint rows, uint cols, uint channels, uint8 value, double alpha=1.0);
