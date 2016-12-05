@@ -7,7 +7,7 @@
 
 using namespace bd;
 
-#define DEBUG 1
+//#define DEBUG 1
 
 void TestBinaryTensor3D::printTestArma2(std::string testName, std::string desc, arma::mat input) {
 #ifdef DEBUG
