@@ -32,7 +32,12 @@ BinaryTensor3D::BinaryTensor3D(const BinaryTensor3D &tensor) {
 }
 
 BinaryTensor3D::~BinaryTensor3D() {
-
+    // Delete each layer
+    for (uint ch = 0; ch < this->bt3_channels; ++ch) {
+        if (this->bt3_tensor[ch]) { // Not NULL
+            delete this->bt3_tensor[ch];
+        }
+    }
 }
 
 BinaryLayer BinaryTensor3D::im2col(uint block_width, uint block_height, uint padding, uint stride) {
