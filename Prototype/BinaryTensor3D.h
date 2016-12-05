@@ -31,10 +31,14 @@ public:
     // Destructor
     ~BinaryTensor3D();
 
+    std::string toString();
+
     // im2col(3D tensor) returns a 2D matrix
-    BinaryLayer im2col(uint block_width, uint block_height, uint padding, uint stride);
+    BinaryLayer         im2col(uint block_width, uint block_height, uint padding, uint stride);
     // im2col(3D arma cube) returns a 2D matrix
-    static arma::umat  im2colArma(arma::ucube input, uint block_width, uint block_height, uint padding, uint stride);
+    static arma::umat   im2colArma(arma::ucube input, uint block_width, uint block_height, uint padding, uint stride);
+    // random arma 3D binary tensor
+    static arma::ucube  randomArmaUCube(uint rows, uint cols, uint channels);
 
     // accessor functions for members
     uint                      rows()     {    return bt3_rows;        }

@@ -48,11 +48,45 @@ BinaryTensor3D::~BinaryTensor3D() {
 }
 
 void BinaryTensor3D::init(uint rows, uint cols, uint channels, double alpha) {
+
+    if (rows == 0 || cols == 0 || channels == 0) {
+        throw std::invalid_argument("[BinaryTensor3D::init] Tensor dimensions should be positive");
+    }
+    if (alpha < 0.0) {
+        throw std::invalid_argument("[BinaryTensor3D::init] Factor alpha should be positive");
+    }
+
     this->bt3_rows = rows;
     this->bt3_cols = cols;
     this->bt3_channels = channels;
     this->bt3_alpha = alpha;
     this->bt3_tensor.reserve(this->bt3_channels);
+}
+
+std::string BinaryTensor3D::toString() {
+    std::string result = "";
+    for (uint ch = 0; ch < this->bt3_channels; ch++) {
+        result += "[channel " + std::to_string(ch) + "]:\n";
+        BinaryMatrix *bm = this->bt3_tensor[ch]->binMtx();
+        for (uint row = 0; row < this->bt3_rows; ++row) {
+            for (uint col = 0; col < this->bt3_cols; ++col) {
+                result += std::to_string(bm->getValueAt(row, col)) + "\t";
+            }
+            result += "\n";
+        }
+    }
+    return result;
+}
+
+arma::ucube BinaryTensor3D::randomArmaUCube(uint rows, uint cols, uint channels) {
+    arma::ucube result(rows, cols, channels);
+    result.zeros();
+
+    for (uint ch = 0; ch < channels; ++ch) {
+        result.slice(ch) = BinaryMatrix::randomArmaUMat(rows, cols);
+    }
+
+    return result;
 }
 
 BinaryLayer BinaryTensor3D::im2col(uint block_width, uint block_height, uint padding, uint stride) {
@@ -87,7 +121,7 @@ BinaryLayer BinaryTensor3D::im2col(uint block_width, uint block_height, uint pad
         end_idx = start_idx + n;
         for (uint row = 0; row < result_height; ++row) {
             for (uint col = start_idx; col < end_idx; ++col) {
-                result.binMtx()->setValueAt(row, col, bm.getValueAt(row - start_idx, col));
+                result.binMtx()->setValueAt(row, col, bm.getValueAt(row, col - start_idx));
             }
         }
     }
@@ -115,7 +149,7 @@ arma::umat BinaryTensor3D::im2colArma(arma::ucube input, uint block_width, uint 
     cols_out = cols_out / stride + 1;
 
     uint result_height = rows_out * cols_out;
-    uint result_width = n * input.n_slices;
+    uint result_width = n * (uint) input.n_slices;
 
     // Implementation 1
     arma::umat result(result_height, result_width);
