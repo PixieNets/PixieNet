@@ -24,8 +24,10 @@ public:
     BinaryTensor3D(uint rows, uint cols, uint channels, uint8 value, double alpha=1.0);
     // Initialize to random values
     BinaryTensor3D(uint rows, uint cols, uint channels, double alpha=1.0, bool randomized=false, uint n=0);
-    // Initialize using Armadillo cube
+    // Initialize using Armadillo ucube
     BinaryTensor3D(arma::ucube tensor);
+    // Initialize using Armadillo double cube
+    BinaryTensor3D(arma::cube tensor);
     // Initialize using copy constructor
     BinaryTensor3D(const BinaryTensor3D &tensor);
     // Destructor
