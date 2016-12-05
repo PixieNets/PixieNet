@@ -14,7 +14,6 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
     this->init_convolution(w, h, ch, k, stride, conv_type);
     this->init_pooling(pool_type, pool_size, pool_stride);
     this->init_nonlinearity(actv_type);
-
 }
 
 void BinaryConvolution::init_convolution(uint w, uint h, uint ch, uint k, uint stride, Convolution conv_type) {
@@ -177,6 +176,20 @@ arma::cube BinaryConvolution::doPooling(arma::cube data) {
         output.slice(ch) = poolMat(data.slice(ch));
     }
     return output;
+}
+
+void BinaryConvolution::setWeights(BinaryTensor4D conv_weights) {
+    if (conv_weights.empty()) {
+        throw std::invalid_argument("[BinaryConvolution::setWeights] Input set of conv_weights must be non-empty");
+    }
+    this->bc_width = conv_weights[0].cols();
+    this->bc_height = conv_weights[0].rows();
+    this->bc_channels = conv_weights[0].channels();
+    this->bc_filters = (uint) conv_weights.size();
+    this->bc_conv_weights.reserve(this->bc_channels);
+    for (uint f = 0; f < this->bc_filters; ++f) {
+        this->bc_conv_weights.emplace_back(BinaryTensor3D(conv_weights[f]));
+    }
 }
 
 arma::cube BinaryConvolution::forwardPass(arma::cube data) {

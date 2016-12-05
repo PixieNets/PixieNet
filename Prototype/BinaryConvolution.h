@@ -67,6 +67,8 @@ public:
 
     // Set weights
     void           setWeights(BinaryTensor4D conv_weights);
+    void           setPadding(uint padding) {   this->bc_padding = padding;     }
+    void           setStride(uint stride)   {   this->bc_conv_stride = stride;  }
 
     // Accessor functions for class members
     uint width()              {    return bc_width;       }
