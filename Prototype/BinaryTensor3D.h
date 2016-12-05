@@ -10,6 +10,9 @@
 
 class bd::BinaryTensor3D {
 private:
+    uint                      bt3_rows;
+    uint                      bt3_cols;
+    uint                      bt3_channels;
     double                    bt3_alpha;
     std::vector<BinaryLayer*> bt3_tensor;
 
@@ -29,8 +32,11 @@ public:
     BinaryLayer im2col(uint block_width, uint block_height, uint padding, uint stride);
 
     // accessor functions for members
-    std::vector<BinaryLayer*> tensor() {    return bt3_tensor;  }
-    double                    alpha()  {    return bt3_alpha;   }
+    uint                      rows()     {    return bt3_rows;        }
+    uint                      cols()     {    return bt3_cols;        }
+    uint                      channels() {    return bt3_channels;    }
+    double                    alpha()    {    return bt3_alpha;       }
+    std::vector<BinaryLayer*> tensor()   {    return bt3_tensor;      }
 };
 
 
