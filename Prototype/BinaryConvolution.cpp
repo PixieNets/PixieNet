@@ -6,6 +6,8 @@
 
 #include <assert.h>
 
+using namespace bd;
+
 BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint stride,
                                      uint padding, Convolution conv_type, bool pool,
                                      Pooling pool_type, uint pool_size, uint pool_stride) {
@@ -28,23 +30,13 @@ BinaryConvolution::BinaryConvolution(uint w, uint h, uint ch, uint k, uint strid
 
     // The 4D hyper-cube weights of the convolution layer
     this->bc_conv_weights.reserve(this->bc_filters);
-    for (uint i = 0; i < this->bc_filters; ++i) {
-        this->bc_conv_weights[i].reserve(this->bc_channels);
-        for (uint j = 0; j < this->bc_channels; ++j) {
-            this->bc_conv_weights[i][j] = new BinaryLayer(w, h);
-        }
+    for (uint f = 0; f < this->bc_filters; ++f) {
+        this->bc_conv_weights.emplace_back(BinaryTensor3D(this->bc_height, this->bc_width, this->bc_channels, BIT_ZERO));
     }
-
 }
 
 BinaryConvolution::~BinaryConvolution() {
-    // Weights matrix
-    for (uint i = 0; i < this->bc_filters; ++i) {
-        // delete each member of the array
-        for (uint j = 0; j < this->bc_channels; ++j) {
-            delete this->bc_conv_weights[i][j];
-        }
-    }
+    // Explicit destructor only for pointer members
 }
 
 arma::mat BinaryConvolution::normalizeData2D(arma::mat data) {
@@ -70,59 +62,53 @@ arma::mat BinaryConvolution::input2KMat(arma::cube norm_data) {
     return K;
 }
 
-BinaryTensor3DVec BinaryConvolution::binarizeInput(arma::cube norm_data) {
-    uint width = (uint) norm_data.n_cols;
-    uint height = (uint) norm_data.n_rows;
-    uint channels = (uint) norm_data.n_slices;
-    BinaryTensor3DVec tensor;
-    tensor.reserve(channels);
-    for (int ch = 0; ch < channels; ++ch) {
-        tensor[ch] = new BinaryLayer(width, height);
-        tensor[ch]->binarizeMat(norm_data.slice(ch));
-    }
-    return tensor;
+BinaryTensor3D BinaryConvolution::binarizeInput(arma::cube norm_data) {
+    return BinaryTensor3D(norm_data);
 }
 
-arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3DVec input, arma::mat K) {
+arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
 
     // (sign(I) xnor_conv sign(W)) xnor_prod K,w_alpha
     arma::cube output;
 
-    if (input.empty() || input[0]->width() < this->bc_width || input[0]->height() < this->bc_height) {
+    if (input.cols() < this->bc_width || input.rows() < this->bc_height) {
         // result is an empty matrix
         return output;
     }
 
-    if (input.size() != this->bc_channels) {
+    if (input.channels() != this->bc_channels) {
         std::cerr << "[BinaryConv::doBinConv] Input (arg1) and conv weights should have the same number of channels\n";
         return output;
     }
 
     // Output dimensions
     uint n_filter = this->bc_height * this->bc_width;
-    uint rows_out = (input[0]->height() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
-    uint cols_out = (input[0]->width() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    uint rows_out = (input.rows() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    uint cols_out = (input.cols() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
     output = arma::zeros(rows_out, cols_out, this->bc_filters);
     output.zeros();
 
+
     // Simple for-loop implementation
+    std::vector<BinaryLayer*> inputVec = input.tensor();
     for (uint f = 0; f < this->bc_filters; ++f) {
-        BinaryTensor3DVec cur_weights = this->bc_conv_weights[f];
+        BinaryTensor3D cur_weights = this->bc_conv_weights[f];
         for (uint ch = 0; ch < this->bc_channels; ++ch) {
             // 1 (a). Spatial column layout of input
-            BinaryLayer col_input = input[ch]->im2col(this->bc_width, this->bc_height,
-                                                      this->bc_padding, this->bc_conv_stride);
+            BinaryLayer col_input = inputVec[ch]->im2col(this->bc_width, this->bc_height,
+                                                     this->bc_padding, this->bc_conv_stride);
             // 1. XNOR Product of input and weights;
             // 1 (b). Spatial row layout of weight filter
-            BinaryLayer wt_input = cur_weights[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
             // 1 (c). XNOR product
             BinaryLayer result = col_input * wt_input;
             // 2. Bitcount and reshape
-            output.slice(f) += (result.binMtx()->bitCountPerRow(true, rows_out, cols_out)) * wt_input.alpha();
+            output.slice(f) += result.binMtx()->bitCountPerRow(true, rows_out, cols_out);
         }
-        // Element-wise multiply by scalar factors of input tensor
-        output.slice(f) = (output.slice(f) % K);
+        // Element-wise multiply by scalar factors of input tensor and weights alpha
+        output.slice(f) = (output.slice(f) % K) * cur_weights.alpha();
     }
+
 
     return output;
 }
@@ -163,4 +149,10 @@ arma::cube BinaryConvolution::doPooling(arma::cube data) {
         output.slice(ch) = poolMat(data.slice(ch));
     }
     return output;
+}
+
+arma::cube BinaryConvolution::forwardPass(arma::cube data) {
+
+    arma::cube result;
+    return result;
 }

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "BinaryLayer.h"
+#include "BinaryTensor3D.h"
 
 using namespace bd;
 
@@ -43,12 +44,15 @@ public:
     // 2. Compute K matrix of input data
     arma::mat      input2KMat(arma::cube norm_data);
     // 3. Compute sign(I)
-    BinaryTensor3DVec binarizeInput(arma::cube norm_data);
+    BinaryTensor3D binarizeInput(arma::cube norm_data);
     // 4. Binary convolution
-    arma::cube     doBinaryConv(BinaryTensor3DVec input, arma::mat K);
+    arma::cube     doBinaryConv(BinaryTensor3D input, arma::mat K);
     // 5. Pooling
     arma::mat      poolMat(arma::mat data);
     arma::cube     doPooling(arma::cube data);
+    // Setup pipeline - this is what a user would call
+    arma::cube     forwardPass(arma::cube data);
+
     // Set weights
     void           setWeights(BinaryTensor4D conv_weights);
 

@@ -26,17 +26,8 @@ BinaryMatrix* XnorNetUtils::centerDataMat(arma::mat data) {
  * @param data - a 3D matrix of size H X W X N
  * @return 3D binary matrix representation of input data
  */
-BinaryTensor3DVec XnorNetUtils::normalizeData3D(arma::cube data) {
-    BinaryTensor3DVec binMat;
-    binMat.reserve(data.n_slices);
-    for (int ch = 0; ch < data.n_slices; ++ch) {
-        arma::mat centered_data = (data.slice(ch) - arma::mean(arma::mean(data.slice(ch))))
-                                  / arma::stddev(arma::stddev(data.slice(ch)));
-        binMat[ch] = new BinaryLayer((uint) data.n_cols, (uint) data.n_rows);
-        binMat[ch]->binarizeMat(centered_data);
-    }
-
-    return binMat;
+BinaryTensor3D XnorNetUtils::normalizeData3D(arma::cube data) {
+    return BinaryTensor3D(data);
 }
 
 arma::mat relu2D(arma::mat data) {
