@@ -81,8 +81,21 @@ void TestArmadillo::testGeneral() {
     std::cout << A * B.t() << std::endl;
 }
 
+void TestArmadillo::testFlattenCube(){
+    std::cout << "--- TEST FLATTEN CUBE" << std::endl;
+    //filter's dimensions are defined as [rows, cols, numFilters]
+    arma::cube randCube = randu<arma::cube>(1, 1, 10);
+    std::cout << "Random cube" << std::endl;
+    std::cout << randCube << std::endl;
+
+    randCube.reshape(10,1,1);
+    std::cout << "Vectorized cube" << std::endl;
+    std::cout << randCube << std::endl;
+}
+
 void TestArmadillo::runTest() {
     this->testGeneral();
     this->testSoftmax();
     this->testRank();
+    this->testFlattenCube();
 }
