@@ -345,6 +345,15 @@ uint BinaryMatrix::bitCount() {
     return count;
 }
 
+arma::mat BinaryMatrix::bitCountPerRowArma(arma::umat input, bool reshape, uint new_rows, uint new_cols) {
+    arma::mat result = arma::sum(arma::conv_to<mat>::from(input), 1);
+    if (reshape) {
+        // Arma is column major
+        result = arma::reshape(result.t(), new_cols, new_rows).t();
+    }
+    return result;
+}
+
 arma::mat BinaryMatrix::bitCountPerRow(bool reshape, uint new_rows, uint new_cols) {
     arma::mat result(this->bm_height, 1);
     result.zeros();

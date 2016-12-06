@@ -69,7 +69,10 @@ public:
     arma::cube     doPooling(arma::cube data);
     // Setup pipeline - this is what a user would call
     arma::cube     forwardPass(arma::cube data);
+    arma::cube     forwardPassArma(arma::cube data);
 
+
+    static BinaryLayer          bt4_reshape(BinaryTensor4D tensor, uint new_width, uint new_height);
 
     // Compute standard deviation of all elements of a 2D Arma matrix
     static double               std2Arma(arma::mat input);
@@ -81,8 +84,8 @@ public:
     // Convert a 4D Arma tensor to a 4D Binary Tensor
     static BinaryTensor4D       uarmaToBT4(ArmaUTensor4D input);
     // Binary convolution for Arma tensor weights
-    static arma::cube           armaBinaryConv(arma::ucube input, ArmaUTensor4D weights, uint stride,
-                                               Convolution conv_type);
+    static arma::cube           armaBinaryConv(arma::ucube input, arma::mat K, ArmaUTensor4D weights, uint stride,
+                                               Convolution conv_type, std::vector<double> alphaPerFilter);
 
     // Set weights
     void           setWeights(BinaryTensor4D conv_weights);

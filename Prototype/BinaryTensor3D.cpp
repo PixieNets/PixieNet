@@ -123,12 +123,12 @@ BinaryLayer BinaryTensor3D::im2col(uint block_width, uint block_height, uint pad
     if (rows_out % stride) {
         throw std::invalid_argument("[BinaryTensor3D::im2col] block_height (arg2), padding (arg3) and stride (arg4) are invalid");
     }
-    rows_out = rows_out / stride + 1;
+    rows_out = rows_out / stride + (block_height % 2);
     uint cols_out = (uint) (this->bt3_cols - block_width + 2 * padding);
     if (cols_out % stride) {
         throw std::invalid_argument("[BinaryTensor3D::im2col] block_width (arg1), padding (arg3) and stride (arg4) are invalid");
     }
-    cols_out = cols_out / stride + 1;
+    cols_out = cols_out / stride + (block_width % 2);
 
     uint result_height = rows_out * cols_out;
     uint result_width = n * this->bt3_channels;
@@ -163,12 +163,12 @@ arma::umat BinaryTensor3D::im2colArma(arma::ucube input, uint block_width, uint 
     if (rows_out % stride) {
         throw std::invalid_argument("[BinaryTensor3D::im2col] block_height (arg2), padding (arg3) and stride (arg4) are invalid");
     }
-    rows_out = rows_out / stride + 1;
+    rows_out = rows_out / stride + (block_height % 2);
     uint cols_out = (uint) (input.n_cols - block_width + 2 * padding);
     if (cols_out % stride) {
         throw std::invalid_argument("[BinaryTensor3D::im2col] block_width (arg1), padding (arg3) and stride (arg4) are invalid");
     }
-    cols_out = cols_out / stride + 1;
+    cols_out = cols_out / stride + (block_width % 2);
 
     uint result_height = rows_out * cols_out;
     uint result_width = n * (uint) input.n_slices;
