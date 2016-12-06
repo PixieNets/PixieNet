@@ -15,6 +15,7 @@ void TestXnorNetwork::runMiniNet() {
     arma::cube testRes = testBinConv.forwardPass(testInput);
     std::cout << "Output size:" << std::endl;
     std::cout <<  testRes.size() << std::endl;
+    printf("[TestXnorNetwork::runMiniNet] testRes size = (%llu, %llu, %llu) \n", testRes.n_rows, testRes.n_cols, testRes.n_slices);
 }
 
 void TestXnorNetwork::runAllTests() {
