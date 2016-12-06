@@ -97,7 +97,6 @@ bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, 
     arma::mat K = bconv.input2KMat(norm_input3D);
     printTestArma2(testName, "Arma K betas for input", K);
 
-/*
     // Generate a random weights matrix
     ArmaUTensor4D armaWeights4D = BinaryConvolution::randomTensor4DUArma(width, height, channels, filters);
     printTestUArma4(testName, "Arma weights 4D", armaWeights4D);
@@ -112,7 +111,6 @@ bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, 
     BinaryTensor4D bt4Weights4D = BinaryConvolution::uarmaToBT4(armaWeights4D);
     printTestBT4(testName, "Binary weights 4D", bt4Weights4D);
     bconv.setWeights(bt4Weights4D);
-*/
 
 
 
