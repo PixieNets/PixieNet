@@ -73,7 +73,7 @@ bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, 
     std::string testName = "test_convolution_single";
     // Generate a random input matrix
     arma::cube input3D = BinaryTensor3D::randomArmaCube(rows_in, cols_in, channels);
-    printTestUArma3(testName, "Arma Input3D", input3D);
+    printTestArma3(testName, "Arma Input3D", input3D);
 
     // Generate a random weights matrix
     ArmaUTensor4D armaWeights4D = BinaryConvolution::randomTensor4DUArma(width, height, channels, filters);
