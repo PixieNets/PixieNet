@@ -13,6 +13,7 @@ public:
     void testGeneral();
     void testSoftmax();
     void testRank();
+    void testFlattenCube();
 
     void runTest(); // runs all tests
 
