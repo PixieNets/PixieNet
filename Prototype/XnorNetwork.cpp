@@ -46,3 +46,31 @@ VecStrDblPair XnorNetwork::getTopNLabels(int N, arma::vec outputVec) {
     }
     return rankedVec;
 }
+
+void XnorNetwork::buildAlexNet() {
+
+    XN_convLayers.push_back(BinaryConvolution(11, 11, 3, 96, 4, Convolution::same, Nonlinearity::relu, Pooling::max, 3, 2));
+    XN_convLayers.push_back(BinaryConvolution(5, 5, 96, 256, 3, Convolution::same, Nonlinearity::relu, Pooling::max, 3, 2));
+    XN_convLayers.push_back(BinaryConvolution(3, 3, 256, 384, 1, Convolution::same, Nonlinearity::relu, Pooling::none));
+    XN_convLayers.push_back(BinaryConvolution(3, 3, 384, 384, 1, Convolution::same, Nonlinearity::relu, Pooling::none));
+    XN_convLayers.push_back(BinaryConvolution(3, 3, 384, 256, 1, Convolution::same, Nonlinearity::relu, Pooling::max, 3, 2));
+    XN_convLayers.push_back(BinaryConvolution(6, 6, 256, 4096, 1, Convolution::same, Nonlinearity::relu, Pooling::none);
+    XN_convLayers.push_back(BinaryConvolution(1, 1, 4096, 1000, 1, Convolution::same, Nonlinearity::relu, Pooling::none);
+
+}
+
+arma::vec XnorNetwork::forwardPass(arma::cube image){
+    int numLayers = XN_convLayers.size();
+    if (numLayers < 1){
+        return zeros<vec>(0);
+    }
+    arma::cube lastRes = image;
+
+    for(int fwdPos = 0; fwdPos < numLayers; ++fwdPos) {
+        lastRes = XN_convLayers[fwdPos].forwardPass(lastRes);
+    }
+
+    //TODO: Add softmax
+
+}
+
