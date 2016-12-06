@@ -92,11 +92,12 @@ bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, 
     // Normalize the input
     arma::cube norm_input3D = bconv.normalizeData3D(input3D);
     printTestArma3(testName, "Arma Normalized Input3D", norm_input3D);
-/*
+
     // Compute K beta matrix
     arma::mat K = bconv.input2KMat(norm_input3D);
     printTestArma2(testName, "Arma K betas for input", K);
 
+/*
     // Generate a random weights matrix
     ArmaUTensor4D armaWeights4D = BinaryConvolution::randomTensor4DUArma(width, height, channels, filters);
     printTestUArma4(testName, "Arma weights 4D", armaWeights4D);
