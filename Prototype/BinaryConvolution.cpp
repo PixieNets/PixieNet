@@ -143,6 +143,41 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
     return output;
 }
 
+arma::cube BinaryConvolution::armaBinaryConv(arma::cube input, ArmaUTensor4D weights, uint stride,
+                                             Convolution conv_type) {
+    if (input.empty()) {
+        throw std::invalid_argument("[BinaryConvolution::armaBinaryConv] 3D Arma Input cube should be non-empty");
+    }
+    if (weights.empty()) {
+        throw std::invalid_argument("[BinaryConvolution::armaBinaryConv] 4D Arma Weights tensor should be non-empty");
+    }
+    if (weights.size() != input.n_slices) {
+        throw std::invalid_argument("[BinaryConvolution::armaBinaryConv] #channels in 3D input(dim3) must equal #channels in 4D weights (dim3)");
+    }
+
+    uint rows_in = (uint) input.n_rows;
+    uint cols_in = (uint) input.n_cols;
+    uint channels = (uint) input.n_slices;
+    uint filters = (uint) weights.size();
+    uint filter_width = (uint) weights[0].n_cols;
+    uint filter_height = (uint) weights[0].n_rows;
+    uint padding = 0;
+    if (conv_type == Convolution::same) {
+        padding = filter_width / 2;
+    }
+
+    // Output dimensions
+    uint n_filter = filter_width * filter_height;
+    uint rows_out = (rows_in - filter_height + 2 * padding) / stride + 1;
+    uint cols_out = (cols_in - filter_width + 2 * padding) / stride + 1;
+    arma::cube output = arma::cube(rows_out, cols_out, filters);
+    output.zeros();
+
+    return output;
+}
+
+
+
 arma::cube BinaryConvolution::nonLinearActivate(arma::cube data) {
     arma::cube output = data;
     if (this->bc_nonlinearity == Nonlinearity::relu) {

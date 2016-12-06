@@ -71,12 +71,18 @@ public:
     arma::cube     forwardPass(arma::cube data);
 
 
-    // Get a random 4D binary matrix
+    // Compute standard deviation of all elements of a 2D Arma matrix
     static double               std2Arma(arma::mat input);
+    // Get a random 4D binary matrix
     static ArmaUTensor4D        randomTensor4DUArma(uint width, uint height, uint channels, uint filters);
     static BinaryTensor4D       randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom = 0);
+    // String representaiton of a 4D Binary Tensor
     static std::string          bt4ToString(BinaryTensor4D input);
+    // Convert a 4D Arma tensor to a 4D Binary Tensor
     static BinaryTensor4D       uarmaToBT4(ArmaUTensor4D input);
+    // Binary convolution for Arma tensor weights
+    static arma::cube           armaBinaryConv(arma::cube input, ArmaUTensor4D weights, uint stride,
+                                               Convolution conv_type);
 
     // Set weights
     void           setWeights(BinaryTensor4D conv_weights);

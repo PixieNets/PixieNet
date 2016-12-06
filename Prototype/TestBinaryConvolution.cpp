@@ -112,8 +112,9 @@ bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, 
     printTestBT4(testName, "Binary weights 4D", bt4Weights4D);
     bconv.setWeights(bt4Weights4D);
 
-
-
+    // Compute binary convolution result
+    arma::cube binconvResult = bconv.doBinaryConv(norm_input3D, K);
+    printTestArma3(testName, "Binary convolution result 3D", binconvResult);
 
     return true;
 }
