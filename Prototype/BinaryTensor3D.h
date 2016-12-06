@@ -25,7 +25,7 @@ public:
     // Initialize to random values
     BinaryTensor3D(uint rows, uint cols, uint channels, double alpha=1.0, bool randomized=false, uint n=0);
     // Initialize using Armadillo ucube
-    BinaryTensor3D(arma::ucube tensor);
+    BinaryTensor3D(arma::ucube tensor, double alpha=1.0);
     // Initialize using Armadillo double cube
     BinaryTensor3D(arma::cube tensor);
     // Initialize using copy constructor
@@ -42,7 +42,7 @@ public:
     // random arma 3D binary tensor
     static arma::ucube  randomArmaUCube(uint rows, uint cols, uint channels);
     // random arma 3D tensor
-    static arma::cube  randomArmaCube(uint rows, uint cols, uint channels);
+    static arma::cube   randomArmaCube(uint rows, uint cols, uint channels);
 
     // accessor functions for members
     uint                      rows()     {    return bt3_rows;        }

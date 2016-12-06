@@ -18,10 +18,12 @@ private:
     void printTestArma3(std::string testName, std::string desc, arma::cube input);
     void printTestBT3(std::string testName, std::string desc, BinaryTensor3D input);
 
+    void printTestUArma4(std::string testName, std::string desc, arma::ucube input);
     void printTestBT4(std::string testName, std::string desc, BinaryTensor4D input);
 
 
-    bool test_convolution_single(uint width = 3, uint height = 3, uint channels = 2, uint filters = 1,
+    bool test_convolution_single(uint rows_in = 3, uint cols_in = 3, uint width = 3,
+                                 uint height = 3, uint channels = 2, uint filters = 1,
                                  uint stride = 1, Convolution conv_type=Convolution::same);
     bool test_convolution();
 

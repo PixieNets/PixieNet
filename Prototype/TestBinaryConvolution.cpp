@@ -49,6 +49,16 @@ void TestBinaryConvolution::printTestBT3(std::string testName, std::string desc,
 #endif
 }
 
+void TestBinaryConvolution::printTestUArma4(std::string testName, std::string desc, ArmaUTensor4D input) {
+#ifdef DEBUG
+    std::cout << "[TestBinaryConvolution::" << testName << "] arma tensor4D" << desc << " : \n";
+    for (uint f = 0; f < input.size(); ++f) {
+        std::cout << "[ARMA FILTER #" << f << "]:\n" << input[f] << std::endl;
+    }
+#endif
+}
+
+
 void TestBinaryConvolution::printTestBT4(std::string testName, std::string desc, BinaryTensor4D input) {
 #ifdef DEBUG
     std::cout << "[TestBinaryConvolution::" << testName << "] binary tensor4d " << desc << " : \n"
@@ -56,8 +66,27 @@ void TestBinaryConvolution::printTestBT4(std::string testName, std::string desc,
 #endif
 }
 
-bool TestBinaryConvolution::test_convolution_single(uint width, uint height, uint channels, uint filters, uint stride,
-                                             Convolution conv_type) {
+bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, uint width, uint height,
+                                                    uint channels, uint filters, uint stride,
+                                                    Convolution conv_type) {
+
+    std::string testName = "test_convolution_single";
+    // Generate a random input matrix
+    arma::cube input3D = BinaryTensor3D::randomArmaCube(rows_in, cols_in, channels);
+    printTestUArma3(testName, "Arma Input3D", input3D);
+
+    // Generate a random weights matrix
+    ArmaUTensor4D armaWeights4D = BinaryConvolution::randomTensor4DUArma(width, height, channels, filters);
+    printTestUArma4(testName, "Arma weights 4D", armaWeights4D);
+    std::vector<double> alphaPerFilter;
+    alphaPerFilter.reserve(filters);
+    for (uint f = 0; f < filters; ++f) {
+        alphaPerFilter.emplace_back(1.0);
+    }
+    BinaryTensor4D bt4Weights4D = BinaryConvolution::uarmaToBT4(armaWeights4D);
+    printTestBT4(testName, "Binary weights 4D", bt4Weights4D);
+
+
 
     return true;
 }
