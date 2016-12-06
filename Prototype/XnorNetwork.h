@@ -29,5 +29,7 @@ class XnorNetwork {
 
     void            loadLabelsFromFile(std::string path);
     VecStrDblPair   getTopNLabels(int N, arma::vec outputVec);
+
+    arma::vec       softmax(arma::mat weight, arma::vec prevOutput);
 };
 

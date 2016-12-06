@@ -74,3 +74,10 @@ arma::vec XnorNetwork::forwardPass(arma::cube image){
 
 }
 
+arma::vec XnorNetwork::softmax(arma::mat W, arma::vec prevOutput) {
+    assert(W.n_rows == prevOutput.n_elem);
+
+    vec Y = arma::exp( arma::tanh(W.t() * prevOutput) );
+    return Y / arma::accu(Y);
+}
+
