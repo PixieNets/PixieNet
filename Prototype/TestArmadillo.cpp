@@ -89,8 +89,11 @@ void TestArmadillo::testFlattenCube(){
     std::cout << randCube << std::endl;
 
     randCube.reshape(10,1,1);
+    arma::vec randCubeVec = randCube;
     std::cout << "Vectorized cube" << std::endl;
-    std::cout << randCube << std::endl;
+    std::cout << randCubeVec.size() << std::endl;
+    std::cout << randCubeVec << std::endl;
+    std::cout << randCubeVec << std::endl;
 }
 
 void TestArmadillo::runTest() {

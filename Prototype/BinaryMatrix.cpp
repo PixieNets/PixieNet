@@ -238,6 +238,9 @@ void BinaryMatrix::setValueAt(uint idx, uint8 bitValue) {
 
 void BinaryMatrix::setValueAt(uint row, uint col, uint8 bitValue) {
     assert( row < this->bm_height);
+    if(col >= this->bm_width) {
+        std::cout << "This is the bug!" << std::endl;
+    }
     assert( col < this->bm_width);
 
     //IntPair pos = this->elemAccessor( (row*this->width)+col, this->dataLength, this->baseBitSize, this->transposed);
