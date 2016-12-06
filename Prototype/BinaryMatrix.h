@@ -77,6 +77,7 @@ public:
     static std::vector<uint>  randIndices(uint highest, uint n=0);
     static arma::umat         im2colArmaMat(arma::umat input, uint block_width, uint block_height,
                                             uint padding, uint stride);
+    static arma::umat         armaXNOR(arma::umat left, arma::umat right);
 
 
     // Accessor functions for class members

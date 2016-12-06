@@ -143,7 +143,7 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
     return output;
 }
 
-arma::cube BinaryConvolution::armaBinaryConv(arma::cube input, ArmaUTensor4D weights, uint stride,
+arma::cube BinaryConvolution::armaBinaryConv(arma::ucube input, ArmaUTensor4D weights, uint stride,
                                              Convolution conv_type) {
     if (input.empty()) {
         throw std::invalid_argument("[BinaryConvolution::armaBinaryConv] 3D Arma Input cube should be non-empty");
@@ -172,6 +172,23 @@ arma::cube BinaryConvolution::armaBinaryConv(arma::cube input, ArmaUTensor4D wei
     uint cols_out = (cols_in - filter_width + 2 * padding) / stride + 1;
     arma::cube output = arma::cube(rows_out, cols_out, filters);
     output.zeros();
+
+    // Simple for-loop implementation
+    for (uint f = 0; f < filters; ++f) {
+        arma::ucube cur_weights = weights[f];
+        for (uint ch = 0; ch < channels; ++ch) {
+            // 1 (a). Spatial column layout of input
+            arma::umat col_input = BinaryMatrix::im2colArmaMat(input.slice(ch), filter_width, filter_height,
+                                                               padding, stride);
+            // 1. XNOR Product of input and weights;
+            // 1 (b). Spatial row layout of weight filter
+            arma::umat wt_input = BinaryMatrix::im2colArmaMat(cur_weights.slice(ch), filter_width, filter_height,
+                                                              padding, stride);
+            // 1 (c). XNOR product
+
+
+        }
+    }
 
     return output;
 }

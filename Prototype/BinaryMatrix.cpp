@@ -625,3 +625,20 @@ bool BinaryMatrix::equalsArmaMat(arma::umat armaMat) {
 
     return result;
 }
+
+arma::umat BinaryMatrix::armaXNOR(arma::umat left, arma::umat right) {
+    if (left.empty() || right.empty()) {
+        throw std::invalid_argument("[BinaryMatrix::armaXNOR] Both Arma matrix inputs must be non-empty.");
+    }
+    if (left.n_rows != right.n_rows || left.n_cols != right.n_cols) {
+        throw std::invalid_argument("[BinaryMatrix::armaXNOR] The dimensions of the Arma matrix inputs should match.");
+    }
+    arma::umat result(left.n_rows, left.n_cols);
+    for (uint row = 0; row < result.n_rows; ++row) {
+        for (uint col = 0; col < result.n_cols; ++col) {
+            result(row, col) = ~(left(row, col) ^ right(row, col));
+        }
+    }
+
+    return result;
+}

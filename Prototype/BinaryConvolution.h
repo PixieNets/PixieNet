@@ -81,7 +81,7 @@ public:
     // Convert a 4D Arma tensor to a 4D Binary Tensor
     static BinaryTensor4D       uarmaToBT4(ArmaUTensor4D input);
     // Binary convolution for Arma tensor weights
-    static arma::cube           armaBinaryConv(arma::cube input, ArmaUTensor4D weights, uint stride,
+    static arma::cube           armaBinaryConv(arma::ucube input, ArmaUTensor4D weights, uint stride,
                                                Convolution conv_type);
 
     // Set weights
