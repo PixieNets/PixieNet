@@ -41,6 +41,8 @@ public:
     static arma::umat   im2colArma(arma::ucube input, uint block_width, uint block_height, uint padding, uint stride);
     // random arma 3D binary tensor
     static arma::ucube  randomArmaUCube(uint rows, uint cols, uint channels);
+    // random arma 3D tensor
+    static arma::cube  randomArmaCube(uint rows, uint cols, uint channels);
 
     // accessor functions for members
     uint                      rows()     {    return bt3_rows;        }

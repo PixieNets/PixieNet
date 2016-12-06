@@ -141,6 +141,14 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
     return output;
 }
 
+arma::cube BinaryConvolution::nonLinearActivate(arma::cube data) {
+    arma::cube output = data;
+    if (this->bc_nonlinearity == Nonlinearity::relu) {
+        output.elem(arma::find(data < 0)).zeros();
+    }
+    return output;
+}
+
 arma::mat BinaryConvolution::poolMat(arma::mat data) {
     uint width = (uint) (data.n_cols - this->bc_pool_size) / this->bc_pool_stride - 1;
     uint height = (uint) (data.n_rows - this->bc_pool_size) / this->bc_pool_stride - 1;
@@ -195,6 +203,50 @@ void BinaryConvolution::setWeights(BinaryTensor4D conv_weights) {
 
 arma::cube BinaryConvolution::forwardPass(arma::cube data) {
 
-    arma::cube result;
+    if (data.empty()) {
+        throw std::invalid_argument("[BinaryConvolution::forwardPass] Input data must be non-empty!");
+    }
+    if (data.n_slices != this->bc_channels) {
+        std::string err = std::string("BinaryConvolution::forwardPass] Input data #channels = ")
+                          + std::to_string(data.n_slices)
+                          + std::string(" must match convolution weights channels = ")
+                          + std::to_string(this->bc_channels);
+    }
+
+    // 1. Normalize input
+    arma::cube norm_data = this->normalizeData3D(data);
+    // 2. Generate K matrix containing scalar factors for each input sub-tensor
+    arma::mat K = this->input2KMat(norm_data);
+    // 3. Binarize normalized data - activation
+    BinaryTensor3D input = this->normalizeData3D(norm_data);
+    // 4. Perform the binary convolution
+    arma::cube result = this->doBinaryConv(input, K);
+    // 5. Apply non-linearity
+    if (this->bc_nonlinear_actv) {
+        result = this->nonLinearActivate(result);
+    }
+    // 6. Apply pooling
+    if (this->bc_pool) {
+        result = this->doPooling(result);
+    }
+
+    return result;
+}
+
+BinaryTensor4D BinaryConvolution::randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom) {
+    BinaryTensor4D result;
+    result.reserve(filters);
+    for (uint f = 0; f < filters; ++f) {
+        result.emplace_back(BinaryTensor3D(height, width, channels, 1.0, true, nrandom));
+    }
+    return result;
+}
+
+std::string BinaryConvolution::bt4ToString(BinaryTensor4D input) {
+    std::string result = "";
+    for (uint f = 0; f < input.size(); ++f) {
+        result += "[FILTER #" + std::to_string(f) + "]\n";
+        result += input[f].toString() + "\n";
+    }
     return result;
 }

@@ -100,6 +100,17 @@ arma::ucube BinaryTensor3D::randomArmaUCube(uint rows, uint cols, uint channels)
     return result;
 }
 
+arma::cube BinaryTensor3D::randomArmaCube(uint rows, uint cols, uint channels) {
+    arma::cube result(rows, cols, channels);
+    result.zeros();
+
+    for (uint ch = 0; ch < channels; ++ch) {
+        result.slice(ch) = BinaryMatrix::randomArmaMat(rows, cols);
+    }
+
+    return result;
+}
+
 BinaryLayer BinaryTensor3D::im2col(uint block_width, uint block_height, uint padding, uint stride) {
     uint block_ht_half = block_height / 2;
     uint block_wd_half = block_width / 2;

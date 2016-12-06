@@ -4,18 +4,19 @@
 
 #pragma once
 
-#include "BinaryMatrix.h"
-
 #include <armadillo>
 #include <vector>
 
+#include "BinaryMatrix.h"
 
 namespace bd {
     class BinaryLayer;
+
     class BinaryTensor3D;
+
     // Concatenate multiple 3D binary tensors to form a 4D binary tensor
-    typedef std::vector<BinaryTensor3D>   BinaryTensor4D;
-}
+    typedef std::vector <BinaryTensor3D> BinaryTensor4D;
+};
 
 class bd::BinaryLayer {
 private:

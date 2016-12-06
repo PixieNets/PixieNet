@@ -62,11 +62,16 @@ public:
     arma::cube     doBinaryConv(BinaryTensor3D input, arma::mat K);
     // 5. Non-linearity
     arma::cube     nonLinearActivate(arma::cube data);
-    // 5. Pooling
+    // 6. Pooling
     arma::mat      poolMat(arma::mat data);
     arma::cube     doPooling(arma::cube data);
     // Setup pipeline - this is what a user would call
     arma::cube     forwardPass(arma::cube data);
+
+
+    // Get a random 4D binary matrix
+    static BinaryTensor4D randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom = 0);
+    static std::string bt4ToString(BinaryTensor4D input);
 
     // Set weights
     void           setWeights(BinaryTensor4D conv_weights);
