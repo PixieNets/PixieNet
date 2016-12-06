@@ -56,8 +56,18 @@ void TestBinaryConvolution::printTestBT4(std::string testName, std::string desc,
 #endif
 }
 
+bool TestBinaryConvolution::test_convolution_single(uint width, uint height, uint channels, uint filters, uint stride,
+                                             Convolution conv_type) {
+
+    return true;
+}
+
+bool TestBinaryConvolution::test_convolution() {
+    return test_convolution_single();
+}
+
 void TestBinaryConvolution::runAllTests() {
     std::cout << "----Testing BinaryConvolution class functions...\n";
-    bool result = false;
+    bool result = test_convolution();
     std::cout << "[TestBinaryConvolution] Tests completed! Result = " << (result? "PASSED" : "FAILED") << std::endl;
 }
