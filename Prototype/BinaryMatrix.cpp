@@ -237,10 +237,9 @@ void BinaryMatrix::setValueAt(uint idx, uint8 bitValue) {
 }
 
 void BinaryMatrix::setValueAt(uint row, uint col, uint8 bitValue) {
+
+//    printf("[BinaryMatrix::setValueAt] row = %d, col = %d, height = %d, width = %d\n", row, col, this->bm_height, this->bm_width);
     assert( row < this->bm_height);
-    if(col >= this->bm_width) {
-        std::cout << "This is the bug!" << std::endl;
-    }
     assert( col < this->bm_width);
 
     //IntPair pos = this->elemAccessor( (row*this->width)+col, this->dataLength, this->baseBitSize, this->transposed);
@@ -463,12 +462,12 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     if (rows_out % stride) {
         throw std::invalid_argument("[BinaryMatrix::im2colBinary] block_height (arg2), padding (arg3) and stride (arg4) are invalid");
     }
-    rows_out = rows_out / stride + 1;
+    rows_out = rows_out / stride + (block_height % 2);
     uint cols_out = (uint) (this->bm_width - block_width + 2 * padding);
     if (cols_out % stride) {
         throw std::invalid_argument("[BinaryMatrix::im2colBinary] block_width (arg1), padding (arg3) and stride (arg4) are invalid");
     }
-    cols_out = cols_out / stride + 1;
+    cols_out = cols_out / stride + (block_width % 2);
     uint all_out = rows_out * cols_out;
     BinaryMatrix result(n, all_out);
 
@@ -485,14 +484,21 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
         for (uint col = start_col; col < end_col; col += stride) {
             uint res_col = 0;
             int srow_start = (row - block_ht_half);
-            int srow_end = (row + block_ht_half + 1);
+            int srow_end = (row + block_ht_half) + (block_height % 2);
             int scol_start = (col - block_wd_half);
-            int scol_end = (col + block_wd_half + 1);
+            int scol_end = (col + block_wd_half) + (block_width % 2);
+
+//            printf("[BinaryMatrix::im2ol] srow_start = %d, srow_end = %d, scol_start = %d, scol_end = %d\n",
+//                    srow_start, srow_end, scol_start, scol_end);
+
             for (int srow = srow_start; srow < srow_end; ++srow) {
                 for (int scol = scol_start; scol < scol_end; ++scol) {
                     // In general
                     // result[res_row, res_col++] = input[srow, scol];
+//                    printf("[BinaryMatrix::im2col] srow = %d, scol = %d, res_col = %d\n", srow, scol, res_col);
                     if (srow >= 0 && srow < this->bm_height && scol >= 0 && scol < this->bm_width) {
+//                        printf("[BinaryMatrix::im2col] res_row = %d, res_col = %d, height = %d, width = %d\n", res_row, res_col, all_out, n);
+//                        printf("[BinaryMatrix::im2col] srow = %d, scol = %d, height = %d, width = %d\n", srow, scol, this->bm_height, this->bm_width);
                         result.setValueAt(res_row, res_col, this->getValueAt(srow, scol));
                     }
                     ++res_col;
@@ -503,6 +509,7 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     }
 
     // Check that we capture as many blocks as we had to
+//    printf("[BinaryMatrix::im2col] res_row = %d, all_out = %d\n", res_row, all_out);
     assert(res_row == all_out);
 
     return result;
@@ -556,12 +563,12 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
     if (rows_out % stride) {
         throw std::invalid_argument("[BinaryMatrix::im2colArmaMat] Invalid stride(arg5), block height(arg3) and padding(arg4) for input (arg1)");
     }
-    rows_out = rows_out / stride + 1;
+    rows_out = rows_out / stride + (block_height % 2);
     uint cols_out = (uint) (input.n_cols - block_width + 2 * padding);
     if (cols_out % stride) {
         throw std::invalid_argument("[BinaryMatrix::im2colArmaMat] Invalid stride(arg5), block width(arg2) and padding(arg4) for input (arg1)");
     }
-    cols_out = cols_out / stride + 1;
+    cols_out = cols_out / stride + (block_width % 2);
     uint n = block_width * block_height;
     uint all_out = rows_out * cols_out;
 
@@ -581,9 +588,11 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
         for (int col = col_start; col < col_end; col += stride) {
             uint res_col = 0;
             int srow_start = row - block_ht_half;
-            int srow_end = row + block_ht_half;
+            int srow_end = row + block_ht_half - (block_height % 2 == 0);
             int scol_start = col - block_wd_half;
-            int scol_end = col + block_wd_half;
+            int scol_end = col + block_wd_half - (block_width % 2 == 0);
+//            printf("[BinaryMatrix::im2colArma] srow_start = %d, srow_end = %d, scol_start = %d, scol_end = %d\n",
+//                   srow_start, srow_end, scol_start, scol_end);
             if (srow_start >= 0 && srow_start < (int) input.n_rows
                 && srow_end >= 0 && srow_end < (int) input.n_rows
                 && scol_start >= 0 && scol_start < (int) input.n_cols
@@ -595,6 +604,8 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
                 for (int srow = srow_start; srow < (srow_end + 1); ++srow) {
                     for (int scol = scol_start; scol < (scol_end + 1); ++scol) {
                         if (srow >= 0 && srow < (int) input.n_rows && scol >= 0 && scol < (int) input.n_cols ) {
+//                            printf("[BinaryMatrix::im2colArma] srow = %d, scol = %d, input_rows = %d, input_cols = %d\n",
+//                                    srow, scol, input.n_rows, input.n_cols);
                             result(res_row, res_col) = input(srow, scol);
                         }
                         ++res_col;

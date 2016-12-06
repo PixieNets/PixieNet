@@ -5,7 +5,7 @@
 #include "BinaryLayer.h"
 #include "TestBinaryConvolution.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 using namespace bd;
 using namespace bconv;

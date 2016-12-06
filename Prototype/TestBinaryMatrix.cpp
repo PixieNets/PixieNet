@@ -244,6 +244,28 @@ void TestBinaryMatrix::testDoubleMultiply(){
     cout << endl;
 }
 
+
+void TestBinaryMatrix::printTestArma2(std::string testName, std::string desc, arma::mat input) {
+#ifdef DEBUG
+    std::cout << "[TestBinaryMatrix::" << testName << "] arma cube " << desc << " : \n" << input << std::endl;
+#endif
+}
+
+void TestBinaryMatrix::printTestUArma2(std::string testName, std::string desc, arma::umat input) {
+#ifdef DEBUG
+    std::cout << "[TestBinaryMatrix::" << testName << "] arma cube " << desc << " : \n" << input << std::endl;
+#endif
+}
+
+void TestBinaryMatrix::printTestBM(std::string testName, std::string desc, BinaryMatrix input) {
+#ifdef DEBUG
+    std::cout << "[TestBinaryMatrix::" << testName << "] binary tensor3d " << desc << " : \n";
+    input.print();
+    std::cout << std::endl;
+#endif
+}
+
+
 bool TestBinaryMatrix::test_setValueAtIdx_single(uint rows, uint cols, uint8 value) {
     // Generate a random binary matrix
     arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
@@ -303,13 +325,23 @@ bool TestBinaryMatrix::test_initWithArma() {
 
 bool TestBinaryMatrix::test_im2col_single(uint rows, uint cols, uint block_width, uint block_height,
                                    uint padding, uint stride) {
+    std::string testName = "test_im2col_single";
+
     // Generate a random binary matrix
     arma::umat input2D = BinaryMatrix::randomArmaUMat(rows, cols);
+    printTestUArma2(testName, "Arma input2D", input2D);
+
     BinaryMatrix bm(input2D);
+    printTestBM(testName, "BinaryMatrix input", input2D);
+
+
+    BinaryMatrix bmResult = bm.im2col(block_width, block_height, padding, stride);
+    printTestBM(testName, "BinaryMatrix im2col result", bmResult);
+
 
     // Compare im2col result for binary matrix and arma
-    BinaryMatrix bmResult = bm.im2col(block_width, block_height, padding, stride);
     arma::umat armaResult = BinaryMatrix::im2colArmaMat(input2D, block_width, block_height, padding, stride);
+    printTestUArma2(testName, "Arma im2col result", armaResult);
 
     return bmResult.equalsArmaMat(armaResult);
 }
@@ -335,7 +367,10 @@ bool TestBinaryMatrix::test_im2col() {
         && test_im2col_single(7, 9, 5, 5, 2, 1)
         && test_im2col_invalid(8, 6, 3, 3, 1, 2)
         && test_im2col_invalid(7, 9, 5, 5, 3, 1)
-        && test_im2col_invalid(10, 10, 3, 3, 0, 2);
+        && test_im2col_invalid(10, 10, 3, 3, 0, 2)
+        && test_im2col_single(4, 4, 4, 4, 2, 1)
+        && test_im2col_single(6, 6, 4, 4, 2, 1)
+        && test_im2col_single(100, 100, 10, 10, 5, 1);
 }
 
 bool TestBinaryMatrix::test_repmat_single(uint rows, uint cols, uint n_rows, uint n_cols) {
@@ -443,7 +478,8 @@ void TestBinaryMatrix::runAllTests(){
     */
 
     std::cout << "----Testing BinaryMatrix class functions...\n";
-    bool result = test_initWithArma() && test_im2col() && test_repmat() && test_reshape()
-                   && test_bitCountPerRow() && test_bitCountPerCol() && test_setValueAtIdx();
+//    bool result = test_initWithArma() && test_im2col() && test_repmat() && test_reshape()
+//                   && test_bitCountPerRow() && test_bitCountPerCol() && test_setValueAtIdx();
+    bool result = test_im2col();
     std::cout << "[TestBinaryMatrix] Tests completed! Result = " << (result? "PASSED" : "FAILED") << std::endl;
 }
