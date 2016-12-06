@@ -24,6 +24,11 @@ class TestBinaryMatrix {
     void testTBinMultiply();
     void testDoubleMultiply();
 
+
+    void printTestUArma2(std::string testName, std::string desc, arma::umat input);
+    void printTestArma2(std::string testName, std::string desc, arma::mat input);
+    void printTestBM(std::string testName, std::string desc, BinaryMatrix input);
+
     bool test_setValueAtIdx_single(uint rows = 3, uint cols = 5, uint8 value=BIT_ONE);
     bool test_initWithArma_single(uint rows = 10, uint cols = 10);
     bool test_im2col_single(uint rows = 10, uint cols = 10,

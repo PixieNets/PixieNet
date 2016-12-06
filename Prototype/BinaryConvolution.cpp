@@ -113,8 +113,8 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
 
     // Output dimensions
     uint n_filter = this->bc_height * this->bc_width;
-    uint rows_out = (input.rows() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + 1;
-    uint cols_out = (input.cols() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + 1;
+    uint rows_out = (input.rows() - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + (this->bc_height % 2);
+    uint cols_out = (input.cols() - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + (this->bc_width % 2);
     output = arma::zeros(rows_out, cols_out, this->bc_filters);
     output.zeros();
 
@@ -125,17 +125,24 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
         BinaryTensor3D cur_weights = this->bc_conv_weights[f];
         for (uint ch = 0; ch < this->bc_channels; ++ch) {
             // 1 (a). Spatial column layout of input
+//            printf("[BinaryConvolution::doConv] Spatial column layout ofinput\n");
             BinaryLayer col_input = inputVec[ch]->im2col(this->bc_width, this->bc_height,
                                                      this->bc_padding, this->bc_conv_stride);
             // 1. XNOR Product of input and weights;
             // 1 (b). Spatial row layout of weight filter
+//            printf("[BinaryConvolution::doConv] Spatial row layout of weight filter\n");
             BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
             // 1 (c). XNOR product
+//            printf("[BinaryConvolution::doConv] XNOR product\n");
             BinaryLayer result = col_input * wt_input;
             // 2. Bitcount and reshape
+//            printf("[BinaryConvolution::doConv] Bitcount and reshape\n");
             output.slice(f) += result.binMtx()->bitCountPerRow(true, rows_out, cols_out);
         }
         // Element-wise multiply by scalar factors of input tensor and weights alpha
+//        printf("[BinaryConvolution::doConv] Element-wise multiply by scalar factors of input tensor and weights alpha\n");
+//        printf("[BinaryConvolution::doConv] output.slice(%llu) dims = (%llu, %llu), K dims = (%llu, %llu), cur_weights.alpha = %f\n",
+//                f, output.slice(f).n_rows, output.slice(f).n_cols, K.n_rows, K.n_cols, cur_weights.alpha());
         output.slice(f) = (output.slice(f) % K) * cur_weights.alpha();
     }
 
@@ -268,20 +275,36 @@ arma::cube BinaryConvolution::forwardPass(arma::cube data) {
     }
 
     // 1. Normalize input
+    printf("[BinaryConvolution::forwardPass] Step 1. Normalize data(%llu, %llu, %llu) ...\n", data.n_rows, data.n_cols, data.n_slices);
     arma::cube norm_data = this->normalizeData3D(data);
+    printf("[BinaryConvolution::forwardPass] Step 1. Normalization done\n");
     // 2. Generate K matrix containing scalar factors for each input sub-tensor
+    printf("[BinaryConvolution::forwardPass] Step 2. Compute K matrix for data(%llu, %llu, %llu) ...\n",
+           norm_data.n_rows, norm_data.n_cols, norm_data.n_slices);
     arma::mat K = this->input2KMat(norm_data);
+    printf("[BinaryConvolution::forwardPass] Step 2. Computed K  of size = (%llu, %llu)\n", K.n_rows, K.n_cols);
     // 3. Binarize normalized data - activation
+    printf("[BinaryConvolution::forwardPass] Step 3. Activate! Converting normalized input to a 3D binary tensor...\n");
     BinaryTensor3D input = this->normalizeData3D(norm_data);
+    printf("[BinaryConvolution::forwardPass] Step 3. Activation compltete! Binary Tensor 3D of size (%llu, %llu, %llu)\n",
+            input.rows(), input.cols(), input.channels());
     // 4. Perform the binary convolution
+    printf("[BinaryConvolution::forwardPass] Step 4. Performing binary convolution ... \n");
     arma::cube result = this->doBinaryConv(input, K);
+    printf("[BinaryConvolution::forwardPass] Step 4. Binary convolution Done! Ooo lalala, output of size (%llu, %llu, %llu)\n",
+            result.n_rows, result.n_cols, result.n_slices);
     // 5. Apply non-linearity
     if (this->bc_nonlinear_actv) {
+        printf("[BinaryConvolution::forwardPass] Step 5. Non linear activation, a moment of silence for the negative guys...\n");
         result = this->nonLinearActivate(result);
+        printf("[BinaryConvolution::forwardPass] Step 5. Non linear activation done! Life is full of positivity\n");
     }
     // 6. Apply pooling
     if (this->bc_pool) {
+        printf("[BinaryConvolution::forwardPass] Step 6. Pooling ... coz `living life, king size` isn't possible for a deep net...\n");
         result = this->doPooling(result);
+        printf("[BinaryConvolution::forwardPass] Step 6. Pooled result dimensions = (%llu, %llu, %llu)\n",
+               result.n_rows, result.n_cols, result.n_slices);
     }
 
     return result;
