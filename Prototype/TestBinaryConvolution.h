@@ -21,6 +21,9 @@ private:
     void printTestUArma4(std::string testName, std::string desc, ArmaUTensor4D input);
     void printTestBT4(std::string testName, std::string desc, BinaryTensor4D input);
 
+    template<typename T>
+    void printTestVec(std::string testName, std::string desc, std::vector<T> input);
+
 
     bool test_convolution_single(uint rows_in = 3, uint cols_in = 3, uint width = 3,
                                  uint height = 3, uint channels = 2, uint filters = 1,

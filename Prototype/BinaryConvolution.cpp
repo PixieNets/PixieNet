@@ -5,6 +5,7 @@
 #include "BinaryConvolution.h"
 
 #include <assert.h>
+#include <math.h>
 
 using namespace bd;
 using namespace bconv;
@@ -68,7 +69,8 @@ BinaryConvolution::~BinaryConvolution() {
 }
 
 arma::mat BinaryConvolution::normalizeData2D(arma::mat data) {
-    arma::mat norm_data = (data - arma::mean(arma::mean(data))) / arma::stddev(arma::stddev(data));
+    double std2 = std2Arma(data);
+    arma::mat norm_data = (data - arma::mean(arma::mean(data))) / std2;
     return norm_data;
 }
 
@@ -233,6 +235,13 @@ arma::cube BinaryConvolution::forwardPass(arma::cube data) {
     return result;
 }
 
+double BinaryConvolution::std2Arma(arma::mat input) {
+    uint n = input.n_rows * input.n_cols;
+    double meanValue = arma::accu(input) / n;
+    arma::mat elems = ((input - meanValue) % (input - meanValue)) / (n - 1.0);
+    double result = sqrt(arma::accu(elems));
+    return result;
+}
 
 ArmaUTensor4D BinaryConvolution::randomTensor4DUArma(uint width, uint height, uint channels, uint filters) {
     ArmaUTensor4D result;

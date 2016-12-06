@@ -72,6 +72,7 @@ public:
 
 
     // Get a random 4D binary matrix
+    static double               std2Arma(arma::mat input);
     static ArmaUTensor4D        randomTensor4DUArma(uint width, uint height, uint channels, uint filters);
     static BinaryTensor4D       randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom = 0);
     static std::string          bt4ToString(BinaryTensor4D input);

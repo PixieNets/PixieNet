@@ -58,11 +58,21 @@ void TestBinaryConvolution::printTestUArma4(std::string testName, std::string de
 #endif
 }
 
-
 void TestBinaryConvolution::printTestBT4(std::string testName, std::string desc, BinaryTensor4D input) {
 #ifdef DEBUG
     std::cout << "[TestBinaryConvolution::" << testName << "] binary tensor4d " << desc << " : \n"
               << BinaryConvolution::bt4ToString(input) << std::endl;
+#endif
+}
+
+template<typename T>
+void TestBinaryConvolution::printTestVec(std::string testName, std::string desc, std::vector<T> input) {
+#ifdef DEBUG
+    std::cout << "[TestBinaryConvolution::" << testName << "] vector " << desc << " : \n";
+    for (auto value : input) {
+        std::cout << value << std::endl;
+    }
+    std::cout << std::endl;
 #endif
 }
 
@@ -71,20 +81,38 @@ bool TestBinaryConvolution::test_convolution_single(uint rows_in, uint cols_in, 
                                                     Convolution conv_type) {
 
     std::string testName = "test_convolution_single";
+
+    BinaryConvolution bconv = BinaryConvolution(width, height, channels, filters, stride, conv_type, Nonlinearity::none,
+                                                Pooling::none);
+
     // Generate a random input matrix
     arma::cube input3D = BinaryTensor3D::randomArmaCube(rows_in, cols_in, channels);
     printTestArma3(testName, "Arma Input3D", input3D);
 
+    // Normalize the input
+    arma::cube norm_input3D = bconv.normalizeData3D(input3D);
+    printTestArma3(testName, "Arma Normalized Input3D", norm_input3D);
+/*
+    // Compute K beta matrix
+    arma::mat K = bconv.input2KMat(norm_input3D);
+    printTestArma2(testName, "Arma K betas for input", K);
+
     // Generate a random weights matrix
     ArmaUTensor4D armaWeights4D = BinaryConvolution::randomTensor4DUArma(width, height, channels, filters);
     printTestUArma4(testName, "Arma weights 4D", armaWeights4D);
+
     std::vector<double> alphaPerFilter;
     alphaPerFilter.reserve(filters);
     for (uint f = 0; f < filters; ++f) {
         alphaPerFilter.emplace_back(1.0);
     }
+    printTestVec(testName, "weights 4D alphas", alphaPerFilter);
+
     BinaryTensor4D bt4Weights4D = BinaryConvolution::uarmaToBT4(armaWeights4D);
     printTestBT4(testName, "Binary weights 4D", bt4Weights4D);
+    bconv.setWeights(bt4Weights4D);
+*/
+
 
 
 
