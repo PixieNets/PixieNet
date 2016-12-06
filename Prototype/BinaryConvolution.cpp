@@ -233,6 +233,25 @@ arma::cube BinaryConvolution::forwardPass(arma::cube data) {
     return result;
 }
 
+
+ArmaUTensor4D BinaryConvolution::randomTensor4DUArma(uint width, uint height, uint channels, uint filters) {
+    ArmaUTensor4D result;
+    result.reserve(filters);
+    for (uint f = 0; f < filters; ++f) {
+        result.emplace_back(BinaryTensor3D::randomArmaUCube(height, width, channels));
+    }
+    return result;
+}
+
+BinaryTensor4D BinaryConvolution::uarmaToBT4(ArmaUTensor4D input) {
+    BinaryTensor4D result;
+    result.reserve(input.size());
+    for (uint f = 0; f < input.size(); ++f) {
+        result.emplace_back(BinaryTensor3D(input[f]));
+    }
+    return result;
+}
+
 BinaryTensor4D BinaryConvolution::randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom) {
     BinaryTensor4D result;
     result.reserve(filters);

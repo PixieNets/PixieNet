@@ -20,6 +20,11 @@ private:
 
     void printTestBT4(std::string testName, std::string desc, BinaryTensor4D input);
 
+
+    bool test_convolution_single(uint width = 3, uint height = 3, uint channels = 2, uint filters = 1,
+                                 uint stride = 1, Convolution conv_type=Convolution::same);
+    bool test_convolution();
+
 public:
     void runAllTests();
 };

@@ -9,6 +9,8 @@
 
 using namespace bd;
 
+typedef std::vector<arma::ucube> ArmaUTensor4D;
+
 namespace bconv {
     // Multiple types of pooling
     enum class Pooling {none, max, min, average};
@@ -70,8 +72,10 @@ public:
 
 
     // Get a random 4D binary matrix
-    static BinaryTensor4D randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom = 0);
-    static std::string bt4ToString(BinaryTensor4D input);
+    static ArmaUTensor4D        randomTensor4DUArma(uint width, uint height, uint channels, uint filters);
+    static BinaryTensor4D       randomTensor4D(uint width, uint height, uint channels, uint filters, uint nrandom = 0);
+    static std::string          bt4ToString(BinaryTensor4D input);
+    static BinaryTensor4D       uarmaToBT4(ArmaUTensor4D input);
 
     // Set weights
     void           setWeights(BinaryTensor4D conv_weights);
