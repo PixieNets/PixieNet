@@ -3,6 +3,7 @@
 //
 
 #include "XnorNetwork.h"
+#include "assert.h"
 
 XnorNetwork::XnorNetwork() {
 
@@ -54,12 +55,13 @@ void XnorNetwork::buildAlexNet() {
     XN_convLayers.push_back(BinaryConvolution(3, 3, 256, 384, 1, Convolution::same, Nonlinearity::relu, Pooling::none));
     XN_convLayers.push_back(BinaryConvolution(3, 3, 384, 384, 1, Convolution::same, Nonlinearity::relu, Pooling::none));
     XN_convLayers.push_back(BinaryConvolution(3, 3, 384, 256, 1, Convolution::same, Nonlinearity::relu, Pooling::max, 3, 2));
-    XN_convLayers.push_back(BinaryConvolution(6, 6, 256, 4096, 1, Convolution::same, Nonlinearity::relu, Pooling::none);
-    XN_convLayers.push_back(BinaryConvolution(1, 1, 4096, 1000, 1, Convolution::same, Nonlinearity::relu, Pooling::none);
+    XN_convLayers.push_back(BinaryConvolution(6, 6, 256, 4096, 1, Convolution::same, Nonlinearity::relu, Pooling::none));
+    XN_convLayers.push_back(BinaryConvolution(1, 1, 4096, 1000, 1, Convolution::same, Nonlinearity::relu, Pooling::none));
 
 }
 
 arma::vec XnorNetwork::forwardPass(arma::cube image){
+    arma::vec classProbs;
     int numLayers = XN_convLayers.size();
     if (numLayers < 1){
         return zeros<vec>(0);
@@ -70,14 +72,13 @@ arma::vec XnorNetwork::forwardPass(arma::cube image){
         lastRes = XN_convLayers[fwdPos].forwardPass(lastRes);
     }
 
-    //TODO: Add softmax
+    //TODO: flatten lastRes
+    lastRes.reshape(XN_totalLabels, 1, 1);
 
+    return this->softmax(lastRes);
 }
 
-arma::vec XnorNetwork::softmax(arma::mat W, arma::vec prevOutput) {
-    assert(W.n_rows == prevOutput.n_elem);
-
-    vec Y = arma::exp( arma::tanh(W.t() * prevOutput) );
+arma::vec XnorNetwork::softmax(arma::mat z) {
+    vec Y = arma::exp( arma::tanh(z) );
     return Y / arma::accu(Y);
 }
-
