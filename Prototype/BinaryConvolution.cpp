@@ -3,6 +3,7 @@
 //
 
 #include "BinaryConvolution.h"
+#include "Timer.h"
 
 #include <assert.h>
 #include <math.h>
@@ -276,35 +277,55 @@ arma::cube BinaryConvolution::forwardPass(arma::cube data) {
 
     // 1. Normalize input
     printf("[BinaryConvolution::forwardPass] Step 1. Normalize data(%llu, %llu, %llu) ...\n", data.n_rows, data.n_cols, data.n_slices);
+    Utility::Timer timerStep1;
     arma::cube norm_data = this->normalizeData3D(data);
-    printf("[BinaryConvolution::forwardPass] Step 1. Normalization done\n");
+    printf("[BinaryConvolution::forwardPass] Step 1. Normalization done in time {%llu ms}\n", timerStep1.elapsedMs().count());
+//    printf("[BinaryConvolution::forwardPass] Step 1. Normalization done\n");
+
     // 2. Generate K matrix containing scalar factors for each input sub-tensor
     printf("[BinaryConvolution::forwardPass] Step 2. Compute K matrix for data(%llu, %llu, %llu) ...\n",
            norm_data.n_rows, norm_data.n_cols, norm_data.n_slices);
+    Utility::Timer timerStep2;
     arma::mat K = this->input2KMat(norm_data);
-    printf("[BinaryConvolution::forwardPass] Step 2. Computed K  of size = (%llu, %llu)\n", K.n_rows, K.n_cols);
+    printf("[BinaryConvolution::forwardPass] Step 2. Computed K  of size = (%llu, %llu), done in time {%llu ms}\n",
+           K.n_rows, K.n_cols, timerStep2.elapsedMs().count());
+//    printf("[BinaryConvolution::forwardPass] Step 2. Computed K  of size = (%llu, %llu)\n", K.n_rows, K.n_cols);
+
     // 3. Binarize normalized data - activation
     printf("[BinaryConvolution::forwardPass] Step 3. Activate! Converting normalized input to a 3D binary tensor...\n");
+    Utility::Timer timerStep3;
     BinaryTensor3D input = this->normalizeData3D(norm_data);
-    printf("[BinaryConvolution::forwardPass] Step 3. Activation compltete! Binary Tensor 3D of size (%llu, %llu, %llu)\n",
-            input.rows(), input.cols(), input.channels());
+    printf("[BinaryConvolution::forwardPass] Step 3. Activation compltete! Binary Tensor 3D of size (%llu, %llu, %llu) in time {%llu ms}\n",
+            input.rows(), input.cols(), input.channels(), timerStep3.elapsedMs().count());
+//    printf("[BinaryConvolution::forwardPass] Step 3. Activation compltete! Binary Tensor 3D of size (%llu, %llu, %llu)\n",
+//           input.rows(), input.cols(), input.channels());
+
     // 4. Perform the binary convolution
     printf("[BinaryConvolution::forwardPass] Step 4. Performing binary convolution ... \n");
+    Utility::Timer timerStep4;
     arma::cube result = this->doBinaryConv(input, K);
-    printf("[BinaryConvolution::forwardPass] Step 4. Binary convolution Done! Ooo lalala, output of size (%llu, %llu, %llu)\n",
-            result.n_rows, result.n_cols, result.n_slices);
+    printf("[BinaryConvolution::forwardPass] Step 4. Binary convolution Done! Ooo lalala, output of size (%llu, %llu, %llu) in time {%llu ms}\n",
+            result.n_rows, result.n_cols, result.n_slices, timerStep4.elapsedMs().count());
+//    printf("[BinaryConvolution::forwardPass] Step 4. Binary convolution Done! Ooo lalala, output of size (%llu, %llu, %llu)\n",
+//           result.n_rows, result.n_cols, result.n_slices);
     // 5. Apply non-linearity
     if (this->bc_nonlinear_actv) {
         printf("[BinaryConvolution::forwardPass] Step 5. Non linear activation, a moment of silence for the negative guys...\n");
+        Utility::Timer timerStep5;
         result = this->nonLinearActivate(result);
-        printf("[BinaryConvolution::forwardPass] Step 5. Non linear activation done! Life is full of positivity\n");
+        printf("[BinaryConvolution::forwardPass] Step 5. Non linear activation done! Life is full of positivity in {%llu ms}\n",
+               timerStep5.elapsedMs().count());
+//        printf("[BinaryConvolution::forwardPass] Step 5. Non linear activation done! Life is full of positivity\n");
     }
     // 6. Apply pooling
     if (this->bc_pool) {
         printf("[BinaryConvolution::forwardPass] Step 6. Pooling ... coz `living life, king size` isn't possible for a deep net...\n");
+        Utility::Timer timerStep6;
         result = this->doPooling(result);
-        printf("[BinaryConvolution::forwardPass] Step 6. Pooled result dimensions = (%llu, %llu, %llu)\n",
-               result.n_rows, result.n_cols, result.n_slices);
+        printf("[BinaryConvolution::forwardPass] Step 6. Pooled result dimensions = (%llu, %llu, %llu) in {%llu ms}\n",
+               result.n_rows, result.n_cols, result.n_slices, timerStep6.elapsedMs().count());
+//        printf("[BinaryConvolution::forwardPass] Step 6. Pooled result dimensions = (%llu, %llu, %llu)\n",
+//               result.n_rows, result.n_cols, result.n_slices);
     }
 
     return result;
