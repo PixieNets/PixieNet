@@ -11,7 +11,7 @@
 
 using namespace arma;
 
-typedef uint64_t uint8;
+typedef uint8_t uint8;
 typedef unsigned int uint;
 typedef std::pair<uint, uint> uIntPair;
 
