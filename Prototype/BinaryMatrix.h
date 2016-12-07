@@ -80,6 +80,9 @@ public:
     static arma::umat         armaXNOR(arma::umat left, arma::umat right);
 
 
+    static arma::mat          bitCountPerRowArma(arma::umat input, bool reshape, uint new_rows, uint new_cols);
+
+
     // Accessor functions for class members
     bool transposed()  {    return bm_transposed;  }
     uint width()       {    return bm_width;       }

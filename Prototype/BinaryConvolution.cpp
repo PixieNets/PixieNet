@@ -167,24 +167,84 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
             BinaryLayer result = col_input * wt_input;
             // 2. Bitcount and reshape
 //            printf("[BinaryConvolution::doConv] Bitcount and reshape\n");
+            // Element-wise multiply by scalar factors of input tensor and weights alpha
             output.slice(f) += result.binMtx()->bitCountPerRow(true, rows_out, cols_out);
         }
     }
 
+    /*
+    // This segment of 2D convolution is for timing purposes only
+    uint f = 0;
+    uint ch = 0;
+    BinaryLayer col_input = inputVec[ch]->im2col(this->bc_width, this->bc_height,
+                                                 this->bc_padding, this->bc_conv_stride);
+    BinaryTensor3D cur_weights = this->bc_conv_weights[f];
+    BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+    BinaryLayer result = col_input * wt_input;
+    output.slice(f) += result.binMtx()->bitCountPerRow(true, rows_out, cols_out);
+    */
+/*
+    // 3D matrix multiplication implementation
+    // 1 (a). Spatial column layout of input
+    BinaryLayer col_input = input.im2col(this->bc_width, this->bc_height, this->bc_padding, this->bc_conv_stride);
+
+    // 1 (b). Spatial row layout of weight filter
+    // TODO: im2col for 4D tensor of weights with reshape
+
+
+    // 1 (c). XNOR product
+    // TODO : xnor product of 2D matrices
+
+    // 2. Bitcount and reshape
+    // TODO : bitcount + reshape of 2D matrix into 3D cube
+
+
+    // Element-wise multiply by scalar factors of input tensor and weights alpha
     for (uint f = 0; f < this->bc_filters; ++f) {
-        // Element-wise multiply by scalar factors of input tensor and weights alpha
 //        printf("[BinaryConvolution::doConv] Element-wise multiply by scalar factors of input tensor and weights alpha\n");
 //        printf("[BinaryConvolution::doConv] output.slice(%llu) dims = (%llu, %llu), K dims = (%llu, %llu), cur_weights.alpha = %f\n",
 //                f, output.slice(f).n_rows, output.slice(f).n_cols, K.n_rows, K.n_cols, cur_weights.alpha());
         output.slice(f) = (output.slice(f) % K) * this->bc_conv_weights[f].alpha();
     }
-
+*/
 
     return output;
 }
 
-arma::cube BinaryConvolution::armaBinaryConv(arma::ucube input, ArmaUTensor4D weights, uint stride,
-                                             Convolution conv_type) {
+/*
+BinaryLayer BinaryConvolution::bt4_reshape(BinaryTensor4D tensor, uint new_width, uint new_height) {
+
+    if (tensor.empty()) {
+        throw std::invalid_argument("[BinaryConvolution::bt4_reshape] BT4 tensor should be non-empty");
+    }
+
+    uint rows = tensor[0].rows();
+    uint cols = tensor[0].cols();
+    uint n_filter = rows * cols;
+    uint channels = tensor[0].channels();
+    uint filters = (uint) tensor.size();
+
+    if ((rows * cols * channels * filters) != (new_width * new_height)) {
+        throw std::invalid_argument("[BinaryConvolution::bt4_reshape] #elements shouldn't change in reshape");
+    }
+
+    BinaryLayer output(new_width, new_height);
+    uint start_idx = 0, end_idx = 0;
+    for (uint ch = 0; ch < channels; ++ch) {
+        for (uint f = 0; f < filters; ++f) {
+            BinaryTensor3D cur_weights = tensor[f];
+            BinaryLayer wt_input = tensor[f].tensor()[ch]->reshape(1, n_filter);
+        }
+    }
+
+    BinaryLayer result(new_width, new_height);
+    return result;
+}
+*/
+
+
+arma::cube BinaryConvolution::armaBinaryConv(arma::ucube input, arma::mat K, ArmaUTensor4D weights, uint stride,
+                                             Convolution conv_type, std::vector<double> alphaPerFilter) {
     if (input.empty()) {
         throw std::invalid_argument("[BinaryConvolution::armaBinaryConv] 3D Arma Input cube should be non-empty");
     }
@@ -225,9 +285,15 @@ arma::cube BinaryConvolution::armaBinaryConv(arma::ucube input, ArmaUTensor4D we
             arma::umat wt_input = BinaryMatrix::im2colArmaMat(cur_weights.slice(ch), filter_width, filter_height,
                                                               padding, stride);
             // 1 (c). XNOR product
-
-
+            arma::umat result = BinaryMatrix::armaXNOR(col_input, wt_input);
+            // 2. Bit count and reshape
+            output.slice(f) += BinaryMatrix::bitCountPerRowArma(result, true, rows_out, cols_out);
         }
+    }
+
+
+    for (uint f = 0; f < filters; ++f) {
+        output.slice(f) = (output.slice(f) % K) * alphaPerFilter[f];
     }
 
     return output;
