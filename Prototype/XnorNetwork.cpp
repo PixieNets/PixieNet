@@ -61,7 +61,8 @@ void XnorNetwork::buildAlexNet() {
 
 void XnorNetwork::buildMiniNet() {
 //    XN_convLayers.push_back(BinaryConvolution(11, 11, 3, 3, 1, Convolution::same, Nonlinearity::relu, Pooling::max, 2, 2));
-    XN_convLayers.push_back(BinaryConvolution(11, 11, 3, 96, 4, Convolution::same, Nonlinearity::relu, Pooling::max, 2, 2));
+//    XN_convLayers.push_back(BinaryConvolution(11, 11, 3, 96, 1, Convolution::same, Nonlinearity::relu, Pooling::max, 2, 2));
+    XN_convLayers.push_back(BinaryConvolution(11, 11, 3, 96, 4, Convolution::valid, Nonlinearity::relu, Pooling::max, 2, 2));
 }
 
 arma::vec XnorNetwork::forwardPass(arma::cube image){

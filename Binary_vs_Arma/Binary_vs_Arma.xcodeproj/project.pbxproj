@@ -40,7 +40,7 @@
 		355B5FA51DF781CB00A597C3 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		355B5FA71DF7852E00A597C3 /* BinaryMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryMatrix.cpp; sourceTree = "<group>"; };
 		355B5FA81DF7852E00A597C3 /* BinaryMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryMatrix.h; sourceTree = "<group>"; };
-		355B5FAA1DF78E9800A597C3 /* BinaryLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryLayer.cpp; sourceTree = "<group>"; };
+		355B5FAA1DF78E9800A597C3 /* BinaryLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = BinaryLayer.cpp; sourceTree = "<group>"; };
 		355B5FAB1DF78E9800A597C3 /* BinaryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryLayer.h; sourceTree = "<group>"; };
 		35ADF47C1DF8554700F10F75 /* GEMM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMM.cpp; sourceTree = "<group>"; };
 		35ADF47D1DF8554700F10F75 /* GEMM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMM.h; sourceTree = "<group>"; };
