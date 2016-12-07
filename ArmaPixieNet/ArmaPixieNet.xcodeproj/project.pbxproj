@@ -1,0 +1,521 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A6E751BB1DF7E14C0098AE41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751BA1DF7E14C0098AE41 /* main.m */; };
+		A6E751BE1DF7E14C0098AE41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751BD1DF7E14C0098AE41 /* AppDelegate.m */; };
+		A6E751C11DF7E14C0098AE41 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6E751C01DF7E14C0098AE41 /* ViewController.mm */; };
+		A6E751C41DF7E14C0098AE41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6E751C21DF7E14C0098AE41 /* Main.storyboard */; };
+		A6E751C61DF7E14C0098AE41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6E751C51DF7E14C0098AE41 /* Assets.xcassets */; };
+		A6E751C91DF7E14C0098AE41 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6E751C71DF7E14C0098AE41 /* LaunchScreen.storyboard */; };
+		A6E751D41DF7E14C0098AE41 /* ArmaPixieNetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751D31DF7E14C0098AE41 /* ArmaPixieNetTests.m */; };
+		A6E751DF1DF7E14C0098AE41 /* ArmaPixieNetUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751DE1DF7E14C0098AE41 /* ArmaPixieNetUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A6E751D01DF7E14C0098AE41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6E751AE1DF7E14C0098AE41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A6E751B51DF7E14C0098AE41;
+			remoteInfo = ArmaPixieNet;
+		};
+		A6E751DB1DF7E14C0098AE41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6E751AE1DF7E14C0098AE41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A6E751B51DF7E14C0098AE41;
+			remoteInfo = ArmaPixieNet;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A6E751B61DF7E14C0098AE41 /* ArmaPixieNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArmaPixieNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6E751BA1DF7E14C0098AE41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A6E751BC1DF7E14C0098AE41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A6E751BD1DF7E14C0098AE41 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A6E751BF1DF7E14C0098AE41 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A6E751C01DF7E14C0098AE41 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		A6E751C31DF7E14C0098AE41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A6E751C51DF7E14C0098AE41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A6E751C81DF7E14C0098AE41 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A6E751CA1DF7E14C0098AE41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A6E751CF1DF7E14C0098AE41 /* ArmaPixieNetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArmaPixieNetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6E751D31DF7E14C0098AE41 /* ArmaPixieNetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArmaPixieNetTests.m; sourceTree = "<group>"; };
+		A6E751D51DF7E14C0098AE41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A6E751DA1DF7E14C0098AE41 /* ArmaPixieNetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArmaPixieNetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6E751DE1DF7E14C0098AE41 /* ArmaPixieNetUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArmaPixieNetUITests.m; sourceTree = "<group>"; };
+		A6E751E01DF7E14C0098AE41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A6E751B31DF7E14C0098AE41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6E751CC1DF7E14C0098AE41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6E751D71DF7E14C0098AE41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A6E751AD1DF7E14C0098AE41 = {
+			isa = PBXGroup;
+			children = (
+				A6E751B81DF7E14C0098AE41 /* ArmaPixieNet */,
+				A6E751D21DF7E14C0098AE41 /* ArmaPixieNetTests */,
+				A6E751DD1DF7E14C0098AE41 /* ArmaPixieNetUITests */,
+				A6E751B71DF7E14C0098AE41 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A6E751B71DF7E14C0098AE41 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A6E751B61DF7E14C0098AE41 /* ArmaPixieNet.app */,
+				A6E751CF1DF7E14C0098AE41 /* ArmaPixieNetTests.xctest */,
+				A6E751DA1DF7E14C0098AE41 /* ArmaPixieNetUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A6E751B81DF7E14C0098AE41 /* ArmaPixieNet */ = {
+			isa = PBXGroup;
+			children = (
+				A6E751BC1DF7E14C0098AE41 /* AppDelegate.h */,
+				A6E751BD1DF7E14C0098AE41 /* AppDelegate.m */,
+				A6E751BF1DF7E14C0098AE41 /* ViewController.h */,
+				A6E751C01DF7E14C0098AE41 /* ViewController.mm */,
+				A6E751C21DF7E14C0098AE41 /* Main.storyboard */,
+				A6E751C51DF7E14C0098AE41 /* Assets.xcassets */,
+				A6E751C71DF7E14C0098AE41 /* LaunchScreen.storyboard */,
+				A6E751CA1DF7E14C0098AE41 /* Info.plist */,
+				A6E751B91DF7E14C0098AE41 /* Supporting Files */,
+			);
+			path = ArmaPixieNet;
+			sourceTree = "<group>";
+		};
+		A6E751B91DF7E14C0098AE41 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A6E751BA1DF7E14C0098AE41 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A6E751D21DF7E14C0098AE41 /* ArmaPixieNetTests */ = {
+			isa = PBXGroup;
+			children = (
+				A6E751D31DF7E14C0098AE41 /* ArmaPixieNetTests.m */,
+				A6E751D51DF7E14C0098AE41 /* Info.plist */,
+			);
+			path = ArmaPixieNetTests;
+			sourceTree = "<group>";
+		};
+		A6E751DD1DF7E14C0098AE41 /* ArmaPixieNetUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A6E751DE1DF7E14C0098AE41 /* ArmaPixieNetUITests.m */,
+				A6E751E01DF7E14C0098AE41 /* Info.plist */,
+			);
+			path = ArmaPixieNetUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A6E751B51DF7E14C0098AE41 /* ArmaPixieNet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6E751E31DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNet" */;
+			buildPhases = (
+				A6E751B21DF7E14C0098AE41 /* Sources */,
+				A6E751B31DF7E14C0098AE41 /* Frameworks */,
+				A6E751B41DF7E14C0098AE41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ArmaPixieNet;
+			productName = ArmaPixieNet;
+			productReference = A6E751B61DF7E14C0098AE41 /* ArmaPixieNet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A6E751CE1DF7E14C0098AE41 /* ArmaPixieNetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6E751E61DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNetTests" */;
+			buildPhases = (
+				A6E751CB1DF7E14C0098AE41 /* Sources */,
+				A6E751CC1DF7E14C0098AE41 /* Frameworks */,
+				A6E751CD1DF7E14C0098AE41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A6E751D11DF7E14C0098AE41 /* PBXTargetDependency */,
+			);
+			name = ArmaPixieNetTests;
+			productName = ArmaPixieNetTests;
+			productReference = A6E751CF1DF7E14C0098AE41 /* ArmaPixieNetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A6E751D91DF7E14C0098AE41 /* ArmaPixieNetUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6E751E91DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNetUITests" */;
+			buildPhases = (
+				A6E751D61DF7E14C0098AE41 /* Sources */,
+				A6E751D71DF7E14C0098AE41 /* Frameworks */,
+				A6E751D81DF7E14C0098AE41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A6E751DC1DF7E14C0098AE41 /* PBXTargetDependency */,
+			);
+			name = ArmaPixieNetUITests;
+			productName = ArmaPixieNetUITests;
+			productReference = A6E751DA1DF7E14C0098AE41 /* ArmaPixieNetUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A6E751AE1DF7E14C0098AE41 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Esha Uboweja";
+				TargetAttributes = {
+					A6E751B51DF7E14C0098AE41 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					A6E751CE1DF7E14C0098AE41 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = A6E751B51DF7E14C0098AE41;
+					};
+					A6E751D91DF7E14C0098AE41 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = A6E751B51DF7E14C0098AE41;
+					};
+				};
+			};
+			buildConfigurationList = A6E751B11DF7E14C0098AE41 /* Build configuration list for PBXProject "ArmaPixieNet" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A6E751AD1DF7E14C0098AE41;
+			productRefGroup = A6E751B71DF7E14C0098AE41 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A6E751B51DF7E14C0098AE41 /* ArmaPixieNet */,
+				A6E751CE1DF7E14C0098AE41 /* ArmaPixieNetTests */,
+				A6E751D91DF7E14C0098AE41 /* ArmaPixieNetUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A6E751B41DF7E14C0098AE41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6E751C91DF7E14C0098AE41 /* LaunchScreen.storyboard in Resources */,
+				A6E751C61DF7E14C0098AE41 /* Assets.xcassets in Resources */,
+				A6E751C41DF7E14C0098AE41 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6E751CD1DF7E14C0098AE41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6E751D81DF7E14C0098AE41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A6E751B21DF7E14C0098AE41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6E751C11DF7E14C0098AE41 /* ViewController.mm in Sources */,
+				A6E751BE1DF7E14C0098AE41 /* AppDelegate.m in Sources */,
+				A6E751BB1DF7E14C0098AE41 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6E751CB1DF7E14C0098AE41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6E751D41DF7E14C0098AE41 /* ArmaPixieNetTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6E751D61DF7E14C0098AE41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6E751DF1DF7E14C0098AE41 /* ArmaPixieNetUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A6E751D11DF7E14C0098AE41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A6E751B51DF7E14C0098AE41 /* ArmaPixieNet */;
+			targetProxy = A6E751D01DF7E14C0098AE41 /* PBXContainerItemProxy */;
+		};
+		A6E751DC1DF7E14C0098AE41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A6E751B51DF7E14C0098AE41 /* ArmaPixieNet */;
+			targetProxy = A6E751DB1DF7E14C0098AE41 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A6E751C21DF7E14C0098AE41 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A6E751C31DF7E14C0098AE41 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A6E751C71DF7E14C0098AE41 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A6E751C81DF7E14C0098AE41 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A6E751E11DF7E14C0098AE41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A6E751E21DF7E14C0098AE41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A6E751E41DF7E14C0098AE41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ArmaPixieNet/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A6E751E51DF7E14C0098AE41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ArmaPixieNet/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A6E751E71DF7E14C0098AE41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ArmaPixieNetTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ArmaPixieNet.app/ArmaPixieNet";
+			};
+			name = Debug;
+		};
+		A6E751E81DF7E14C0098AE41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ArmaPixieNetTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ArmaPixieNet.app/ArmaPixieNet";
+			};
+			name = Release;
+		};
+		A6E751EA1DF7E14C0098AE41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ArmaPixieNetUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNetUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ArmaPixieNet;
+			};
+			name = Debug;
+		};
+		A6E751EB1DF7E14C0098AE41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ArmaPixieNetUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNetUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ArmaPixieNet;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A6E751B11DF7E14C0098AE41 /* Build configuration list for PBXProject "ArmaPixieNet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6E751E11DF7E14C0098AE41 /* Debug */,
+				A6E751E21DF7E14C0098AE41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A6E751E31DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6E751E41DF7E14C0098AE41 /* Debug */,
+				A6E751E51DF7E14C0098AE41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A6E751E61DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6E751E71DF7E14C0098AE41 /* Debug */,
+				A6E751E81DF7E14C0098AE41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A6E751E91DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNetUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6E751EA1DF7E14C0098AE41 /* Debug */,
+				A6E751EB1DF7E14C0098AE41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A6E751AE1DF7E14C0098AE41 /* Project object */;
+}
