@@ -91,8 +91,8 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
 									"Output 3D hypercube must be empty to fill in with the correct dims"));
 	}
 
-
 	// Initialize output dimensions
+	this->n_in = input->n_rows * input->n_cols;
 	this->rows_out = input->n_rows - this->ac_size + 2 * this->padding;
 	this->cols_out = input->n_cols - this->ac_size + 2 * this->padding;
 	if (this->rows_out % this->ac_conv_stride || this->cols_out % this->ac_conv_stride) {
@@ -108,24 +108,26 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
 	}
 	this->rows_out = this->rows_out / this->ac_conv_stride + (this->rows_out % 2);
 	this->cols_out = this->cols_out / this->ac_conv_stride + (this->cols_out % 2);
+	this->n_out = this->rows_out * this->cols_out;
 
 	// Initialize traversal values
 	this->start_row = 0; this->start_col = 0;
 	this->end_row = input->n_rows; this->end_col = input->n_cols;
 	if (this->ac_conv_padding == 0) {
-		start_row += this->ac_ksz_half;
-		start_col += this->ac_ksz_half;
-		end_row -= this->ac_ksz_half;
-		end_col -= this->ac_ksz_half;
+		this->start_row += this->ac_ksz_half;
+		this->start_col += this->ac_ksz_half;
+		this->end_row -= this->ac_ksz_half;
+		this->end_col -= this->ac_ksz_half;
 	}
 
 	// 1. Compute K matrix of input data (containing scalar factors per sub-tensor)
-	arma::Mat<T> *inputFactors;
-	this->getInputFactors(input, inputFactors);
+	arma::Mat<T> input_factors;
+	this->getInputFactors(input, input_factors);
 	// 2. Normalize input data by mean and variance (in-place)
-    this->normalizeData3D(input);
+	arma::Cube<T> norm_input;
+    this->normalizeData3D(input, norm_input);
     // 3. Binarize and perform binary convolution
-    this->convolve(input, inputFactors, result);
+    this->convolve(input, input_factors, result);
     // 4. Non-linear activation (in-place)
     if (this->ac_nl_type != Nonlinearity::none) {
     	this->nlActivate(result);
@@ -136,6 +138,46 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
     }
     // Done!
 }
+
+// 1. Compute K matrix of input data (containing scalar factors per sub-tensor)
+template<typename T>
+void ArmaConvolution<T>::getInputFactors(arma::Cube<T> *data, arma::Mat<T> &factors) {
+	// A = (\sum_{i=1}^n I(:, :, i)) / n
+	arma::mat A = arma::mean(*data, 2);
+	// Convolve with box filter k of size w x h of the convolution weights
+	factors = arma::conv2(A, this->ac_box_filter, "same");
+	if (this->ac_conv_stride > 1) {
+		uint i = 0;
+		arma::uvec indices(this->n_out);
+		for (uint col = this->start_col; col < this->end_col; ++col) {
+			for (uint row = this->start_row; row < this->end_row; ++row) {
+				indices(i++) = arma::sub2ind(arma::size(factors), row, col);
+			}
+		}
+		factors = arma::reshape(factors.elem(indices), this->rows_out, this->cols_out);
+	}
+}
+
+// 2. Normalize input data by mean and variance (in-place)
+template<typename T>
+void ArmaConvolution<T>::normalizeData3D(arma::Cube<T> *data, arma::Cube<T> &norm_input) {
+	norm_input = arma::zeros(arma::size(data));
+	for (uint ch = 0; ch < this->ac_channels; ++ch) {
+		T mean_value = arma::accu(data->slice(ch)) / this->n_in;
+		arma::mat elems = ((data->slice(ch) - mean_value) % (data->slice(ch) - mean_value))
+							(this->n_in - 1.0);
+		norm_input.slice(ch) = arma::sqrt(elems);
+	}
+}
+
+
+
+
+
+
+
+
+
 
 
 

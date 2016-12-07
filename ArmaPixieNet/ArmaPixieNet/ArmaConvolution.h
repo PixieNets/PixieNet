@@ -41,11 +41,15 @@ private:
     T               *ac_alpha_per_filter;   // Scalar factors per weight filter
 
     // For the forward pass operations
+    uint            n_in;
     uint            ac_ksz_half;
     uint            start_row;
     uint            end_row;
     uint            start_col;
     uint            end_col;
+    uint            rows_out;
+    uint            cols_out;
+    uint            n_out;
 
     std::string     constructMessage(std::string functionName, std::string message);
     
@@ -56,11 +60,11 @@ public:
     ~ArmaConvolution();
     
     // 1. Compute K matrix of input data (containing scalar factors per sub-tensor)
-    void    getInputFactors(arma::Cube<T> *data, arma::Mat<T> *factors);
+    void    getInputFactors(arma::Cube<T> *data, arma::Mat<T> &factors);
     // 2. Normalize input data by mean and variance (in-place)
-    void    normalizeData3D(arma::Cube<T> *data);
+    void    normalizeData3D(arma::Cube<T> *data, arma::Cube<T> &norm_input);
     // 3. Binarize and perform binary convolution
-    void    convolve(arma::Cube<T> *data, arma::Mat<T> *dataScalars, arma::Cube<T> *result);
+    void    convolve(arma::Cube<T> *data, const arma::Mat<T> &dataFactors, arma::Cube<T> *result);
     // 4. Non-linear activation (in-place)
     void    nlActivate(arma::Cube<T> *data);
     // 5. Pooling
