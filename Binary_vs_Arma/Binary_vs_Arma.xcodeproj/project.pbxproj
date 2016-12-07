@@ -18,6 +18,10 @@
 		355B5FA61DF781CB00A597C3 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 355B5FA51DF781CB00A597C3 /* Accelerate.framework */; };
 		355B5FA91DF7852E00A597C3 /* BinaryMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5FA71DF7852E00A597C3 /* BinaryMatrix.cpp */; };
 		355B5FAC1DF78E9800A597C3 /* BinaryLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5FAA1DF78E9800A597C3 /* BinaryLayer.cpp */; };
+		35ADF47E1DF8554700F10F75 /* GEMM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35ADF47C1DF8554700F10F75 /* GEMM.cpp */; };
+		35ADF4811DF855CC00F10F75 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 35ADF47F1DF855CC00F10F75 /* utils.c */; };
+		35ADF4841DF855F500F10F75 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 35ADF4821DF855F500F10F75 /* list.c */; };
+		35ADF4871DF8562900F10F75 /* Im2Col.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35ADF4851DF8562900F10F75 /* Im2Col.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,14 @@
 		355B5FA81DF7852E00A597C3 /* BinaryMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryMatrix.h; sourceTree = "<group>"; };
 		355B5FAA1DF78E9800A597C3 /* BinaryLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryLayer.cpp; sourceTree = "<group>"; };
 		355B5FAB1DF78E9800A597C3 /* BinaryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryLayer.h; sourceTree = "<group>"; };
+		35ADF47C1DF8554700F10F75 /* GEMM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEMM.cpp; sourceTree = "<group>"; };
+		35ADF47D1DF8554700F10F75 /* GEMM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEMM.h; sourceTree = "<group>"; };
+		35ADF47F1DF855CC00F10F75 /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		35ADF4801DF855CC00F10F75 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		35ADF4821DF855F500F10F75 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
+		35ADF4831DF855F500F10F75 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		35ADF4851DF8562900F10F75 /* Im2Col.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Im2Col.cpp; sourceTree = "<group>"; };
+		35ADF4861DF8562900F10F75 /* Im2Col.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Im2Col.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +90,14 @@
 				355B5FA81DF7852E00A597C3 /* BinaryMatrix.h */,
 				355B5FAA1DF78E9800A597C3 /* BinaryLayer.cpp */,
 				355B5FAB1DF78E9800A597C3 /* BinaryLayer.h */,
+				35ADF47C1DF8554700F10F75 /* GEMM.cpp */,
+				35ADF47D1DF8554700F10F75 /* GEMM.h */,
+				35ADF4851DF8562900F10F75 /* Im2Col.cpp */,
+				35ADF4861DF8562900F10F75 /* Im2Col.h */,
+				35ADF4821DF855F500F10F75 /* list.c */,
+				35ADF4831DF855F500F10F75 /* list.h */,
+				35ADF47F1DF855CC00F10F75 /* utils.c */,
+				35ADF4801DF855CC00F10F75 /* utils.h */,
 				355B5F8C1DF76DDE00A597C3 /* AppDelegate.h */,
 				355B5F8D1DF76DDE00A597C3 /* AppDelegate.m */,
 				355B5F8F1DF76DDE00A597C3 /* ViewController.h */,
@@ -182,8 +202,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				355B5F911DF76DDE00A597C3 /* ViewController.mm in Sources */,
+				35ADF4811DF855CC00F10F75 /* utils.c in Sources */,
 				355B5F8E1DF76DDE00A597C3 /* AppDelegate.m in Sources */,
+				35ADF4841DF855F500F10F75 /* list.c in Sources */,
 				355B5F8B1DF76DDE00A597C3 /* main.m in Sources */,
+				35ADF4871DF8562900F10F75 /* Im2Col.cpp in Sources */,
+				35ADF47E1DF8554700F10F75 /* GEMM.cpp in Sources */,
 				355B5FA91DF7852E00A597C3 /* BinaryMatrix.cpp in Sources */,
 				355B5FAC1DF78E9800A597C3 /* BinaryLayer.cpp in Sources */,
 			);
