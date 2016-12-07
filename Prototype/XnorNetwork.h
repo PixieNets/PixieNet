@@ -3,11 +3,12 @@
 //
 
 #pragma once
-#include <armadillo>
+
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <armadillo>
 #include "BinaryConvolution.h"
 
 #define StrDblPair std::pair<std::string, double>
@@ -20,10 +21,12 @@ class XnorNetwork {
     int                                 XN_totalLabels;
     std::vector<BinaryConvolution>      XN_convLayers;
 
+public:
     XnorNetwork();
     ~XnorNetwork();
 
     void            buildAlexNet();
+    void            buildMiniNet();
     arma::vec       forwardPass(arma::cube image);
 
 

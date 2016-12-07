@@ -14,6 +14,7 @@ public:
     void testSoftmax();
     void testRank();
     void testFlattenCube();
+    void testCubeMultiply();
 
     void runTest(); // runs all tests
 

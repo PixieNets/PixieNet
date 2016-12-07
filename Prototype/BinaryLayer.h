@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include <armadillo>
+
 #include <vector>
 
 #include "BinaryMatrix.h"
+#include <armadillo>
 
 namespace bd {
     class BinaryLayer;

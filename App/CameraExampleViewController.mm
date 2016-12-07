@@ -49,7 +49,10 @@ static const NSString *AVCaptureStillImageIsCapturingStillImageContext =
 
 - (void)setupAVCapture {
   NSError *error = nil;
-
+    
+  //XnorNetwork
+    xnorNet.buildMiniNet();
+    
   // Set up session
   session = [AVCaptureSession new];
   if ([[UIDevice currentDevice] userInterfaceIdiom] ==
@@ -287,8 +290,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   }
 
     //TODO: Insert XNorNet run here
-    // Takes as an input the incoming pixel buffer
+    // Takes as input an image in arma::cube
     // Outputs an arma::vec with the values
+    arma::cube imageCube(55,55,3);
+
+    xnorNet.forwardPass(imageCube);
+    
 
     //TODO: Translate from the predicted values to the pairs of NSString and NSNumber
 

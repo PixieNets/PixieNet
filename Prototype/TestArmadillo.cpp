@@ -5,6 +5,18 @@
 #include "TestArmadillo.h"
 #include <algorithm> // for std::sort
 
+void TestArmadillo::testCubeMultiply() {
+    std::cout << "--- TEST CUBE MULTIPLICATION" << std::endl;
+    int totalOperations = 1182816;
+    arma::cube A = randu<arma::cube>(11,11,3);
+    arma::cube B = randu<arma::cube>(11,11,3);
+    arma::cube C;
+    for(int i=0; i < totalOperations; ++i) {
+
+        C = A%B;
+    }
+}
+
 void TestArmadillo::testSoftmax() {
     std::cout << "--- TEST SOFTMAX" << std::endl;
     // The test will have 10 output from previous layers
@@ -101,4 +113,5 @@ void TestArmadillo::runTest() {
     this->testSoftmax();
     this->testRank();
     this->testFlattenCube();
+    this->testCubeMultiply();
 }

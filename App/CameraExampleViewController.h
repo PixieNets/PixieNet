@@ -18,6 +18,8 @@
 #include <vector>
 #include <memory>
 
+#include "XnorNetwork.h"
+
 @interface CameraExampleViewController
     : UIViewController<UIGestureRecognizerDelegate,
                        AVCaptureVideoDataOutputSampleBufferDelegate> {
@@ -36,6 +38,7 @@
   AVCaptureSession *session;
                            
   //TODO: Declare XnorNetwork object and aux classes
+  XnorNetwork xnorNet;
   
 }
 @property(retain, nonatomic) CATextLayer *predictionTextLayer;

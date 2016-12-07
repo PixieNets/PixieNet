@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		355B5F781DF745E900A597C3 /* BinaryConvolution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5F6E1DF745E900A597C3 /* BinaryConvolution.cpp */; };
+		355B5F791DF745E900A597C3 /* BinaryLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5F701DF745E900A597C3 /* BinaryLayer.cpp */; };
+		355B5F7A1DF745E900A597C3 /* BinaryMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5F721DF745E900A597C3 /* BinaryMatrix.cpp */; };
+		355B5F7B1DF745E900A597C3 /* BinaryTensor3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5F741DF745E900A597C3 /* BinaryTensor3D.cpp */; };
+		355B5F7C1DF745E900A597C3 /* XnorNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 355B5F761DF745E900A597C3 /* XnorNetwork.cpp */; };
 		35AAD7761DEEDD3E00322989 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35AAD76A1DEED79300322989 /* Accelerate.framework */; };
 		35AAD79D1DEEE1D100322989 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35AAD7741DEEDCE400322989 /* CoreFoundation.framework */; };
 		35AAD79E1DEEE1DB00322989 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35AAD7721DEED7BC00322989 /* AVFoundation.framework */; };
@@ -28,6 +33,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		355B5F6E1DF745E900A597C3 /* BinaryConvolution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryConvolution.cpp; sourceTree = SOURCE_ROOT; };
+		355B5F6F1DF745E900A597C3 /* BinaryConvolution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryConvolution.h; sourceTree = SOURCE_ROOT; };
+		355B5F701DF745E900A597C3 /* BinaryLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryLayer.cpp; sourceTree = SOURCE_ROOT; };
+		355B5F711DF745E900A597C3 /* BinaryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryLayer.h; sourceTree = SOURCE_ROOT; };
+		355B5F721DF745E900A597C3 /* BinaryMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryMatrix.cpp; sourceTree = SOURCE_ROOT; };
+		355B5F731DF745E900A597C3 /* BinaryMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryMatrix.h; sourceTree = SOURCE_ROOT; };
+		355B5F741DF745E900A597C3 /* BinaryTensor3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryTensor3D.cpp; sourceTree = SOURCE_ROOT; };
+		355B5F751DF745E900A597C3 /* BinaryTensor3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryTensor3D.h; sourceTree = SOURCE_ROOT; };
+		355B5F761DF745E900A597C3 /* XnorNetwork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XnorNetwork.cpp; sourceTree = SOURCE_ROOT; };
+		355B5F771DF745E900A597C3 /* XnorNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XnorNetwork.h; sourceTree = SOURCE_ROOT; };
 		35AAD76A1DEED79300322989 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.1.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
 		35AAD76C1DEED79D00322989 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.1.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
 		35AAD76E1DEED7A700322989 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.1.sdk/System/Library/Frameworks/AssetsLibrary.framework; sourceTree = DEVELOPER_DIR; };
@@ -139,6 +154,16 @@
 				592FF92418EE240200C164F8 /* CameraExampleViewController.mm */,
 				592FF90318ECCB8300C164F8 /* Info.plist */,
 				592FF90118ECC66200C164F8 /* main.mm */,
+				355B5F6E1DF745E900A597C3 /* BinaryConvolution.cpp */,
+				355B5F6F1DF745E900A597C3 /* BinaryConvolution.h */,
+				355B5F701DF745E900A597C3 /* BinaryLayer.cpp */,
+				355B5F711DF745E900A597C3 /* BinaryLayer.h */,
+				355B5F721DF745E900A597C3 /* BinaryMatrix.cpp */,
+				355B5F731DF745E900A597C3 /* BinaryMatrix.h */,
+				355B5F741DF745E900A597C3 /* BinaryTensor3D.cpp */,
+				355B5F751DF745E900A597C3 /* BinaryTensor3D.h */,
+				355B5F761DF745E900A597C3 /* XnorNetwork.cpp */,
+				355B5F771DF745E900A597C3 /* XnorNetwork.h */,
 				35AAD7B31DEF136F00322989 /* armadillo.h */,
 				35AAD7B41DEF136F00322989 /* armadillo_bits */,
 			);
@@ -227,8 +252,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				592FF90218ECC66200C164F8 /* main.mm in Sources */,
+				355B5F7C1DF745E900A597C3 /* XnorNetwork.cpp in Sources */,
 				592FF92618EE240200C164F8 /* CameraExampleViewController.mm in Sources */,
 				592FF92518EE240200C164F8 /* CameraExampleAppDelegate.m in Sources */,
+				355B5F7A1DF745E900A597C3 /* BinaryMatrix.cpp in Sources */,
+				355B5F781DF745E900A597C3 /* BinaryConvolution.cpp in Sources */,
+				355B5F791DF745E900A597C3 /* BinaryLayer.cpp in Sources */,
+				355B5F7B1DF745E900A597C3 /* BinaryTensor3D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

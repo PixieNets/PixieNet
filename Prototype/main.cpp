@@ -10,15 +10,14 @@
 
 
 int main() {
-    //TestArmadillo testArma;
+    TestArmadillo testArma;
     TestBinaryMatrix testBinaryMatrix;
     TestBinaryLayer testBinaryLayer;
     TestBinaryTensor3D testBinaryTensor3D;
     TestBinaryConvolution testBinaryConvolution;
     TestXnorNetwork testXnorNetwork;
 
-    //testArma.runTest();
-    //testArma.runTest();
+    testArma.runTest();
     testBinaryMatrix.runAllTests();
     testBinaryLayer.runAllTests();
     testBinaryTensor3D.runAllTests();
