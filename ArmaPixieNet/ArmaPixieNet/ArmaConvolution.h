@@ -20,29 +20,33 @@ namespace aconv {
     // Multiple types of nonlinearities
     enum class Nonlinearity {none, relu};
     // Implementing XNOR convolution in Armadillo
-    class ArmaConvolution;
+    template<typename T> class ArmaConvolution;
 }
 
 template<typename T>
 class aconv::ArmaConvolution {
 private:
-    uint            ac_size;  // kernel size (DIM 1, 2)
-    uint            ac_channels;   // kernel channels (DIM 3)
-    uint            ac_filters;    // kernel #filters (DIM 4)
-    uint            ac_conv_stride;    // convolution stride
-    uint            ac_conv_padding;   // convolution padding
-    Convolution     ac_conv_type;  // convolution type
-    Nonlinearity    ac_nl_type;   // non-linear activation function
-    Pooling         ac_pool_type;   // pooling type
-    uint            ac_pool_size;  // pooling size
-    uint            ac_pool_stride;    // pooling stride
-    arma::Mat<T>    ac_box_filter; // convolution kernel to compute scaling factors of input
-    arma::Cube<T>   **ac_conv_weights; // 4D weights tensor for convolution
-    T               **ac_alpha_per_filter; // Scalar factors per weight filter
-    
-    void    init_convolution(uint ksize, uint channels, uint filters, uint conv_stride, Convolution conv_type);
-    void    init_pooling(Pooling pool_type=Pooling::none, uint pool_size=0, uint pool_stride=0);
-    void    init_nonlinearity(Nonlinearity actv_type=Nonlinearity::None);
+    uint            ac_size;                // kernel size (DIM 1, 2)
+    uint            ac_channels;            // kernel channels (DIM 3)
+    uint            ac_filters;             // kernel #filters (DIM 4)
+    uint            ac_conv_stride;         // convolution stride
+    uint            ac_conv_padding;        // convolution padding
+    Convolution     ac_conv_type;           // convolution type
+    Nonlinearity    ac_nl_type;             // non-linear activation function
+    Pooling         ac_pool_type;           // pooling type
+    uint            ac_pool_size;           // pooling size
+    uint            ac_pool_stride;         // pooling stride
+    arma::Mat<T>    ac_box_filter;          // convolution kernel to compute scaling factors of input
+    arma::Cube<T>   *ac_conv_weights;       // 4D weights tensor for convolution
+    T               *ac_alpha_per_filter;   // Scalar factors per weight filter
+
+    // For the forward pass operations
+    uint            ac_block_wd_half;
+    uint            ac_block_ht_half;
+    uint            start_row;
+    uint            end_row;
+    uint            start_col;
+    uint            end_col;
     
 public:
     ArmaConvolution(uint ksize, uint channels, uint filters, uint conv_stride, Convolution conv_type=Convolution::same,
@@ -76,7 +80,7 @@ public:
     uint                pool_size()         {   return ac_pool_size;        }
     uint                pool_stride()       {   return ac_pool_stride;      }
     arma::Mat<T>        box_filter()        {   return ac_box_filter;       }
-    arma::Cube<T>**     conv_weights()      {   return ac_conv_weights;     }
-    T**                 alpha_per_filter()  {   return ac_alpha_per_filter; }
+    arma::Cube<T>*      conv_weights()      {   return ac_conv_weights;     }
+    T*                  alpha_per_filter()  {   return ac_alpha_per_filter; }
     
 };

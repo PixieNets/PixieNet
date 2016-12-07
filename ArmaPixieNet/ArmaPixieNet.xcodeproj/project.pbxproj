@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A62D461C1DF8ABE1009E0FD4 /* ArmaConvolution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A62D461B1DF8ABE1009E0FD4 /* ArmaConvolution.cpp */; };
 		A6A477FE1DF7E86A002B0B2E /* armadillo in Resources */ = {isa = PBXBuildFile; fileRef = A6A477FC1DF7E86A002B0B2E /* armadillo */; };
 		A6A477FF1DF7E86A002B0B2E /* armadillo_bits in Resources */ = {isa = PBXBuildFile; fileRef = A6A477FD1DF7E86A002B0B2E /* armadillo_bits */; };
 		A6E751BB1DF7E14C0098AE41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751BA1DF7E14C0098AE41 /* main.m */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		A62D46161DF85A5C009E0FD4 /* ArmaConvolution.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ArmaConvolution.h; sourceTree = "<group>"; };
+		A62D461B1DF8ABE1009E0FD4 /* ArmaConvolution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArmaConvolution.cpp; sourceTree = "<group>"; };
 		A6A477FC1DF7E86A002B0B2E /* armadillo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = armadillo; sourceTree = "<group>"; };
 		A6A477FD1DF7E86A002B0B2E /* armadillo_bits */ = {isa = PBXFileReference; lastKnownFileType = folder; path = armadillo_bits; sourceTree = "<group>"; };
 		A6E751B61DF7E14C0098AE41 /* ArmaPixieNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArmaPixieNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +118,7 @@
 				A6E751BD1DF7E14C0098AE41 /* AppDelegate.m */,
 				A62D46161DF85A5C009E0FD4 /* ArmaConvolution.h */,
 				A6E751BF1DF7E14C0098AE41 /* ViewController.h */,
+				A62D461B1DF8ABE1009E0FD4 /* ArmaConvolution.cpp */,
 				A6E751C01DF7E14C0098AE41 /* ViewController.mm */,
 				A6E751C21DF7E14C0098AE41 /* Main.storyboard */,
 				A6E751C51DF7E14C0098AE41 /* Assets.xcassets */,
@@ -286,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6E751C11DF7E14C0098AE41 /* ViewController.mm in Sources */,
+				A62D461C1DF8ABE1009E0FD4 /* ArmaConvolution.cpp in Sources */,
 				A6E751BE1DF7E14C0098AE41 /* AppDelegate.m in Sources */,
 				A6E751BB1DF7E14C0098AE41 /* main.m in Sources */,
 			);
