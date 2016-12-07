@@ -94,8 +94,8 @@ arma::mat BinaryConvolution::input2KMat(arma::cube norm_data) {
         // Select the elements by stride
         uint block_ht_half = this->bc_height / 2;
         uint block_wd_half = this->bc_width / 2;
-        uint n_rows = (K.n_rows - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + (this->bc_height % 2);
-        uint n_cols = (K.n_cols - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + (this->bc_width % 2);
+        uint n_rows = (K.n_rows - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + (K.n_rows % 2);
+        uint n_cols = (K.n_cols - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + (K.n_cols % 2);
         uint start_row = 0, end_row = K.n_rows;
         uint start_col = 0, end_col = K.n_cols;
         if (this->bc_padding == 0) {
