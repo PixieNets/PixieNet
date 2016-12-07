@@ -478,9 +478,11 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     }
     cols_out = cols_out / stride + (block_width % 2);
     uint all_out = rows_out * cols_out;
-    BinaryMatrix result(n, all_out);
+//    BinaryMatrix result(n, all_out);
+    BinaryMatrix result(all_out, n);
 
-    uint res_row = 0;
+//    uint res_row = 0;
+    uint res_col = 0;
     uint start_row = 0, end_row = this->bm_height;
     uint start_col = 0, end_col = this->bm_width;
     if (padding == 0) {
@@ -491,7 +493,8 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
     }
     for (uint row = start_row; row < end_row; row += stride) {
         for (uint col = start_col; col < end_col; col += stride) {
-            uint res_col = 0;
+//            uint res_col = 0;
+            uint res_row = 0;
             int srow_start = (row - block_ht_half);
             int srow_end = (row + block_ht_half) + (block_height % 2);
             int scol_start = (col - block_wd_half);
@@ -504,15 +507,18 @@ BinaryMatrix BinaryMatrix::im2col(uint block_width, uint block_height,
                     if (srow >= 0 && srow < this->bm_height && scol >= 0 && scol < this->bm_width) {
                         result.setValueAt(res_row, res_col, this->getValueAt(srow, scol));
                     }
-                    ++res_col;
+//                    ++res_col;
+                    ++res_row;
                 }
             }
-            ++res_row;
+//            ++res_row;
+            ++res_col;
         }
     }
 
     // Check that we capture as many blocks as we had to
-    assert(res_row == all_out);
+//    assert(res_row == all_out);
+    assert(res_col == all_out);
 
     return result;
 }
@@ -574,10 +580,12 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
     uint n = block_width * block_height;
     uint all_out = rows_out * cols_out;
 
-    arma::umat result(all_out, n);
+//    arma::umat result(all_out, n);
+    arma::umat result(n, all_out);
     result.zeros();
 
-    uint res_row = 0;
+//    uint res_row = 0;
+    uint res_col = 0;
     int row_start = 0, col_start = 0;
     int row_end = (uint) input.n_rows, col_end = (uint) input.n_cols;
     if (padding == 0) {
@@ -588,7 +596,8 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
     }
     for (int row = row_start; row < row_end; row += stride) {
         for (int col = col_start; col < col_end; col += stride) {
-            uint res_col = 0;
+//            uint res_col = 0;
+            uint res_row = 0;
             int srow_start = row - block_ht_half;
             int srow_end = row + block_ht_half - (block_height % 2 == 0);
             int scol_start = col - block_wd_half;
@@ -606,16 +615,19 @@ arma::umat BinaryMatrix::im2colArmaMat(arma::umat input, uint block_width, uint 
                         if (srow >= 0 && srow < (int) input.n_rows && scol >= 0 && scol < (int) input.n_cols ) {
                             result(res_row, res_col) = input(srow, scol);
                         }
-                        ++res_col;
+//                        ++res_col;
+                        ++res_row;
                     }
                 }
             }
-            ++res_row;
+//            ++res_row;
+            ++res_col;
         }
     }
 
     // Check that we capture as many blocks as we had to
-    assert(res_row == all_out);
+//    assert(res_row == all_out);
+    assert(res_col == all_out);
 
     return result;
 }

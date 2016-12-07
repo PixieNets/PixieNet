@@ -17,11 +17,11 @@ int main() {
     TestBinaryConvolution testBinaryConvolution;
     TestXnorNetwork testXnorNetwork;
 
-    testArma.runTest();
-    testBinaryMatrix.runAllTests();
-    testBinaryLayer.runAllTests();
-    testBinaryTensor3D.runAllTests();
-    testBinaryConvolution.runAllTests();
+//    testArma.runTest();
+//    testBinaryMatrix.runAllTests();
+//    testBinaryLayer.runAllTests();
+//    testBinaryTensor3D.runAllTests();
+//    testBinaryConvolution.runAllTests();
     testXnorNetwork.runAllTests();
 
     return 0;
