@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <stdexcept>
 #include "ArmaConvolution.h"
 
 using namespace aconv;
@@ -38,6 +39,12 @@ ArmaConvolution<T>::ArmaConvolution(uint ksize, uint channels, uint filters, uin
 	} else if (this->ac_conv_type == Convolution::valid) {
 		this->ac_conv_padding = 0;
 	}
+	this->ac_ksz_half = ksize/2;
+	this->start_row = 0;
+	this->start_col = 0;
+	this->end_row = 0;
+	this->end_col = 0;
+
 	// Non-linearity
 	this->ac_nl_type = nl_type;
 	// Pooling
@@ -59,5 +66,85 @@ ArmaConvolution<T>::~ArmaConvolution() {
 	// delete the alpha values array
 	delete[] this->ac_conv_weights;
 }
+
+template<typename T>
+std::string ArmaConvolution<T>::constructMessage(std::string functionName, std::string message) {
+	return std::string("[ArmaConvolution::") + functionName + std::string("] ") + message;
+}
+
+template<typename T>
+void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result,
+								 	arma::Cube<T> *result_pooling) {
+
+	std::string fname = "forwardPass";
+	if (input->empty()) {
+		throw std::invalid_argument(this->constructMessage(fname, "Input data must be non-empty"));
+	}
+	if (input->n_slices != this->n_channels) {
+		std::string message = std::string("Input data #channels = ") + std::to_string(input->n_slices)
+							+ std::string(" should match convolution weights 4D hypercube #channels = ")
+							+ std::to_string(this->n_channels);
+		throw std::invalid_argument(this->constructMessage(fname, message));
+	}
+	if (!result->empty()) {
+		throw std::invalid_argument(this->constructMessage(fname, 
+									"Output 3D hypercube must be empty to fill in with the correct dims"));
+	}
+
+
+	// Initialize output dimensions
+	this->rows_out = input->n_rows - this->ac_size + 2 * this->padding;
+	this->cols_out = input->n_cols - this->ac_size + 2 * this->padding;
+	if (this->rows_out % this->ac_conv_stride || this->cols_out % this->ac_conv_stride) {
+		std::string message = std::string("Input data dimensions (") + std::to_string(input->nrows) + 
+							  std::string(", ") + std::to_string(input->n_cols) + 
+							  std::string(") are invalid for convolution with weights of size (") + 
+							  std::to_string(this->ac_size) + std::string(", ") + std::to_string(this->ac_size)
+							  + std::string(", ") + std::to_string(this->ac_channels) + std::string(", ")
+							  + std::to_string(this->ac_filters) + std::string(") with stride = ") + 
+							  std::to_string(this->ac_conv_stride) + std::string(" and padding = ") +
+							  std::to_string(this->ac_conv_padding);
+		throw std::invalid_argument(this->constructMessage(fname, message));
+	}
+	this->rows_out = this->rows_out / this->ac_conv_stride + (this->rows_out % 2);
+	this->cols_out = this->cols_out / this->ac_conv_stride + (this->cols_out % 2);
+
+	// Initialize traversal values
+	this->start_row = 0; this->start_col = 0;
+	this->end_row = input->n_rows; this->end_col = input->n_cols;
+	if (this->ac_conv_padding == 0) {
+		start_row += this->ac_ksz_half;
+		start_col += this->ac_ksz_half;
+		end_row -= this->ac_ksz_half;
+		end_col -= this->ac_ksz_half;
+	}
+
+	// 1. Compute K matrix of input data (containing scalar factors per sub-tensor)
+	arma::Mat<T> *inputFactors;
+	this->getInputFactors(input, inputFactors);
+	// 2. Normalize input data by mean and variance (in-place)
+    this->normalizeData3D(input);
+    // 3. Binarize and perform binary convolution
+    this->convolve(input, inputFactors, result);
+    // 4. Non-linear activation (in-place)
+    if (this->ac_nl_type != Nonlinearity::none) {
+    	this->nlActivate(result);
+    }
+    // 5. Pooling
+    if (this->ac_pool_type != Pooling::none) {
+    	this->pool(result, result_pooling);
+    }
+    // Done!
+}
+
+
+
+
+
+
+
+
+
+
 
 

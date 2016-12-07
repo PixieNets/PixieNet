@@ -41,12 +41,13 @@ private:
     T               *ac_alpha_per_filter;   // Scalar factors per weight filter
 
     // For the forward pass operations
-    uint            ac_block_wd_half;
-    uint            ac_block_ht_half;
+    uint            ac_ksz_half;
     uint            start_row;
     uint            end_row;
     uint            start_col;
     uint            end_col;
+
+    std::string     constructMessage(std::string functionName, std::string message);
     
 public:
     ArmaConvolution(uint ksize, uint channels, uint filters, uint conv_stride, Convolution conv_type=Convolution::same,
@@ -65,7 +66,7 @@ public:
     // 5. Pooling
     void    pool(arma::Cube<T> *input, arma::Mat<T> *result);
     // FULL forward pass of convolution unit in network
-    void    forwardPass(arma::Cube<T> *input, arma::Cube<T> *result);     
+    void    forwardPass(arma::Cube<T> *input, arma::Cube<T> *result, arma::Cube<T> *result_pooling);     
     
     
     // Accessor functions for class members
