@@ -20,7 +20,7 @@ using namespace aconv;
  * @param conv_stride - stride for convolution
  * @param conv_type - convolution type, one of "same" or "valid"
  * @param nl_type - type of non-linear activation, one of "none" or "relu"
- * @param pool_type - type of pooling, one of "none", max", "min", or "average"
+ * @param pool_type - type of pooling, one of "none", or max"
  * @param pool_size - size of square pooling kernel
  * @param pool_stride - stride for pooling operations
  */
@@ -127,6 +127,7 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
 	arma::Cube<T> norm_input;
     this->normalizeData3D(input, norm_input);
     // 3. Binarize and perform binary convolution
+    // this->result = new Arma::Cube<T>(this->rows_out, this->cols_out, this->ac_filters);
     this->convolve(input, input_factors, result);
     // 4. Non-linear activation (in-place)
     if (this->ac_nl_type != Nonlinearity::none) {
@@ -170,23 +171,48 @@ void ArmaConvolution<T>::normalizeData3D(arma::Cube<T> *data, arma::Cube<T> &nor
 	}
 }
 
+// 3. Binarize and perform binary convolution
+// void    convolve(arma::Cube<T> *data, const arma::Mat<T> &dataFactors, arma::Cube<T> *result);
 
+// 4. Non-linear activation (in-place)
+template<typename T>
+void ArmaConvolution<T>::nlActivate(arma::Cube<T> *data) {
+	std::string fname = "nlActivate";
+	if (this->ac_nonlinearity == Nonlinearity::relu) {
+		data->elem(arma::find(*data < 0)).zeros();
+	} else {
+		throw std::invalid_argument(this->constructMessage(fname, 
+										"Unidentified Non-linearity function"));
+	}
+}
 
+// 5. Pooling
+template<typename T>
+void ArmaConvolution<T>::pool(arma::Cube<T> *input, arma::Cube<T> *result) {
+	std::string fname = "pool";
+	if (input->empty()) {
+		throw std::invalid_argument(this->constructMessage(fname, "Input should be non-empty"));
+	}
+	if (this->ac_pool_type != Pooling::max) {
+		throw std::invalid_argument(this->constructMessage(fname, "Unidentified pooling type"));
+	}
+	uint new_rows = (uint) (input->n_rows - this->ac_pool_size) / this->ac_pool_stride - 1;
+	uint new_cols = (uint) (input->n_cols - this->ac_pool_size) / this->ac_pool_stride - 1;
 
+	result = new arma::Cube<T>(new_rows, new_cols, input->channels);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	uint srow = 0, scol = 0, erow = 0, ecol = 0;
+	for (uint row = 0; row < this->rows_out; ++row) {
+		for (uint col = 0; col < this->cols_out; ++col) {
+			srow = row * this->ac_pool_size;
+			erow = srow + this->ac_pool_size - 1;
+			scol = col * this->ac_pool_size;
+			ecol = scol + this->ac_pool_size - 1;
+			result->at(row, col) = arma::max(arma::max(input->at(arma::span(srow, erow), 
+																 arma::span(scol, ecol))));
+		}
+	}
+}
 
 
 

@@ -14,7 +14,7 @@ typedef unsigned int uint;
 
 namespace aconv {
     // Multiple types of pooling
-    enum class Pooling {none, min, max, average};
+    enum class Pooling {none, max};
     // Multiple types of convolution
     enum class Convolution {same, valid};
     // Multiple types of nonlinearities
@@ -68,7 +68,7 @@ public:
     // 4. Non-linear activation (in-place)
     void    nlActivate(arma::Cube<T> *data);
     // 5. Pooling
-    void    pool(arma::Cube<T> *input, arma::Mat<T> *result);
+    void    pool(arma::Cube<T> *input, arma::Cube<T> *result);
     // FULL forward pass of convolution unit in network
     void    forwardPass(arma::Cube<T> *input, arma::Cube<T> *result, arma::Cube<T> *result_pooling);     
     
