@@ -14,7 +14,8 @@ void TestXnorNetwork::runMiniNet() {
     XnorNetwork xnorNet;
     xnorNet.buildMiniNet();
 
-    arma::cube input = randu<arma::cube>(55,55,3);
+//    arma::cube input = randu<arma::cube>(55,55,3);
+    arma::cube input = randu<arma::cube>(227, 227,3);
     arma::vec output = xnorNet.forwardPass(input);
     std::cout << "[XnorNetwork::ForwardPass]: output size is: " ;
     std::cout << output.size() << std::endl;

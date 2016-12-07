@@ -161,7 +161,8 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
             // 1. XNOR Product of input and weights;
             // 1 (b). Spatial row layout of weight filter
 //            printf("[BinaryConvolution::doConv] Spatial row layout of weight filter\n");
-            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+//            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(n_filter, 1).repmat(1, col_input.width());
             // 1 (c). XNOR product
 //            printf("[BinaryConvolution::doConv] XNOR product\n");
             BinaryLayer result = col_input * wt_input;
@@ -199,6 +200,7 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
     // TODO : bitcount + reshape of 2D matrix into 3D cube
 
 
+*/
     // Element-wise multiply by scalar factors of input tensor and weights alpha
     for (uint f = 0; f < this->bc_filters; ++f) {
 //        printf("[BinaryConvolution::doConv] Element-wise multiply by scalar factors of input tensor and weights alpha\n");
@@ -206,7 +208,6 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
 //                f, output.slice(f).n_rows, output.slice(f).n_cols, K.n_rows, K.n_cols, cur_weights.alpha());
         output.slice(f) = (output.slice(f) % K) * this->bc_conv_weights[f].alpha();
     }
-*/
 
     return output;
 }
