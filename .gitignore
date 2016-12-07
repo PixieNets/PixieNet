@@ -13,3 +13,6 @@ cmake-build-debug
 
 # Ignore personal user state in XCode
 ArmaPixieNet/ArmaPixieNet.xcodeproj/project.xcworkspace/xcuserdata/esphinx.xcuserdatad/UserInterfaceState.xcuserstate
+ArmaPixieNet/ArmaPixieNet.xcodeproj/xcuserdata/esphinx.xcuserdatad
+App/PixieNet.xcodeproj/project.xcworkspace/xcuserdata/esphinx.xcuserdatad/
+App/PixieNet.xcodeproj/xcuserdata/esphinx.xcuserdatad/
