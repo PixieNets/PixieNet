@@ -10,3 +10,6 @@ README.md~
 index.html~
 .gitignore~
 cmake-build-debug
+
+# Ignore personal user state in XCode
+ArmaPixieNet/ArmaPixieNet.xcodeproj/project.xcworkspace/xcuserdata/esphinx.xcuserdatad/UserInterfaceState.xcuserstate

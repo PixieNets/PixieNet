@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A6A477FE1DF7E86A002B0B2E /* armadillo in Resources */ = {isa = PBXBuildFile; fileRef = A6A477FC1DF7E86A002B0B2E /* armadillo */; };
+		A6A477FF1DF7E86A002B0B2E /* armadillo_bits in Resources */ = {isa = PBXBuildFile; fileRef = A6A477FD1DF7E86A002B0B2E /* armadillo_bits */; };
 		A6E751BB1DF7E14C0098AE41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751BA1DF7E14C0098AE41 /* main.m */; };
 		A6E751BE1DF7E14C0098AE41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751BD1DF7E14C0098AE41 /* AppDelegate.m */; };
 		A6E751C11DF7E14C0098AE41 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6E751C01DF7E14C0098AE41 /* ViewController.mm */; };
@@ -15,6 +17,7 @@
 		A6E751C91DF7E14C0098AE41 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6E751C71DF7E14C0098AE41 /* LaunchScreen.storyboard */; };
 		A6E751D41DF7E14C0098AE41 /* ArmaPixieNetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751D31DF7E14C0098AE41 /* ArmaPixieNetTests.m */; };
 		A6E751DF1DF7E14C0098AE41 /* ArmaPixieNetUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E751DE1DF7E14C0098AE41 /* ArmaPixieNetUITests.m */; };
+		A6E751ED1DF7E47A0098AE41 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E751EC1DF7E47A0098AE41 /* Accelerate.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A6A477FC1DF7E86A002B0B2E /* armadillo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = armadillo; sourceTree = "<group>"; };
+		A6A477FD1DF7E86A002B0B2E /* armadillo_bits */ = {isa = PBXFileReference; lastKnownFileType = folder; path = armadillo_bits; sourceTree = "<group>"; };
 		A6E751B61DF7E14C0098AE41 /* ArmaPixieNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArmaPixieNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6E751BA1DF7E14C0098AE41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A6E751BC1DF7E14C0098AE41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +56,7 @@
 		A6E751DA1DF7E14C0098AE41 /* ArmaPixieNetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArmaPixieNetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6E751DE1DF7E14C0098AE41 /* ArmaPixieNetUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArmaPixieNetUITests.m; sourceTree = "<group>"; };
 		A6E751E01DF7E14C0098AE41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A6E751EC1DF7E47A0098AE41 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6E751ED1DF7E47A0098AE41 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +88,7 @@
 		A6E751AD1DF7E14C0098AE41 = {
 			isa = PBXGroup;
 			children = (
+				A6E751EC1DF7E47A0098AE41 /* Accelerate.framework */,
 				A6E751B81DF7E14C0098AE41 /* ArmaPixieNet */,
 				A6E751D21DF7E14C0098AE41 /* ArmaPixieNetTests */,
 				A6E751DD1DF7E14C0098AE41 /* ArmaPixieNetUITests */,
@@ -101,6 +109,8 @@
 		A6E751B81DF7E14C0098AE41 /* ArmaPixieNet */ = {
 			isa = PBXGroup;
 			children = (
+				A6A477FC1DF7E86A002B0B2E /* armadillo */,
+				A6A477FD1DF7E86A002B0B2E /* armadillo_bits */,
 				A6E751BC1DF7E14C0098AE41 /* AppDelegate.h */,
 				A6E751BD1DF7E14C0098AE41 /* AppDelegate.m */,
 				A6E751BF1DF7E14C0098AE41 /* ViewController.h */,
@@ -207,6 +217,7 @@
 				TargetAttributes = {
 					A6E751B51DF7E14C0098AE41 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 3AVBQM9N79;
 					};
 					A6E751CE1DF7E14C0098AE41 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -244,7 +255,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6E751C91DF7E14C0098AE41 /* LaunchScreen.storyboard in Resources */,
+				A6A477FF1DF7E86A002B0B2E /* armadillo_bits in Resources */,
 				A6E751C61DF7E14C0098AE41 /* Assets.xcassets in Resources */,
+				A6A477FE1DF7E86A002B0B2E /* armadillo in Resources */,
 				A6E751C41DF7E14C0098AE41 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,10 +428,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ArmaPixieNet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -426,10 +442,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ArmaPixieNet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PixieNet.ArmaPixieNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -498,6 +517,7 @@
 				A6E751E51DF7E14C0098AE41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A6E751E61DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNetTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +526,7 @@
 				A6E751E81DF7E14C0098AE41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A6E751E91DF7E14C0098AE41 /* Build configuration list for PBXNativeTarget "ArmaPixieNetUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +535,7 @@
 				A6E751EB1DF7E14C0098AE41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
