@@ -90,6 +90,31 @@ arma::mat BinaryConvolution::input2KMat(arma::cube norm_data) {
     // Discuss if Box filter using integral images is a good idea (will it be faster here
     // because the input keeps changing?)
     arma::mat K = arma::conv2(A, this->bc_box_filter, "same");
+    if (this->bc_conv_stride > 1) {
+        // Select the elements by stride
+        uint block_ht_half = this->bc_height / 2;
+        uint block_wd_half = this->bc_width / 2;
+        uint n_rows = (K.n_rows - this->bc_height + 2 * this->bc_padding) / this->bc_conv_stride + (this->bc_height % 2);
+        uint n_cols = (K.n_cols - this->bc_width + 2 * this->bc_padding) / this->bc_conv_stride + (this->bc_width % 2);
+        uint start_row = 0, end_row = this->bc_height;
+        uint start_col = 0, end_col = this->bc_width;
+        if (this->bc_padding == 0) {
+            start_row = this->bc_padding + block_ht_half;
+            end_row = K.n_rows - this->bc_padding - block_ht_half;
+            start_col = this->bc_padding + block_wd_half;
+            end_col = K.n_cols - this->bc_padding - block_wd_half;
+        }
+        uint n_elems = n_rows * n_cols;
+        arma::uvec indices(n_elems);
+        uint i = 0;
+
+        for (uint col = start_col; col < end_col; col += bc_conv_stride) {
+            for (uint row = start_row; row < end_row; row += bc_conv_stride) {
+                indices(i++) = arma::sub2ind(arma::size(K), row, col);
+            }
+        }
+        K = arma::reshape(K.elem(indices), n_rows, n_cols);
+    }
     return K;
 }
 
@@ -393,7 +418,7 @@ arma::cube BinaryConvolution::forwardPass(arma::cube data) {
     // 3. Binarize normalized data - activation
     printf("[BinaryConvolution::forwardPass] Step 3. Activate! Converting normalized input to a 3D binary tensor...\n");
     Utility::Timer timerStep3;
-    BinaryTensor3D input = this->normalizeData3D(norm_data);
+    BinaryTensor3D input(norm_data);
     printf("[BinaryConvolution::forwardPass] Step 3. Activation compltete! Binary Tensor 3D of size (%d, %d, %d) in time {%llu ms}\n",
             input.rows(), input.cols(), input.channels(), timerStep3.elapsedMs().count());
 //    printf("[BinaryConvolution::forwardPass] Step 3. Activation compltete! Binary Tensor 3D of size (%llu, %llu, %llu)\n",
