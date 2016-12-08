@@ -158,7 +158,8 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
             // 1. XNOR Product of input and weights;
             // 1 (b). Spatial row layout of weight filter
 //            printf("[BinaryConvolution::doConv] Spatial row layout of weight filter\n");
-            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+//            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(n_filter, 1).repmat(1, col_input.width());
             // 1 (c). XNOR product
 //            printf("[BinaryConvolution::doConv] XNOR product\n");
             BinaryLayer result = col_input * wt_input;
@@ -172,31 +173,67 @@ arma::cube BinaryConvolution::doBinaryConv(BinaryTensor3D input, arma::mat K) {
 //                f, output.slice(f).n_rows, output.slice(f).n_cols, K.n_rows, K.n_cols, cur_weights.alpha());
         output.slice(f) = (output.slice(f) % K) * cur_weights.alpha();
     }
-    */
+     */
 
     // Second for-loop implementation
+//    std::vector<BinaryLayer*> inputVec = input.tensor();
+//    for (uint ch = 0; ch < this->bc_channels; ++ch) {
+//        // 1 (a). Spatial column layout of input
+////      printf("[BinaryConvolution::doConv] Spatial column layout ofinput\n");
+//        BinaryLayer col_input = inputVec[ch]->im2col(this->bc_width, this->bc_height,
+//                                                     this->bc_padding, this->bc_conv_stride);
+//        for (uint f = 0; f < this->bc_filters; ++f) {
+//            BinaryTensor3D cur_weights = this->bc_conv_weights[f];
+//            // 1. XNOR Product of input and weights;
+//            // 1 (b). Spatial row layout of weight filter
+////            printf("[BinaryConvolution::doConv] Spatial row layout of weight filter\n");
+////            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
+//            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(n_filter, 1).repmat(1, col_input.width());
+//            // 1 (c). XNOR product
+////            printf("[BinaryConvolution::doConv] XNOR product\n");
+//            BinaryLayer result = col_input * wt_input;
+//            // 2. Bitcount and reshape
+////            printf("[BinaryConvolution::doConv] Bitcount and reshape\n");
+//            // Element-wise multiply by scalar factors of input tensor and weights alpha
+//            output.slice(f) += result.binMtx()->bitCountPerRow(true, rows_out, cols_out);
+//        }
+//    }
+
+
+    // Third for-loop implementation
     std::vector<BinaryLayer*> inputVec = input.tensor();
+    std::vector<BinaryLayer> wt_inputs;
+    wt_inputs.reserve(this->bc_filters);
+    bool first = true;
     for (uint ch = 0; ch < this->bc_channels; ++ch) {
         // 1 (a). Spatial column layout of input
 //      printf("[BinaryConvolution::doConv] Spatial column layout ofinput\n");
         BinaryLayer col_input = inputVec[ch]->im2col(this->bc_width, this->bc_height,
                                                      this->bc_padding, this->bc_conv_stride);
         for (uint f = 0; f < this->bc_filters; ++f) {
-            BinaryTensor3D cur_weights = this->bc_conv_weights[f];
+            if (first) {
+                BinaryTensor3D cur_weights = this->bc_conv_weights[f];
+                wt_inputs.emplace_back(cur_weights.tensor()[ch]->reshape(n_filter, 1).repmat(1, col_input.width()));
+            }
             // 1. XNOR Product of input and weights;
             // 1 (b). Spatial row layout of weight filter
 //            printf("[BinaryConvolution::doConv] Spatial row layout of weight filter\n");
 //            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(1, n_filter).repmat(col_input.height(), 1);
-            BinaryLayer wt_input = cur_weights.tensor()[ch]->reshape(n_filter, 1).repmat(1, col_input.width());
             // 1 (c). XNOR product
 //            printf("[BinaryConvolution::doConv] XNOR product\n");
-            BinaryLayer result = col_input * wt_input;
+            BinaryLayer result = col_input * wt_inputs[f];
             // 2. Bitcount and reshape
 //            printf("[BinaryConvolution::doConv] Bitcount and reshape\n");
             // Element-wise multiply by scalar factors of input tensor and weights alpha
             output.slice(f) += result.binMtx()->bitCountPerRow(true, rows_out, cols_out);
         }
+        first = false;
     }
+
+
+
+
+
 
     /*
     // This segment of 2D convolution is for timing purposes only
