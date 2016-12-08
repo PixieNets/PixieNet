@@ -19,6 +19,21 @@ namespace aconv {
     enum class Convolution {same, valid};
     // Multiple types of nonlinearities
     enum class Nonlinearity {none, relu};
+    // Matrix params for performing convolution 
+    struct conv_params {
+        uint ksize;
+        uint n_in;
+        uint n_out;
+        uint rows_out;
+        uint cols_out;
+        uint n_out;
+        uint ksz_half;
+        uint start_row;
+        uint end_row;
+        uint start_col;
+        uint end_col;
+    };
+    typedef struct conv_params aconv_params;
     // Implementing XNOR convolution in Armadillo
     template<typename T> class ArmaConvolution;
 }
@@ -41,6 +56,7 @@ private:
     T               *ac_alpha_per_filter;   // Scalar factors per weight filter
 
     // For the forward pass operations
+    /*
     uint            n_in;
     uint            ac_ksz_half;
     uint            start_row;
@@ -50,8 +66,9 @@ private:
     uint            rows_out;
     uint            cols_out;
     uint            n_out;
+    */
 
-    std::string     constructMessage(std::string functionName, std::string message);
+    static std::string  constructMessage(std::string functionName, std::string message);
     
 public:
     ArmaConvolution(uint ksize, uint channels, uint filters, uint conv_stride, Convolution conv_type=Convolution::same,
@@ -64,7 +81,8 @@ public:
     // 2. Normalize input data by mean and variance (in-place)
     void    normalizeData3D(arma::Cube<T> *data, arma::Cube<T> &norm_input);
     // 3. Binarize and perform binary convolution
-    void    convolve(arma::Cube<T> *data, const arma::Mat<T> &dataFactors, arma::Cube<T> *result);
+    // Input - 3D, Weights - 4D
+    void    convolve(const arma::Cube<T> &data, const arma::Mat<T> &dataFactors, arma::Cube<T> *result);
     // 4. Non-linear activation (in-place)
     void    nlActivate(arma::Cube<T> *data);
     // 5. Pooling
@@ -72,6 +90,13 @@ public:
     // FULL forward pass of convolution unit in network
     void    forwardPass(arma::Cube<T> *input, arma::Cube<T> *result, arma::Cube<T> *result_pooling);     
     
+    static void set_conv_params(uint rows_in, uint cols_in, uint ksize, uint stride, uint padding,
+                                aconv_params *params);
+
+    // Convolution:
+    // Input - 2D, Weights - 2D
+    static void convolve2D(arma::Mat<T> *input, arma::Mat<T> *weights,
+                            uint stride, uint padding, arma::Mat<T> *result);
     
     // Accessor functions for class members
     uint                size()              {   return ac_size;             }

@@ -19,9 +19,9 @@
 @implementation ViewController
 
 void changeMatrix(arma::mat *input, arma::uword row, arma::uword col) {
-    if (row < input->n_rows && col < input->n_cols) {
-        input->at(row, col) = 7.0;
-    }
+//    if (row < input->n_rows && col < input->n_cols) {
+//        input->at(row, col) = 7.0;
+//    }
 }
 
 - (void)viewDidLoad {

@@ -78,16 +78,16 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
 
 	std::string fname = "forwardPass";
 	if (input->empty()) {
-		throw std::invalid_argument(this->constructMessage(fname, "Input data must be non-empty"));
+		throw std::invalid_argument(constructMessage(fname, "Input data must be non-empty"));
 	}
 	if (input->n_slices != this->n_channels) {
 		std::string message = std::string("Input data #channels = ") + std::to_string(input->n_slices)
 							+ std::string(" should match convolution weights 4D hypercube #channels = ")
 							+ std::to_string(this->n_channels);
-		throw std::invalid_argument(this->constructMessage(fname, message));
+		throw std::invalid_argument(constructMessage(fname, message));
 	}
 	if (!result->empty()) {
-		throw std::invalid_argument(this->constructMessage(fname, 
+		throw std::invalid_argument(constructMessage(fname, 
 									"Output 3D hypercube must be empty to fill in with the correct dims"));
 	}
 
@@ -96,7 +96,7 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
 	this->rows_out = input->n_rows - this->ac_size + 2 * this->padding;
 	this->cols_out = input->n_cols - this->ac_size + 2 * this->padding;
 	if (this->rows_out % this->ac_conv_stride || this->cols_out % this->ac_conv_stride) {
-		std::string message = std::string("Input data dimensions (") + std::to_string(input->nrows) + 
+		std::string message = std::string("Input data dimensions (") + std::to_string(input->n_rows) + 
 							  std::string(", ") + std::to_string(input->n_cols) + 
 							  std::string(") are invalid for convolution with weights of size (") + 
 							  std::to_string(this->ac_size) + std::string(", ") + std::to_string(this->ac_size)
@@ -104,7 +104,7 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
 							  + std::to_string(this->ac_filters) + std::string(") with stride = ") + 
 							  std::to_string(this->ac_conv_stride) + std::string(" and padding = ") +
 							  std::to_string(this->ac_conv_padding);
-		throw std::invalid_argument(this->constructMessage(fname, message));
+		throw std::invalid_argument(constructMessage(fname, message));
 	}
 	this->rows_out = this->rows_out / this->ac_conv_stride + (this->rows_out % 2);
 	this->cols_out = this->cols_out / this->ac_conv_stride + (this->cols_out % 2);
@@ -128,7 +128,7 @@ void ArmaConvolution<T>::forwardPass(arma::Cube<T> *input, arma::Cube<T> *result
     this->normalizeData3D(input, norm_input);
     // 3. Binarize and perform binary convolution
     // this->result = new Arma::Cube<T>(this->rows_out, this->cols_out, this->ac_filters);
-    this->convolve(input, input_factors, result);
+    this->convolve(norm_input, input_factors, result);
     // 4. Non-linear activation (in-place)
     if (this->ac_nl_type != Nonlinearity::none) {
     	this->nlActivate(result);
@@ -172,7 +172,16 @@ void ArmaConvolution<T>::normalizeData3D(arma::Cube<T> *data, arma::Cube<T> &nor
 }
 
 // 3. Binarize and perform binary convolution
-// void    convolve(arma::Cube<T> *data, const arma::Mat<T> &dataFactors, arma::Cube<T> *result);
+template<typename T>
+void ArmaConvolution<T>::convolve(const arma::Cube<T> &data, const arma::Mat<T> &dataFactors, 
+								  arma::Cube<T> *result) {
+	// 1. Binarize input
+	arma::Cube<T> bin_input = arma::sign(data);
+	bin_input.replace(0, 1);
+
+	// 2. Perform convolution
+
+}
 
 // 4. Non-linear activation (in-place)
 template<typename T>
@@ -181,7 +190,7 @@ void ArmaConvolution<T>::nlActivate(arma::Cube<T> *data) {
 	if (this->ac_nonlinearity == Nonlinearity::relu) {
 		data->elem(arma::find(*data < 0)).zeros();
 	} else {
-		throw std::invalid_argument(this->constructMessage(fname, 
+		throw std::invalid_argument(constructMessage(fname, 
 										"Unidentified Non-linearity function"));
 	}
 }
@@ -191,10 +200,10 @@ template<typename T>
 void ArmaConvolution<T>::pool(arma::Cube<T> *input, arma::Cube<T> *result) {
 	std::string fname = "pool";
 	if (input->empty()) {
-		throw std::invalid_argument(this->constructMessage(fname, "Input should be non-empty"));
+		throw std::invalid_argument(constructMessage(fname, "Input should be non-empty"));
 	}
 	if (this->ac_pool_type != Pooling::max) {
-		throw std::invalid_argument(this->constructMessage(fname, "Unidentified pooling type"));
+		throw std::invalid_argument(constructMessage(fname, "Unidentified pooling type"));
 	}
 	uint new_rows = (uint) (input->n_rows - this->ac_pool_size) / this->ac_pool_stride - 1;
 	uint new_cols = (uint) (input->n_cols - this->ac_pool_size) / this->ac_pool_stride - 1;
@@ -214,5 +223,92 @@ void ArmaConvolution<T>::pool(arma::Cube<T> *input, arma::Cube<T> *result) {
 	}
 }
 
+// Convolution parameters
+template<typename T>
+void ArmaConvolution<T>::set_conv_params(uint rows_in, uint cols_in, uint ksize, 
+										uint stride, uint padding, aconv_params *params) {
+	std::string fname = "set_conv_params";
+	if (params == NULL) {
+		throw std::invalid_argument(constructMessage(fname, "params struct is NULL"));
+	}
+	params->ksize = ksize;
+	params->n_in = rows_in * cols_in;
+	params->rows_out = rows_in - ksize + 2 * padding;
+	params->cols_out = cols_in - ksize + 2 * padding;
+	if (params->rows_out % stride || params->cols_out % stride) {
+		std::string message = std::string("Input data dimensions (") + std::to_string(rows_in) + 
+							  std::string(", ") + std::to_string(colsin) + 
+							  std::string(") are invalid for convolution with weights of size (") + 
+							  std::to_string(ksize) + std::string(", ") + std::to_string(ksize) +
+							  std::string(") with stride = ") + 
+							  std::to_string(stride) + std::string(" and padding = ") +
+							  std::to_string(padding);
+		throw std::invalid_argument(constructMessage(fname, message));
+	}
+	params->rows_out = params->rows_out / stride + (params->rows_out % 2);
+	params->cols_out = params->cols_out / stride + (params->cols_out % 2);
+	params->n_out = params->rows_out * params->cols_out;
+	params->ksz_half = ksize/2;
+	params->start_row = 0;
+	params->start_col = 0;
+	params->end_row = rows_in;
+	params->end_col = cols_in;
+	if (padding == 0) {
+		params->start_row = params->ksz_half;
+		params->end_row -= params->ksz_half;
+		params->start_col = params->ksz_half;
+		params->end_col -= params->ksz_half;
+	}
+}
 
+// Convolution:
+// Input - 2D, Weights - 2D
+template<typename T>
+void ArmaConvolution<T>::convolve2D(arma::Mat<T> *input, arma::Mat<T> *weights,
+								  	uint stride, uint padding, arma::Mat<T> *result) {
+	std::string fname = "convolve2D";
+	if (!input || input->empty()) {
+		throw std::invalid_argument(constructMessage(fname, "Input should be non-empty"));
+	}
+	if (!weights || weights->empty()) {
+		throw std::invalid_argument(constructMessage(fname, "Weight kernels should be non-empty"));
+	}
+	if (weights->n_rows != weights->n_cols) {
+		throw std::invalid_argument(constructMessage(fname, "Weight kernels should be square size"));
+	}
+
+	// Initialize output dimensions
+	uint ksize = weights->n_rows;
+	uint n_in = input->n_rows * input->n_cols;
+	uint rows_out = input->n_rows - ksize + 2 * padding;
+	uint cols_out = input->n_cols - ksize + 2 * padding;
+	if (rows_out % stride || cols_out % stride) {
+		std::string message = std::string("Input data dimensions (") + std::to_string(input->n_rows) + 
+							  std::string(", ") + std::to_string(input->n_cols) + 
+							  std::string(") are invalid for convolution with weights of size (") + 
+							  std::to_string(ksize) + std::string(", ") + std::to_string(ksize) +
+							  std::string(") with stride = ") + 
+							  std::to_string(stride) + std::string(" and padding = ") +
+							  std::to_string(padding);
+		throw std::invalid_argument(constructMessage(fname, message));
+	}
+	rows_out = rows_out / stride + (rows_out % 2);
+	cols_out = cols_out / stride + (cols_out % 2);
+	n_out = rows_out * cols_out;
+
+	// Initialize traversal values
+	uint ksz_half = ksize / 2;
+	uint start_row = 0, start_col = 0;
+	uint end_row = input->n_rows, end_col = input->n_cols;
+	if (padding == 0) {
+		start_row += ksz_half;
+		start_col += ksz_half;
+		end_row -= ksz_half;
+		end_col -= ksz_half;
+	}
+
+	// result = new arma::Mat<T>(rows_out, cols_out);
+
+
+}
 
